@@ -13,6 +13,10 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
+import { useAppThemeContext } from '../../contexts/ThemeContext';
+
+
+
 
 const pages = ['Dashboard', 'Comprar passagem', 'Ofertas', 'Sair', 'Perfil', 'Conta'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -35,6 +39,8 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const {toggleTheme} = useAppThemeContext();
 
   return (
     <AppBar position="static">
@@ -90,7 +96,7 @@ function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={`/${page}`}  style={{ textDecoration: 'none' }}> 
+                  <Link to={`/${page}`}  style={{ textDecoration: 'none',color: 'black'}}> 
                     <Typography textAlign="center">{page}</Typography>
                   </Link>
                 </MenuItem>
@@ -127,6 +133,7 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
+            <button onClick={toggleTheme}>Troca</button>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
