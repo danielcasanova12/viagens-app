@@ -1,12 +1,13 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ResponsiveAppBar from './shared/components/responsilveAppBar/ResponsiveAppBar';
+import { AppRoutes } from './routes';
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <div>
-      
-    </div>
+    <BrowserRouter>
+      <ResponsiveAppBar/>
+      <AppRoutes/>
+    </BrowserRouter>
   );
 }
 
