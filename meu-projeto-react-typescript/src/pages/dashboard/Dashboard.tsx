@@ -1,7 +1,7 @@
+import React from "react";
+
 export const Dashboard = () => {
-    return (
-        <div>
-          oi
-        </div>  
-    )
+	return (
+		<div>oi</div>  
+	);
 };
