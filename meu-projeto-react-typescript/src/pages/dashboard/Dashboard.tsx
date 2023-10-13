@@ -1,7 +1,15 @@
 import React from "react";
+import { LayoutBasePage } from "../../shared/layouts";
+import { Toolbar } from "../../shared/components";
 
 export const Dashboard = () => {
 	return (
-		<div>oi</div>  
+		<LayoutBasePage
+			title='Dashboard'
+			toolbar={
+				<Toolbar >ASD</Toolbar>
+			}>
+			Testes
+		</LayoutBasePage>
 	);
 };
