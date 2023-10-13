@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
 import { useAppThemeContext } from "../../contexts/ThemeContext";
-
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 
 
@@ -51,7 +51,6 @@ function ResponsiveAppBar() {
 						variant="h6"
 						noWrap
 						component="a"
-						href="#app-bar-with-responsive-menu"
 						sx={{
 							mr: 2,
 							display: { xs: "none", md: "flex" },
@@ -108,7 +107,6 @@ function ResponsiveAppBar() {
 						variant="h5"
 						noWrap
 						component="a"
-						href="#app-bar-with-responsive-menu"
 						sx={{
 							mr: 2,
 							display: { xs: "flex", md: "none" },
@@ -124,7 +122,7 @@ function ResponsiveAppBar() {
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 						{pages.map((page) => (
-							<Link key={page} to={`/${page.toLowerCase()}`} style={{ textDecoration: "none" }}>
+							<Link key={page} to={`/${page}`} style={{ textDecoration: "none" }}>
 								<Button sx={{  my: 2, color: "white", display: "block" }}>
 									{page}
 								</Button>
@@ -133,7 +131,9 @@ function ResponsiveAppBar() {
 					</Box>
 
 					<Box sx={{ flexGrow: 0 }}>
-						<button onClick={toggleTheme}>Troca</button>
+						<IconButton aria-label="DarkMode" onClick={toggleTheme}>
+							<DarkModeIcon />
+						</IconButton>
 						<Tooltip title="Open settings">
 							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 								<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
