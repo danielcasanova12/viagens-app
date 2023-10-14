@@ -1,4 +1,4 @@
-import ResponsiveAppBar from "./shared/components/responsilveAppBar/ResponsiveAppBar";
+import ResponsiveAppBar from "./shared/components/responsiveAppBar/ResponsiveAppBar";
 import { AppRoutes } from "./routes";
 import { BrowserRouter } from "react-router-dom";
 import { AppThemeProvider } from "./shared/contexts/ThemeContext"; 
