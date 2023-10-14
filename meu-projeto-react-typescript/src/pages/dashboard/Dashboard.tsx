@@ -1,16 +1,16 @@
 import React from "react";
 import { LayoutBasePage } from "../../shared/layouts";
-import { Toolbar } from "../../shared/components";
+import { ToolsList } from "../../shared/components";
 
 export const Dashboard = () => {
 	return (
 		<LayoutBasePage
 			title='Dashboard'
 			toolbar={
-				<Toolbar 
+				<ToolsList 
 					showInputSearch={true}
 					textNewButton='Nova'
-				></Toolbar>
+				></ToolsList>
 			}>
 			Testes
 		</LayoutBasePage>

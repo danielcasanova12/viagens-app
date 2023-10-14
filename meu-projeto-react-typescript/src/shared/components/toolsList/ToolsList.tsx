@@ -1,7 +1,7 @@
 import { Box, Button, Paper, TextField, useTheme} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-interface IToolbarProps {
+interface IToolsListProps {
   children?: React.ReactNode;
 	textSearch?: string;
 	showInputSearch?: boolean;
@@ -11,7 +11,7 @@ interface IToolbarProps {
 	onClickNewButton?: () => void;
 
 }
-export const Toolbar:React.FC<IToolbarProps> = ({
+export const ToolsList:React.FC<IToolsListProps> = ({
 	children,
 	textSearch = "",
 	showInputSearch = false,
