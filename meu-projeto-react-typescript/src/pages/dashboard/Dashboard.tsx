@@ -7,7 +7,10 @@ export const Dashboard = () => {
 		<LayoutBasePage
 			title='Dashboard'
 			toolbar={
-				<Toolbar >ASD</Toolbar>
+				<Toolbar 
+					showInputSearch={true}
+					textNewButton='Nova'
+				></Toolbar>
 			}>
 			Testes
 		</LayoutBasePage>

@@ -2,9 +2,24 @@ import { Box, Button, Paper, TextField, useTheme} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 interface IToolbarProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
+	textSearch?: string;
+	showInputSearch?: boolean;
+	changeTextSearch?: (newText: string) => void;
+	textNewButton?: string;
+	showNewButton?: boolean;
+	onClickNewButton?: () => void;
+
 }
-export const Toolbar:React.FC<IToolbarProps> = ({children}) => {
+export const Toolbar:React.FC<IToolbarProps> = ({
+	children,
+	textSearch = "",
+	showInputSearch = false,
+	changeTextSearch,
+	textNewButton = "Novo",
+	showNewButton = true,
+	onClickNewButton
+}) => {
 	const theme = useTheme();
   
 	return (
@@ -18,27 +33,36 @@ export const Toolbar:React.FC<IToolbarProps> = ({children}) => {
 			alignItems="center"
 			component={Paper}
 		>
-			<TextField
-				size='small'
-				placeholder='Search...'
-				variant='outlined'
-			/>
+			{showInputSearch && (
+				<TextField
+					size='small'
+					placeholder='Search...'
+					variant='outlined'
+					value={textSearch}
+					onChange={(e) => changeTextSearch?.(e.target.value)}
+				/>
+			)}		
 			
-			<Box 
-				flex={1}
-				display={"flex"}
-				justifyContent={"end"}
+			{ showNewButton && (
+				<Box 
+					flex={1}
+					display={"flex"}
+					justifyContent={"end"}
         
-			>
-				<Button
-					variant='contained'
-					color='primary'
-					disableElevation
-					endIcon={<AddIcon />}
-				>Novo
-				</Button>
+				>
+					<Button
+						variant='contained'
+						color='primary'
+						disableElevation
+						endIcon={<AddIcon />}
+						onClick={onClickNewButton}
+					>{textNewButton}</Button>
+				</Box>
+			)}
+			<Box>
 				{children}
 			</Box>
 		</Box>
+		
 	);
 };
