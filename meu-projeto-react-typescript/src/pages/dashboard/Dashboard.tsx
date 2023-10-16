@@ -1,15 +1,15 @@
 import React from "react";
 import { LayoutBasePage } from "../../shared/layouts";
-import { ToolsDetails } from "../../shared/components";
+import {ToolsDetails } from "../../shared/components";
+
 
 export const Dashboard = () => {
 	return (
 		<LayoutBasePage
-			title='Dashboard'
-			toolbar={
-				<ToolsDetails />
-			}>
-			Testes
+			title="Dashboard"
+			toolbar={<ToolsDetails hideButtonSaveAndBack/>}
+		>
+       mostrarBotaoSalvarEFechar mostrarBotaoSalvarEFecharCarregando
 		</LayoutBasePage>
 	);
 };
