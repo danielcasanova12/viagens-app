@@ -17,7 +17,7 @@ namespace travelapi.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql("server=localhost;database=your_database;user=root;password=your_password",
+            optionsBuilder.UseMySql("server=localhost;database=traveldb;user=root;password=root",
                 new MySqlServerVersion(new Version(10, 4, 28))); // versão do servidor MySQL
         }
     }

@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace travelapi.Domain.Models
 {
     public class Costs
     {
+        [Key]
         public int IdCosts { get; set; }
         public decimal Transport { get; set; }
         public decimal accommodation {  get; set; }

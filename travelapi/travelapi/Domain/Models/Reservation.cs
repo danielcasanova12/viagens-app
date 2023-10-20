@@ -7,6 +7,7 @@ namespace travelapi.Domain.Models
     {
         [Key]
         public int? IdReservation { get; set; }
+        public int UserId { get; set; }
         public DateTime? CheckInDate { get; set; }
         public DateTime? CheckOutDate { get; set; }
         public Hotel? ReservedHotel { get; set; }

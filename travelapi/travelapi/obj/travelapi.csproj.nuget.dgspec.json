@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\daneil\\Documents\\GitHub\\Viagens\\travelapi\\travelapi\\travelapi.csproj": {}
+    "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\travelapi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\daneil\\Documents\\GitHub\\Viagens\\travelapi\\travelapi\\travelapi.csproj": {
+    "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\travelapi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\daneil\\Documents\\GitHub\\Viagens\\travelapi\\travelapi\\travelapi.csproj",
+        "projectUniqueName": "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\travelapi.csproj",
         "projectName": "travelapi",
-        "projectPath": "C:\\Users\\daneil\\Documents\\GitHub\\Viagens\\travelapi\\travelapi\\travelapi.csproj",
+        "projectPath": "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\travelapi.csproj",
         "packagesPath": "C:\\Users\\daneil\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\daneil\\Documents\\GitHub\\Viagens\\travelapi\\travelapi\\obj\\",
+        "outputPath": "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\daneil\\AppData\\Roaming\\NuGet\\NuGet.Config"
