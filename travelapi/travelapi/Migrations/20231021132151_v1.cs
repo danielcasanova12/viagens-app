@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace travelapi.Migrations
 {
     /// <inheritdoc />
-    public partial class CriarBanco : Migration
+    public partial class v1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -187,10 +187,10 @@ namespace travelapi.Migrations
                 {
                     IdReservation = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     CheckInDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CheckOutDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    ReservedHotelIdHotel = table.Column<int>(type: "int", nullable: true),
-                    UserIdUser = table.Column<int>(type: "int", nullable: true)
+                    ReservedHotelIdHotel = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -201,10 +201,11 @@ namespace travelapi.Migrations
                         principalTable: "Hotels",
                         principalColumn: "IdHotel");
                     table.ForeignKey(
-                        name: "FK_Reservations_Users_UserIdUser",
-                        column: x => x.UserIdUser,
+                        name: "FK_Reservations_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "IdUser");
+                        principalColumn: "IdUser",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -238,11 +239,11 @@ namespace travelapi.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    ReservationId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Price = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    DestinationIdDestination = table.Column<int>(type: "int", nullable: true),
-                    ReservationIdReservation = table.Column<int>(type: "int", nullable: true)
+                    DestinationIdDestination = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -253,10 +254,11 @@ namespace travelapi.Migrations
                         principalTable: "Destinations",
                         principalColumn: "IdDestination");
                     table.ForeignKey(
-                        name: "FK_Activities_Reservations_ReservationIdReservation",
-                        column: x => x.ReservationIdReservation,
+                        name: "FK_Activities_Reservations_ReservationId",
+                        column: x => x.ReservationId,
                         principalTable: "Reservations",
-                        principalColumn: "IdReservation");
+                        principalColumn: "IdReservation",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -266,9 +268,9 @@ namespace travelapi.Migrations
                 column: "DestinationIdDestination");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Activities_ReservationIdReservation",
+                name: "IX_Activities_ReservationId",
                 table: "Activities",
-                column: "ReservationIdReservation");
+                column: "ReservationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Destinations_LocationIdLocal",
@@ -291,9 +293,9 @@ namespace travelapi.Migrations
                 column: "ReservedHotelIdHotel");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_UserIdUser",
+                name: "IX_Reservations_UserId",
                 table: "Reservations",
-                column: "UserIdUser");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Restaurants_DestinationIdDestination",

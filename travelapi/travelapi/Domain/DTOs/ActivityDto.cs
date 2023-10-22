@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace travelapi.Domain.Models
+namespace travelapi.Domain.Dto
 {
-    public class Activity
+    public class ActivityDto
     {
         [Key]
         public int? IdActivity { get; set; }

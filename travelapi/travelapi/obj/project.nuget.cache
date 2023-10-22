@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "k+hNSX2Ot/4a2X2Vfu1T24d/CMZFolDPXkKtXswH57XdytByyDXdoDhhx+Wdh1d0RRCoPed701zsB9uv5ndMzQ==",
+  "dgSpecHash": "/H0PiRBNdzDuiQiIsW/q1iVDoe5Iy5Empl56J13tHkN2dD0QEo+3S7UhjeMfZJKN3m8Oq6OTvL1oMZnVXOnrJQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\travelapi.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\daneil\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\daneil\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\daneil\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\daneil\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.7\\microsoft.aspnetcore.openapi.7.0.7.nupkg.sha512",
+    "C:\\Users\\daneil\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\daneil\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.12\\microsoft.entityframeworkcore.7.0.12.nupkg.sha512",
     "C:\\Users\\daneil\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.12\\microsoft.entityframeworkcore.abstractions.7.0.12.nupkg.sha512",
     "C:\\Users\\daneil\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.12\\microsoft.entityframeworkcore.analyzers.7.0.12.nupkg.sha512",

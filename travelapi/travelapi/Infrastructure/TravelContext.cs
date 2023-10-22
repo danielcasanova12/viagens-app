@@ -12,9 +12,11 @@ namespace travelapi.Infrastructure
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Destination> Destinations { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
-        public DbSet<TypeRoom> RoomTypes { get; set; }
+        public DbSet<TypeRoom> TypeRooms { get; set; }
         public DbSet<Local> Locations { get; set; }
-
+        public DbSet<TouristAttraction> TouristAttractions { get; set; }
+        
+        public DbSet<Cost> Costs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql("server=localhost;database=traveldb;user=root;password=root",

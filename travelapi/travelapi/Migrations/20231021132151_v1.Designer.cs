@@ -11,8 +11,8 @@ using travelapi.Infrastructure;
 namespace travelapi.Migrations
 {
     [DbContext(typeof(TravelContext))]
-    [Migration("20231020130212_versao2")]
-    partial class versao2
+    [Migration("20231021132151_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,14 +40,14 @@ namespace travelapi.Migrations
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int?>("ReservationIdReservation")
+                    b.Property<int>("ReservationId")
                         .HasColumnType("int");
 
                     b.HasKey("IdActivity");
 
                     b.HasIndex("DestinationIdDestination");
 
-                    b.HasIndex("ReservationIdReservation");
+                    b.HasIndex("ReservationId");
 
                     b.ToTable("Activities");
                 });
@@ -297,7 +297,9 @@ namespace travelapi.Migrations
 
                     b.HasOne("travelapi.Domain.Models.Reservation", null)
                         .WithMany("ReservedActivities")
-                        .HasForeignKey("ReservationIdReservation");
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("travelapi.Domain.Models.Destination", b =>

@@ -11,8 +11,8 @@ using travelapi.Infrastructure;
 namespace travelapi.Migrations
 {
     [DbContext(typeof(TravelContext))]
-    [Migration("20231019212932_CriarBanco")]
-    partial class CriarBanco
+    [Migration("20231021134408_v2")]
+    partial class v2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,16 +40,42 @@ namespace travelapi.Migrations
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int?>("ReservationIdReservation")
+                    b.Property<int>("ReservationId")
                         .HasColumnType("int");
 
                     b.HasKey("IdActivity");
 
                     b.HasIndex("DestinationIdDestination");
 
-                    b.HasIndex("ReservationIdReservation");
+                    b.HasIndex("ReservationId");
 
                     b.ToTable("Activities");
+                });
+
+            modelBuilder.Entity("travelapi.Domain.Models.Cost", b =>
+                {
+                    b.Property<int>("IdCosts")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Attractions")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Extras")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Restaurants")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Transport")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("accommodation")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("IdCosts");
+
+                    b.ToTable("Costs");
                 });
 
             modelBuilder.Entity("travelapi.Domain.Models.Destination", b =>
@@ -158,14 +184,14 @@ namespace travelapi.Migrations
                     b.Property<int?>("ReservedHotelIdHotel")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserIdUser")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("IdReservation");
 
                     b.HasIndex("ReservedHotelIdHotel");
 
-                    b.HasIndex("UserIdUser");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reservations");
                 });
@@ -297,7 +323,9 @@ namespace travelapi.Migrations
 
                     b.HasOne("travelapi.Domain.Models.Reservation", null)
                         .WithMany("ReservedActivities")
-                        .HasForeignKey("ReservationIdReservation");
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("travelapi.Domain.Models.Destination", b =>
@@ -332,7 +360,9 @@ namespace travelapi.Migrations
 
                     b.HasOne("travelapi.Domain.Models.User", null)
                         .WithMany("Reservations")
-                        .HasForeignKey("UserIdUser");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ReservedHotel");
                 });
