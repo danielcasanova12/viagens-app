@@ -1,29 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using travelapi.Domain.Dto;
 using travelapi.Domain.Models;
 using travelapi.Infrastructure;
+using AutoMapper;
 
 [Route("api/users")]
 [ApiController]
 public class UserController : ControllerBase
 {
     private readonly TravelContext _context;
+    private readonly IMapper _mapper;
 
-    public UserController(TravelContext context)
+    public UserController(TravelContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    // GET: api/users
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
     {
-        return await _context.Users.ToListAsync();
+        var users = await _context.Users.ToListAsync();
+        var userDtos = _mapper.Map<List<UserDto>>(users);
+        return Ok(userDtos);
     }
 
-    // GET: api/users/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(int id)
+    public async Task<ActionResult<UserDto>> GetUser(int id)
     {
         var user = await _context.Users.FindAsync(id);
 
@@ -32,28 +39,31 @@ public class UserController : ControllerBase
             return NotFound();
         }
 
-        return user;
+        var userDto = _mapper.Map<UserDto>(user);
+        return userDto;
     }
 
-    // POST: api/users
     [HttpPost]
-    public async Task<ActionResult<User>> PostUser(User user)
+    public async Task<ActionResult<UserDto>> PostUser(UserDto userDto)
     {
+        var user = _mapper.Map<User>(userDto);
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetUser", new { id = user.IdUser }, user);
+        var createdDto = _mapper.Map<UserDto>(user);
+
+        return CreatedAtAction("GetUser", new { id = createdDto.IdUser }, createdDto);
     }
 
-    // PUT: api/users/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutUser(int id, User user)
+    public async Task<IActionResult> PutUser(int id, UserDto userDto)
     {
-        if (id != user.IdUser)
+        if (id != userDto.IdUser)
         {
             return BadRequest();
         }
 
+        var user = _mapper.Map<User>(userDto);
         _context.Entry(user).State = EntityState.Modified;
 
         try
@@ -75,7 +85,6 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    // DELETE: api/users/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {

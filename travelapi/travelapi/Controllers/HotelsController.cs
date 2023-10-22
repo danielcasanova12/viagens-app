@@ -3,31 +3,34 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using travelapi.Domain.Dto;
 using travelapi.Domain.Models;
 using travelapi.Infrastructure;
+using AutoMapper;
 
-namespace travelapi.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class HotelsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class HotelsController : ControllerBase
+    private readonly TravelContext _context;
+    private readonly IMapper _mapper;
+
+    public HotelsController(TravelContext context, IMapper mapper)
     {
-        private readonly TravelContext _context;
+        _context = context;
+        _mapper = mapper;
+    }
 
-        public HotelsController(TravelContext context)
-        {
-            _context = context;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels()
-        {
-            var hotels = await _context.Hotels.ToListAsync();
-            return Ok(hotels);
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
+    {
+        var hotels = await _context.Hotels.ToListAsync();
+        var hotelDtos = _mapper.Map<List<HotelDto>>(hotels);
+        return Ok(hotelDtos);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Hotel>> GetHotelById(int id)
+    public async Task<ActionResult<HotelDto>> GetHotelById(int id)
     {
         var hotel = await _context.Hotels.FindAsync(id);
 
@@ -36,26 +39,31 @@ namespace travelapi.Controllers
             return NotFound();
         }
 
-        return hotel;
+        var hotelDto = _mapper.Map<HotelDto>(hotel);
+        return hotelDto;
     }
 
     [HttpPost]
-    public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
+    public async Task<ActionResult<HotelDto>> PostHotel(HotelDto hotelDto)
     {
+        var hotel = _mapper.Map<Hotel>(hotelDto);
         _context.Hotels.Add(hotel);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetHotelById", new { id = hotel.IdHotel }, hotel);
+        var createdDto = _mapper.Map<HotelDto>(hotel);
+
+        return CreatedAtAction("GetHotelById", new { id = createdDto.IdHotel }, createdDto);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutHotel(int id, Hotel hotel)
+    public async Task<IActionResult> PutHotel(int id, HotelDto hotelDto)
     {
-        if (id != hotel.IdHotel)
+        if (id != hotelDto.IdHotel)
         {
             return BadRequest();
         }
 
+        var hotel = _mapper.Map<Hotel>(hotelDto);
         _context.Entry(hotel).State = EntityState.Modified;
 
         try
@@ -81,7 +89,6 @@ namespace travelapi.Controllers
     public async Task<IActionResult> DeleteHotel(int id)
     {
         var hotel = await _context.Hotels.FindAsync(id);
-
         if (hotel == null)
         {
             return NotFound();
@@ -97,5 +104,4 @@ namespace travelapi.Controllers
     {
         return _context.Hotels.Any(e => e.IdHotel == id);
     }
-}
 }

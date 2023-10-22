@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using travelapi.Domain.Dto;
 using travelapi.Domain.Models;
 using travelapi.Infrastructure;
 
@@ -13,92 +14,102 @@ namespace travelapi.Controllers
     public class ActivityController : ControllerBase
     {
         private readonly TravelContext _context;
+        private readonly IMapper _mapper;
 
-        public ActivityController(TravelContext context)
+        public ActivityController(TravelContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        // GET: api/Activity
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Activity>>> GetActivities()
+        public async Task<ActionResult<IEnumerable<ActivityDto>>> GetActivities()
         {
-            return await _context.Activities.ToListAsync();
-    }
-
-    // GET: api/Activity/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Activity>> GetActivity(int id)
-    {
-        var activity = await _context.Activities.FindAsync(id);
-
-        if (activity == null)
-        {
-            return NotFound();
+            var activities = await _context.Activities.ToListAsync();
+            var activityDtos = _mapper.Map<List<ActivityDto>>(activities);
+            return activityDtos;
         }
 
-        return activity;
-    }
-
-    // POST: api/Activity
-    [HttpPost]
-    public async Task<ActionResult<Activity>> PostActivity(Activity activity)
-    {
-        _context.Activities.Add(activity);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetActivity", new { id = activity.IdActivity }, activity);
-    }
-
-    // PUT: api/Activity/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutActivity(int id, Activity activity)
-    {
-        if (id != activity.IdActivity)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ActivityDto>> GetActivity(int id)
         {
-            return BadRequest();
-        }
+            var activity = await _context.Activities.FindAsync(id);
 
-        _context.Entry(activity).State = EntityState.Modified;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!ActivityExists(id))
+            if (activity == null)
             {
                 return NotFound();
             }
-            else
-            {
-                throw;
-            }
+
+            var activityDto = _mapper.Map<ActivityDto>(activity);
+            return activityDto;
         }
 
-        return NoContent();
-    }
-
-    // DELETE: api/Activity/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteActivity(int id)
-    {
-        var activity = await _context.Activities.FindAsync(id);
-        if (activity == null)
+        [HttpPost]
+        public async Task<ActionResult<ActivityDto>> PostActivity(ActivityDto activityDto)
         {
-            return NotFound();
+            var activity = _mapper.Map<Activity>(activityDto);
+            _context.Activities.Add(activity);
+            await _context.SaveChangesAsync();
+
+            var createdActivityDto = _mapper.Map<ActivityDto>(activity);
+            return CreatedAtAction("GetActivity", new { id = createdActivityDto.IdActivity }, createdActivityDto);
         }
 
-        _context.Activities.Remove(activity);
-        await _context.SaveChangesAsync();
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutActivity(int id, ActivityDto activityDto)
+        {
+            if (id != activityDto.IdActivity)
+            {
+                return BadRequest();
+            }
 
-        return NoContent();
-    }
+            var existingActivity = await _context.Activities.FindAsync(id);
 
-    private bool ActivityExists(int id)
-    {
-        return _context.Activities.Any(e => e.IdActivity == id);
+            if (existingActivity == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(activityDto, existingActivity);
+            _context.Entry(existingActivity).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ActivityExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteActivity(int id)
+        {
+            var activity = await _context.Activities.FindAsync(id);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            _context.Activities.Remove(activity);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool ActivityExists(int id)
+        {
+            return _context.Activities.Any(e => e.IdActivity == id);
+        }
     }
-}
 }

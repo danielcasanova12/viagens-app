@@ -9,7 +9,7 @@ namespace travelapi.Domain.Models
         public string Name { get; set; }
         public Local Localition { get; set; }
 
-        public string ImageBase64 { get; set; }
+        public string Image { get; set; }
 
         public float Averageprice { get; set; }
     }

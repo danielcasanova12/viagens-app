@@ -1,33 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using travelapi.Domain.Models;
+using travelapi.Domain.Dto;
 using travelapi.Infrastructure;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 
-namespace travelapi.Controllers
+[Route("api/local")] // Define uma rota base para o controller
+[ApiController]
+public class LocalController : ControllerBase
 {
-    [Route("api/local")] // Define uma rota base para o controller
-    [ApiController]
-    public class LocalController : ControllerBase
+    private readonly TravelContext _context;
+    private readonly IMapper _mapper;
+
+    public LocalController(TravelContext context, IMapper mapper)
     {
-        private readonly TravelContext _context;
+        _context = context;
+        _mapper = mapper;
+    }
 
-        public LocalController(TravelContext context)
-        {
-            _context = context;
-        }
-
-        // Rota personalizada para listar todos os locais
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Local>>> GetAllLocals()
-        {
-            return await _context.Locations.ToListAsync();
+    // Rota personalizada para listar todos os locais
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<LocalDto>>> GetAllLocals()
+    {
+        var locals = await _context.Locations.ToListAsync();
+        var localDtos = _mapper.Map<List<LocalDto>>(locals);
+        return Ok(localDtos);
     }
 
     // Rota personalizada para obter um local por ID
     [HttpGet("{id}")]
-    public async Task<ActionResult<Local>> GetLocal(int id)
+    public async Task<ActionResult<LocalDto>> GetLocal(int id)
     {
         var local = await _context.Locations.FindAsync(id);
 
@@ -36,28 +40,33 @@ namespace travelapi.Controllers
             return NotFound();
         }
 
-        return local;
+        var localDto = _mapper.Map<LocalDto>(local);
+        return localDto;
     }
 
     // Rota personalizada para criar um novo local
     [HttpPost]
-    public async Task<ActionResult<Local>> CreateLocal(Local local)
+    public async Task<ActionResult<LocalDto>> CreateLocal(LocalDto localDto)
     {
+        var local = _mapper.Map<Local>(localDto);
         _context.Locations.Add(local);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetLocal", new { id = local.IdLocal }, local);
+        var createdDto = _mapper.Map<LocalDto>(local);
+
+        return CreatedAtAction("GetLocal", new { id = createdDto.IdLocal }, createdDto);
     }
 
     // Rota personalizada para atualizar um local por ID
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateLocal(int id, Local local)
+    public async Task<IActionResult> UpdateLocal(int id, LocalDto localDto)
     {
-        if (id != local.IdLocal)
+        if (id != localDto.IdLocal)
         {
             return BadRequest();
         }
 
+        var local = _mapper.Map<Local>(localDto);
         _context.Entry(local).State = EntityState.Modified;
 
         try
@@ -99,5 +108,4 @@ namespace travelapi.Controllers
     {
         return _context.Locations.Any(e => e.IdLocal == id);
     }
-}
 }

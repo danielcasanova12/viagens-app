@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using travelapi.Domain.Dto;
 using travelapi.Domain.Models;
 using travelapi.Infrastructure;
+using AutoMapper;
 
 namespace travelapi.Controllers
 {
@@ -13,89 +15,97 @@ namespace travelapi.Controllers
     public class RestaurantsController : ControllerBase
     {
         private readonly TravelContext _context;
+        private readonly IMapper _mapper;
 
-        public RestaurantsController(TravelContext context)
+        public RestaurantsController(TravelContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Restaurant>>> GetRestaurants()
+        public async Task<ActionResult<IEnumerable<RestaurantDto>>> GetRestaurants()
         {
             var restaurants = await _context.Restaurants.ToListAsync();
-            return Ok(restaurants);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Restaurant>> GetRestaurantById(int id)
-    {
-        var restaurant = await _context.Restaurants.FindAsync(id);
-
-        if (restaurant == null)
-        {
-            return NotFound();
+            var restaurantDtos = _mapper.Map<List<RestaurantDto>>(restaurants);
+            return Ok(restaurantDtos);
         }
 
-        return restaurant;
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<Restaurant>> PostRestaurant(Restaurant restaurant)
-    {
-        _context.Restaurants.Add(restaurant);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetRestaurantById", new { id = restaurant.IdRestaurant }, restaurant);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutRestaurant(int id, Restaurant restaurant)
-    {
-        if (id != restaurant.IdRestaurant)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RestaurantDto>> GetRestaurantById(int id)
         {
-            return BadRequest();
-        }
+            var restaurant = await _context.Restaurants.FindAsync(id);
 
-        _context.Entry(restaurant).State = EntityState.Modified;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!RestaurantExists(id))
+            if (restaurant == null)
             {
                 return NotFound();
             }
-            else
-            {
-                throw;
-            }
+
+            var restaurantDto = _mapper.Map<RestaurantDto>(restaurant);
+            return restaurantDto;
         }
 
-        return NoContent();
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteRestaurant(int id)
-    {
-        var restaurant = await _context.Restaurants.FindAsync(id);
-
-        if (restaurant == null)
+        [HttpPost]
+        public async Task<ActionResult<RestaurantDto>> PostRestaurant(RestaurantDto restaurantDto)
         {
-            return NotFound();
+            var restaurant = _mapper.Map<Restaurant>(restaurantDto);
+            _context.Restaurants.Add(restaurant);
+            await _context.SaveChangesAsync();
+
+            var createdDto = _mapper.Map<RestaurantDto>(restaurant);
+
+            return CreatedAtAction("GetRestaurantById", new { id = createdDto.IdRestaurant }, createdDto);
         }
 
-        _context.Restaurants.Remove(restaurant);
-        await _context.SaveChangesAsync();
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutRestaurant(int id, RestaurantDto restaurantDto)
+        {
+            if (id != restaurantDto.IdRestaurant)
+            {
+                return BadRequest();
+            }
 
-        return NoContent();
-    }
+            var restaurant = _mapper.Map<Restaurant>(restaurantDto);
+            _context.Entry(restaurant).State = EntityState.Modified;
 
-    private bool RestaurantExists(int id)
-    {
-        return _context.Restaurants.Any(e => e.IdRestaurant == id);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RestaurantExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRestaurant(int id)
+        {
+            var restaurant = await _context.Restaurants.FindAsync(id);
+
+            if (restaurant == null)
+            {
+                return NotFound();
+            }
+
+            _context.Restaurants.Remove(restaurant);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool RestaurantExists(int id)
+        {
+            return _context.Restaurants.Any(e => e.IdRestaurant == id);
+        }
     }
-}
 }

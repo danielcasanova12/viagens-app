@@ -15,10 +15,13 @@ namespace travelapi.Domain.AutoMappers
                 .ReverseMap();
             CreateMap<Destination, DestinationDto>()
                 .ReverseMap();
+            CreateMap<HotelDto, Hotel>()
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location));
             CreateMap<Hotel, HotelDto>()
-                .ReverseMap();
-            CreateMap<Local, LocalDto>()
-                .ReverseMap();
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location));
+
+            CreateMap<Local, LocalDto>();
+            CreateMap<LocalDto, Local>();
             CreateMap<Reservation, ReservationDto>()
                 .ReverseMap();
             CreateMap<Restaurant, RestaurantDto>()
