@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using travelapi.Domain.Dto;
 using travelapi.Domain.Models;
 using travelapi.Infrastructure;
+using AutoMapper;
 
 namespace travelapi.Controllers
 {
@@ -13,22 +15,24 @@ namespace travelapi.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly TravelContext _context;
+        private readonly IMapper _mapper;
 
-        public ReservationController(TravelContext context)
+        public ReservationController(TravelContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        // GET: api/Reservation
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
+        public async Task<ActionResult<IEnumerable<ReservationDto>>> GetReservations()
         {
-            return await _context.Reservations.ToListAsync();
+            var reservations = await _context.Reservations.ToListAsync();
+            var reservationDtos = _mapper.Map<List<ReservationDto>>(reservations);
+            return Ok(reservationDtos);
         }
 
-        // GET: api/Reservation/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Reservation>> GetReservation(int id)
+        public async Task<ActionResult<ReservationDto>> GetReservation(int id)
         {
             var reservation = await _context.Reservations.FindAsync(id);
 
@@ -37,28 +41,31 @@ namespace travelapi.Controllers
                 return NotFound();
             }
 
-            return reservation;
+            var reservationDto = _mapper.Map<ReservationDto>(reservation);
+            return reservationDto;
         }
 
-        // POST: api/Reservation
         [HttpPost]
-        public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
+        public async Task<ActionResult<ReservationDto>> PostReservation(ReservationDto reservationDto)
         {
+            var reservation = _mapper.Map<Reservation>(reservationDto);
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetReservation", new { id = reservation.IdReservation }, reservation);
+            var createdDto = _mapper.Map<ReservationDto>(reservation);
+
+            return CreatedAtAction("GetReservation", new { id = createdDto.IdReservation }, createdDto);
         }
 
-        // PUT: api/Reservation/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReservation(int id, Reservation reservation)
+        public async Task<IActionResult> PutReservation(int id, ReservationDto reservationDto)
         {
-            if (id != reservation.IdReservation)
+            if (id != reservationDto.IdReservation)
             {
                 return BadRequest();
             }
 
+            var reservation = _mapper.Map<Reservation>(reservationDto);
             _context.Entry(reservation).State = EntityState.Modified;
 
             try
@@ -80,11 +87,11 @@ namespace travelapi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Reservation/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReservation(int id)
         {
             var reservation = await _context.Reservations.FindAsync(id);
+
             if (reservation == null)
             {
                 return NotFound();

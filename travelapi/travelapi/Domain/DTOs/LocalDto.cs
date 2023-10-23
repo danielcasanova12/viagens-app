@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace travelapi.Domain.Models
+namespace travelapi.Domain.Dto
 {
-    public class Local
+    public class LocalDto
     {
         [Key]
         public int IdLocal { get; set; }

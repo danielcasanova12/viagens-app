@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace travelapi.Domain.Models
+namespace travelapi.Domain.Dto
 {
-    public class User
+    public class UserDto
     {
         [Key]
         public int? IdUser { get; set; }
@@ -10,7 +10,7 @@ namespace travelapi.Domain.Models
         public string? Email { get; set; }
         public string Password { get; set; }
         [Required]
-        public List<Reservation> Reservations { get; set; } = new List<Reservation>();
+        public List<ReservationDto> Reservations { get; set; } = new List<ReservationDto>();
         public string Image { get; set; }
         public string TypePermission { get; set; }
     }

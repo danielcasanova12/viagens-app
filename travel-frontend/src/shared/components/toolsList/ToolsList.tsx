@@ -1,5 +1,6 @@
 import { Box, Button, Paper, TextField, useTheme} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { Environment } from "../../environment";
 
 interface IToolsListProps {
   children?: React.ReactNode;
@@ -36,7 +37,7 @@ export const ToolsList:React.FC<IToolsListProps> = ({
 			{showInputSearch && (
 				<TextField
 					size='small'
-					placeholder='Search...'
+					placeholder={Environment.INPUT_DEFAULT}
 					variant='outlined'
 					value={textSearch}
 					onChange={(e) => changeTextSearch?.(e.target.value)}

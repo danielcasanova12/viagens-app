@@ -26,83 +26,83 @@ namespace travelapi.Controllers
         public async Task<ActionResult<IEnumerable<CostDto>>> GetCosts()
         {
             var costs = await _context.Costs.ToListAsync();
-        var costDtos = _mapper.Map<List<CostDto>>(costs);
+            var costDtos = _mapper.Map<List<CostDto>>(costs);
             return Ok(costDtos);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<CostDto>> GetCostById(int id)
-    {
-        var cost = await _context.Costs.FindAsync(id);
-
-        if (cost == null)
-        {
-            return NotFound();
         }
 
-        var costDto = _mapper.Map<CostDto>(cost);
-        return Ok(costDto);
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<CostDto>> PostCost(CostDto costDto)
-    {
-        var cost = _mapper.Map<Cost>(costDto);
-        _context.Costs.Add(cost);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetCostById", new { id = cost.IdCosts }, _mapper.Map<CostDto>(cost));
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutCost(int id, CostDto costDto)
-    {
-        if (id != costDto.IdCosts)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CostDto>> GetCostById(int id)
         {
-            return BadRequest();
-        }
+            var cost = await _context.Costs.FindAsync(id);
 
-        var cost = _mapper.Map<Cost>(costDto);
-        _context.Entry(cost).State = EntityState.Modified;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!CostExists(id))
+            if (cost == null)
             {
                 return NotFound();
             }
-            else
-            {
-                throw;
-            }
+
+            var costDto = _mapper.Map<CostDto>(cost);
+            return Ok(costDto);
         }
 
-        return NoContent();
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCost(int id)
-    {
-        var cost = await _context.Costs.FindAsync(id);
-
-        if (cost == null)
+        [HttpPost]
+        public async Task<ActionResult<CostDto>> PostCost(CostDto costDto)
         {
-            return NotFound();
+            var cost = _mapper.Map<Cost>(costDto);
+            _context.Costs.Add(cost);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetCostById", new { id = cost.IdCosts }, _mapper.Map<CostDto>(cost));
         }
 
-        _context.Costs.Remove(cost);
-        await _context.SaveChangesAsync();
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCost(int id, CostDto costDto)
+        {
+            if (id != costDto.IdCosts)
+            {
+                return BadRequest();
+            }
 
-        return NoContent();
-    }
+            var cost = _mapper.Map<Cost>(costDto);
+            _context.Entry(cost).State = EntityState.Modified;
 
-    private bool CostExists(int id)
-    {
-        return _context.Costs.Any(e => e.IdCosts == id);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CostExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCost(int id)
+        {
+            var cost = await _context.Costs.FindAsync(id);
+
+            if (cost == null)
+            {
+                return NotFound();
+            }
+
+            _context.Costs.Remove(cost);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool CostExists(int id)
+        {
+            return _context.Costs.Any(e => e.IdCosts == id);
+        }
     }
-}
 }

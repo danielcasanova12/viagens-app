@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace travelapi.Domain.Models
+namespace travelapi.Domain.Dto
 {
-    public class Cost
+    public class CostDto
     {
         [Key]
         public int IdCosts { get; set; }
