@@ -1,3 +1,6 @@
+import { Environment } from "../../../environment";
+import { Api } from "../axios-config";
+
 
 interface IUser {
   IdUser: number;
@@ -11,14 +14,14 @@ interface IUser {
 
 const gerAllUsers = async (page = 1, filter = ""): Promise<IUser | Error> => {
 	try {
-		const urlRelativa = `/pessoas?_page=${page}&_limit=${Environment.LIMITE_DEFAULT}&nomeCompleto_like=${filter}`;
+		const urlRelativa = `/pessoas?_page=${page}&_limit=${Environment.LIMIT_DEFAULT}&Username_like=${filter}`;
 
 		const { data, headers } = await Api.get(urlRelativa);
 
 		if (data) {
 			return {
 				data,
-				totalCount: Number(headers["x-total-count"] || Environment.LIMITE_DE_LINHAS),
+				totalCount: Number(headers["x-total-count"] || Environment.LIMIT_DEFAULT),
 			};
 		}
 
@@ -30,20 +33,20 @@ const gerAllUsers = async (page = 1, filter = ""): Promise<IUser | Error> => {
 };
 
 const gerAllUsersById = async () => {
-	const response = await axios.get("/users");
+	const response = await Api.get("/users");
 	return response.data;
 };
 
 const create = async () => {
-	const response = await axios.get("/users");
+	const response = await Api.get("/users");
 	return response.data;
 };
 const updateById = async () => {
-	const response = await axios.get("/users");
+	const response = await Api.get("/users");
 	return response.data;
 };
 const deleteById = async () => {
-	const response = await axios.get("/users");
+	const response = await Api.get("/users");
 	return response.data;
 };
 

@@ -7,12 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 using travelapi.Infrastructure; // Certifique-se de ter o namespace correto aqui
 using System;
+using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adicione serviços ao contêiner.
 builder.Services.AddScoped<TravelContext>();
-
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
