@@ -70,7 +70,7 @@ export const ToolsDetails: React.FC<IToolsDetailsProps> = ({
 					startIcon={<SaveIcon />}
 				>
 					<Typography variant="button" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">
-						Salvar
+					Save
 					</Typography>
 				</Button>
 			)}
@@ -88,7 +88,7 @@ export const ToolsDetails: React.FC<IToolsDetailsProps> = ({
 					startIcon={<SaveIcon />}
 				>
 					<Typography variant="button" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">
-						Salvar e voltar
+						Save and Back
 					</Typography>
 				</Button>
 			)}
@@ -106,7 +106,7 @@ export const ToolsDetails: React.FC<IToolsDetailsProps> = ({
 					startIcon={<DeleteIcon />}
 				>
 					<Typography variant="button" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">
-						Apagar
+						Delete
 					</Typography>
 				</Button>
 			)}
