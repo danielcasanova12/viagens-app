@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using travelapi.Application.Interfaces;
 using travelapi.Domain.Dto;
 using travelapi.Domain.Models;
 using travelapi.Infrastructure;
+using travelapi.Utils;
 
 namespace travelapi.Controllers
 {
@@ -15,11 +17,13 @@ namespace travelapi.Controllers
     {
         private readonly TravelContext _context;
         private readonly IMapper _mapper;
+        private readonly ITravelServices _travelServices;
 
-        public ActivityController(TravelContext context, IMapper mapper)
+        public ActivityController(TravelContext context, IMapper mapper, ITravelServices travelServices)
         {
             _context = context;
             _mapper = mapper;
+            _travelServices = travelServices;
         }
 
         [HttpGet]
@@ -33,15 +37,24 @@ namespace travelapi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ActivityDto>> GetActivity(int id)
         {
-            var activity = await _context.Activities.FindAsync(id);
-
-            if (activity == null)
+            try
             {
-                return NotFound();
+                var result = await _travelServices.BuscarActyvityById(id);
+                return Ok(result);
             }
+            catch (Exception ex)
+            {
+                throw ex.Failin();
+            }
+            //var activity = await _context.Activities.FindAsync(id);
 
-            var activityDto = _mapper.Map<ActivityDto>(activity);
-            return activityDto;
+            //if (activity == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var activityDto = _mapper.Map<ActivityDto>(activity);
+            //return activityDto;
         }
 
         [HttpPost]
