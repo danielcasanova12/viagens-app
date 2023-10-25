@@ -144,7 +144,7 @@ export const ToolsDetails: React.FC<IToolsDetailsProps> = ({
 					startIcon={<ArrowBackIcon />}
 				>
 					<Typography variant="button" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">
-						Voltar
+						Back
 					</Typography>
 				</Button>
 			)}
