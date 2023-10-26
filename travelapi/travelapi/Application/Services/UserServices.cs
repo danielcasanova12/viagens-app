@@ -72,16 +72,42 @@ namespace travelapi.Application.Services
                 throw ex.Failin();
             }
         }
-        public async Task<User> EditarUser()
+        public async Task<User> EditarUser(int id, User user)
         {
             try
             {
+                var existingUser = await _context.Users.FindAsync(id);
 
-            }catch (Exception ex) {
+                if (existingUser == null)
+                {
+                    return null;
+                }
+                _context.Entry(existingUser).CurrentValues.SetValues(user);
+                _context.SaveChanges();
+                return user;
+
+            }
+            catch (Exception ex)
+            {
                 throw ex.Failin();
             }
         }
+        public async Task<User> DeletarUser(int id)
+        {
+            if(id == null)
+            {
+                return null;
+            }
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
 
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.IdUser == id);

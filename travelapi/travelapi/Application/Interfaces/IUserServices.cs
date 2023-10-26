@@ -7,5 +7,7 @@ namespace travelapi.Application.Interfaces
         Task<List<User>> BuscarUserPagiandos(int? pageNumber, int? pageSize);
         Task<User> BuscarUserPorId(int id);
         Task<User> CriarUser(User user);
+        Task<User> EditarUser(int id, User user);
+        Task<User> DeletarUser(int id);
     }
 }

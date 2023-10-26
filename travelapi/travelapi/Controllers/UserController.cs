@@ -9,6 +9,7 @@ using travelapi.Infrastructure;
 using AutoMapper;
 using travelapi.Application.Services;
 using travelapi.Application.Interfaces;
+using Microsoft.Extensions.ObjectPool;
 
 [Route("api/users")]
 [ApiController]
@@ -65,54 +66,51 @@ public class UserController : ControllerBase
         }
     }
 
-
     [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(int id, UserDto userDto)
     {
+        var user = _mapper.Map<User>(userDto);
         if (id != userDto.IdUser)
         {
-            return BadRequest();
+            return BadRequest("Id do user != do id");
         }
-
-        var user = _mapper.Map<User>(userDto);
-        _context.Entry(user).State = EntityState.Modified;
-
         try
         {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!UserExists(id))
+            var result = await _userServices.EditarUser(id, user);
+            if (result != null)
             {
-                return NotFound();
+                return Ok(result); 
             }
             else
             {
-                throw;
+                return NotFound(); 
             }
         }
-
-        return NoContent();
+        catch (Exception ex)
+        {  
+            return BadRequest(ex.Message); 
+        }
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
-        var user = await _context.Users.FindAsync(id);
-        if (user == null)
+        try
         {
-            return NotFound();
+
+            var result = await _userServices.DeletarUser(id);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
-
-        _context.Users.Remove(user);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
+        catch(Exception ex) { }
+        {
+            return BadRequest($"Unable to delete user {id}");
+        }
     }
 
-    private bool UserExists(int id)
-    {
-        return _context.Users.Any(e => e.IdUser == id);
-    }
+
 }
