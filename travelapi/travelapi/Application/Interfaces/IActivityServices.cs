@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace travelapi.Application.Interfaces
 {
-    public interface ITravelServices
+    public interface IActivityServices
     {
-        Task<Activity> BuscarActyvityById(int id);
+        Task<Activity> BuscarActyvityPorId(int id);
     }
 }

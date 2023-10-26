@@ -11,6 +11,7 @@ export const Dashboard = () => {
 	useEffect(() => {
 		setLoading(true);
 		UserService.getAllUsers()
+			.then((data) => {
 				if (data instanceof Error) {
 					setError(data);
 				} else {

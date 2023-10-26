@@ -13,8 +13,8 @@ using travelapi.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adicione serviços ao contêiner.
-builder.Services.AddScoped<ITravelServices, TravelServices>();
+builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IActivityServices, ActivityServices>();
 builder.Services.AddScoped<TravelContext>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();

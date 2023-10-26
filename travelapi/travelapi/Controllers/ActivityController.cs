@@ -17,9 +17,9 @@ namespace travelapi.Controllers
     {
         private readonly TravelContext _context;
         private readonly IMapper _mapper;
-        private readonly ITravelServices _travelServices;
+        private readonly IActivityServices _travelServices;
 
-        public ActivityController(TravelContext context, IMapper mapper, ITravelServices travelServices)
+        public ActivityController(TravelContext context, IMapper mapper, IActivityServices travelServices)
         {
             _context = context;
             _mapper = mapper;
@@ -39,7 +39,7 @@ namespace travelapi.Controllers
         {
             try
             {
-                var result = await _travelServices.BuscarActyvityById(id);
+                var result = await _travelServices.BuscarActyvityPorId(id);
                 return Ok(result);
             }
             catch (Exception ex)

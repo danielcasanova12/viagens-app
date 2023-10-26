@@ -7,6 +7,8 @@ using travelapi.Domain.Dto;
 using travelapi.Domain.Models;
 using travelapi.Infrastructure;
 using AutoMapper;
+using travelapi.Application.Services;
+using travelapi.Application.Interfaces;
 
 [Route("api/users")]
 [ApiController]
@@ -14,20 +16,22 @@ public class UserController : ControllerBase
 {
     private readonly TravelContext _context;
     private readonly IMapper _mapper;
-
-    public UserController(TravelContext context, IMapper mapper)
+    private readonly IUserServices _userServices;
+    public UserController(TravelContext context, IMapper mapper, IUserServices userServices)
     {
         _context = context;
         _mapper = mapper;
+        _userServices = userServices;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(int pageNumber, int pageSize)
     {
-        var users = await _context.Users.ToListAsync();
-        var userDtos = _mapper.Map<List<UserDto>>(users);
+        var results = await _userServices.BuscarUserPagiandos(pageNumber, pageSize);
+        var userDtos = _mapper.Map<List<UserDto>>(results);
         return Ok(userDtos);
     }
+    
 
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetUser(int id)

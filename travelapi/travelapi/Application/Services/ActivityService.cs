@@ -5,18 +5,18 @@ using travelapi.Utils;
 
 namespace travelapi.Application.Services
 {
-    public class TravelServices : ITravelServices
+    public class ActivityServices : IActivityServices
     {
         private readonly TravelContext _context;
 
-        public TravelServices(TravelContext context)
+        public ActivityServices(TravelContext context)
         {
             _context = context;
         }
 
 
 
-        public async Task<Activity> BuscarActyvityById(int id)
+        public async Task<Activity> BuscarActyvityPorId(int id)
         {
             try
             {
