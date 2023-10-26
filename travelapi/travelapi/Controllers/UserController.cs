@@ -25,7 +25,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(int pageNumber, int pageSize)
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(int? pageNumber, int? pageSize)
     {
         var results = await _userServices.BuscarUserPagiandos(pageNumber, pageSize);
         var userDtos = _mapper.Map<List<UserDto>>(results);
@@ -34,9 +34,9 @@ public class UserController : ControllerBase
     
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<UserDto>> GetUser(int id)
+    public async Task<ActionResult<UserDto>> GetUsersById(int id)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _userServices.BuscarUserPorId(id);
 
         if (user == null)
         {
@@ -50,14 +50,21 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<UserDto>> PostUser(UserDto userDto)
     {
-        var user = _mapper.Map<User>(userDto);
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        try
+        {
+            var user = _mapper.Map<User>(userDto);
+            var resul = await _userServices.CriarUser(user);
 
-        var createdDto = _mapper.Map<UserDto>(user);
+            var createdDto = _mapper.Map<UserDto>(user);
 
-        return CreatedAtAction("GetUser", new { id = createdDto.IdUser }, createdDto);
+            return CreatedAtAction("GetUsersById", new { id = createdDto.IdUser }, createdDto);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
+
 
     [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(int id, UserDto userDto)
