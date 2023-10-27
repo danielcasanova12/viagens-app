@@ -4,6 +4,8 @@ namespace travelapi.Domain.Models
 {
     public class User
     {
+
+
         [Key]
         public int? IdUser { get; set; }
         public string? Username { get; set; }

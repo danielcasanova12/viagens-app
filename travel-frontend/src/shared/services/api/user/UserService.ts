@@ -1,4 +1,4 @@
-// import { Environment } from "../../../environment";
+import { Environment } from "../../../environment";
 import { Api } from "../axios-config";
 
 
@@ -13,8 +13,10 @@ export interface IUser {
 
 const getAllUsers = async (): Promise<IUser[] | Error> => {
 	try {
-		const urlRelative = "/users";
+		const pageNumber = 2; 
+		const urlRelative = `/users?pageNumber=${pageNumber}&pageSize=${Environment.LIMIT_DEFAULT}`;
 		const data = await Api.get(urlRelative);
+		console.log(pageNumber);
 		return data.data;
 	} catch (error) {
 		console.error(error);
