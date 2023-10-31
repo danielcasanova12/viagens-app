@@ -18,7 +18,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 
 
-const pages = ["Dashboard", "Comprar passagem", "Ofertas", "Sair", "Perfil", "Conta"];
+const pages = ["Dashboard", "Voos", "Hotels", "Carros"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {

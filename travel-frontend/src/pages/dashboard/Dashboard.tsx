@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { LayoutBasePage } from "../../shared/layouts";
 import { ToolsDetails } from "../../shared/components";
 import { UserService, IUser } from "../../shared/services/api/user/UserService";
+import {  Button, Card, CardContent,  Grid,   Typography } from "@mui/material";
 
 export const Dashboard = () => {
 	const [users, setUsers] = useState<IUser[]>([]);
@@ -28,17 +29,34 @@ export const Dashboard = () => {
 			});
 	}, []);
 
+
 	return (
 		<LayoutBasePage title="Dashboard" toolbar={<ToolsDetails />}>
 			{loading && <p>Loading...</p>}
 			{error && <p>{error.message}</p>}
-			{users.map((user) => (
-				<div key={user.idUser}>
-					<p>Username: {user.username}</p>
-					<p>Email: {user.email}</p>
-					{/* outras propriedades do usuário */}
-				</div>
-			))}
+			<Grid container spacing={2}>
+				{users.map((user) => (
+					<Grid item xs={12} sm={6} md={4} key={user.idUser}>
+						<Card variant="outlined" style={{ height: "100%" }}>
+							<CardContent>
+								<Typography variant="h6" component="div">
+                  Username: {user.username}
+								</Typography>
+								<Typography color="textSecondary">
+                  Email: {user.email}
+								</Typography>
+								<Button
+									variant="contained"
+									color="primary"
+								>
+                  Detalhes
+								</Button>
+							</CardContent>
+						</Card>
+					</Grid>
+				))}
+			</Grid>
 		</LayoutBasePage>
 	);
+	
 };

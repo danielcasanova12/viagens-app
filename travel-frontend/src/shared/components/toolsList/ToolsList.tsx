@@ -1,6 +1,7 @@
 import { Box, Button, Paper, TextField, useTheme} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { Environment } from "../../environment";
+import { Environment } from "../../environment/Environments";
+
 
 interface IToolsListProps {
   children?: React.ReactNode;
