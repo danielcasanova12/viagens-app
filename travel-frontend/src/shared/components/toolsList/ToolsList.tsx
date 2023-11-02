@@ -1,7 +1,7 @@
 import { Box, Button, Paper, TextField, useTheme} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Environment } from "../../environment/Environments";
-
+import SearchIcon from "@mui/icons-material/Search";
 
 interface IToolsListProps {
   children?: React.ReactNode;
@@ -9,6 +9,8 @@ interface IToolsListProps {
 	showInputSearch?: boolean;
 	changeTextSearch?: (newText: string) => void;
 	textNewButton?: string;
+	textSaveButton?: string;
+	showSaveButton?: boolean;
 	showNewButton?: boolean;
 	onClickNewButton?: () => void;
 
@@ -19,7 +21,9 @@ export const ToolsList:React.FC<IToolsListProps> = ({
 	showInputSearch = false,
 	changeTextSearch,
 	textNewButton = "Novo",
-	showNewButton = true,
+	textSaveButton= "Buscar", 
+	showNewButton = false,
+	showSaveButton = true,
 	onClickNewButton
 }) => {
 	const theme = useTheme();
@@ -59,6 +63,23 @@ export const ToolsList:React.FC<IToolsListProps> = ({
 						endIcon={<AddIcon />}
 						onClick={onClickNewButton}
 					>{textNewButton}</Button>
+				</Box>
+			)}
+			
+			{ showSaveButton && (
+				<Box 
+					flex={1}
+					display={"flex"}
+					justifyContent={"end"}
+        
+				>
+					<Button
+						variant='contained'
+						color='primary'
+						disableElevation
+						endIcon={<SearchIcon />}
+						onClick={onClickNewButton}
+					>{textSaveButton}</Button>
 				</Box>
 			)}
 			<Box>

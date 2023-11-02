@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LayoutBasePage } from "../../shared/layouts";
 import { ToolsDetails } from "../../shared/components";
 import { UserService, IUser } from "../../shared/services/api/user/UserService";
