@@ -1,17 +1,28 @@
 import { Api } from "../axios-config";
 
-
-
-
 export interface IHotel {
   idHotel: number;
   name: string;
-  location : string;
+  location?: {
+    idLocal: number;
+    name: string;
+    adress: string;
+    city: string;
+    state: string;
+    country: string;
+    image: string;
+  };
   starRating: number;
   pricePerNight: number;
-	typesRoom: [];
+  typesRoom: {
+    idTypeRoom: number;
+    name: string;
+    priceDaily: number;
+  }[];
   image: string;
 }
+
+
 
 const getAllHotels = async (): Promise<IHotel[] | Error> => {
 	try {

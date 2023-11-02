@@ -20,14 +20,17 @@ public class HotelsController : ControllerBase
         _context = context;
         _mapper = mapper;
     }
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
     {
-        var hotels = await _context.Hotels.ToListAsync();
+        var hotels = await _context.Hotels
+            .Include(h => h.Location) // Inclui as informações de localização
+            .ToListAsync();
+
         var hotelDtos = _mapper.Map<List<HotelDto>>(hotels);
         return Ok(hotelDtos);
     }
+
 
     [HttpGet("{id}")]
     public async Task<ActionResult<HotelDto>> GetHotelById(int id)
@@ -51,7 +54,6 @@ public class HotelsController : ControllerBase
         await _context.SaveChangesAsync();
 
         var createdDto = _mapper.Map<HotelDto>(hotel);
-
         return CreatedAtAction("GetHotelById", new { id = createdDto.IdHotel }, createdDto);
     }
 
