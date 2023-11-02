@@ -28,8 +28,6 @@ namespace travelapi.Domain.AutoMappers
                 .ReverseMap();
             CreateMap<TouristAttraction, TouristAttractionDto>()
                 .ReverseMap();
-            CreateMap<TypeRoom, TypeRoomDto>()
-                .ReverseMap();
             CreateMap<User, UserDto>()
                 .ReverseMap();
 

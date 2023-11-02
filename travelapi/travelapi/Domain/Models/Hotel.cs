@@ -10,7 +10,6 @@ namespace travelapi.Domain.Models
         public Local? Location { get; set; }
         public int? StarRating { get; set; }
         public decimal? PricePerNight { get; set; }
-        public ICollection<TypeRoom> TypesRoom { get; set; }
         public string Image { get; set; }
 
 
