@@ -1,16 +1,20 @@
 import { Api } from "../axios-config";
-
+interface Image {
+	id: number;
+  hotelId: number;
+  imageUrl: string;
+}
 export interface IHotel {
   idHotel: number;
   name: string;
-  location?: {
+  location: {
     idLocal: number;
     name: string;
     adress: string;
     city: string;
     state: string;
     country: string;
-    image: string;
+    image?: string;
   };
   starRating: number;
   pricePerNight: number;
@@ -19,7 +23,7 @@ export interface IHotel {
     name: string;
     priceDaily: number;
   }[];
-  image: string;
+	images: Image[];
 }
 
 

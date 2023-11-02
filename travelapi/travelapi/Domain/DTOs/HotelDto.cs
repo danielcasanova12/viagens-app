@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using travelapi.Domain.Dto;
 
 namespace travelapi.Domain.Dto
 {
@@ -10,7 +11,7 @@ namespace travelapi.Domain.Dto
         public LocalDto? Location { get; set; }
         public int? StarRating { get; set; }
         public decimal? PricePerNight { get; set; }
-        public string Image { get; set; }
+        public List<HotelImageDto> Images { get; set; }
 
     }
 }

@@ -3,7 +3,7 @@ import { Api } from "../axios-config";
 
 
 export interface IUser {
-  idUser: number;
+  IdUser: number;
   username: string;
   email : string;
   password: string;

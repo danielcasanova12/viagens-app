@@ -17,7 +17,7 @@ export const Dashboard = () => {
 					setError(data);
 				} else {
 					setUsers(data);
-					console.log(data[0].idUser);
+					console.log(data[0].IdUser);
 					console.log("Dados recebidos com sucesso!");
 				}
 			})
@@ -36,7 +36,7 @@ export const Dashboard = () => {
 			{error && <p>{error.message}</p>}
 			<Grid container spacing={2}>
 				{users.map((user) => (
-					<Grid item xs={12} sm={6} md={4} key={user.idUser}>
+					<Grid item xs={12} sm={6} md={4} key={user.IdUser}>
 						<Card variant="outlined" style={{ height: "100%" }}>
 							<CardContent>
 								<Typography variant="h6" component="div">

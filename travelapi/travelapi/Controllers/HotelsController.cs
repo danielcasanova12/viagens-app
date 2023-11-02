@@ -24,7 +24,8 @@ public class HotelsController : ControllerBase
     public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
     {
         var hotels = await _context.Hotels
-            .Include(h => h.Location) // Inclui as informações de localização
+            .Include(h => h.Location)
+            .Include(h => h.Images)
             .ToListAsync();
 
         var hotelDtos = _mapper.Map<List<HotelDto>>(hotels);
@@ -49,6 +50,31 @@ public class HotelsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<HotelDto>> PostHotel(HotelDto hotelDto)
     {
+        if (hotelDto.Images != null && hotelDto.Images.Any())
+        {
+            // Verifique se as imagens existem no banco de dados.
+            foreach (var imageDto in hotelDto.Images)
+            {
+                if (imageDto.Id == null)
+                {
+                    // A imagem não tem um ID, portanto, crie-a.
+                    var image = _mapper.Map<HotelImage>(imageDto);
+                    _context.HotelImages.Add(image);
+                }
+                else
+                {
+                    // Verifique se a imagem com o ID existe no banco de dados.
+                    var existingImage = await _context.HotelImages.FindAsync(imageDto.Id);
+                    if (existingImage == null)
+                    {
+                        // A imagem com o ID fornecido não existe, então crie-a.
+                        var image = _mapper.Map<HotelImage>(imageDto);
+                        _context.HotelImages.Add(image);
+                    }
+                }
+            }
+        }
+
         var hotel = _mapper.Map<Hotel>(hotelDto);
         _context.Hotels.Add(hotel);
         await _context.SaveChangesAsync();
@@ -56,6 +82,7 @@ public class HotelsController : ControllerBase
         var createdDto = _mapper.Map<HotelDto>(hotel);
         return CreatedAtAction("GetHotelById", new { id = createdDto.IdHotel }, createdDto);
     }
+
 
     [HttpPut("{id}")]
     public async Task<IActionResult> PutHotel(int id, HotelDto hotelDto)
