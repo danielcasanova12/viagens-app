@@ -1,3 +1,4 @@
+import { Environment } from "../../../environment/Environments";
 import { Api } from "../axios-config";
 interface Image {
 	id: number;
@@ -26,18 +27,31 @@ export interface IHotel {
 	images: Image[];
 }
 
+type THotelsCount = {
+  data: IHotel[];
+  totalCount: number;
+}
 
-
-const getAllHotels = async (): Promise<IHotel[] | Error> => {
+const getAllHotels = async (searchValue: string, pageNumber = 1): Promise<THotelsCount[] | Error> => {
 	try {
-		const urlRelative = "/Hotels";
-		const data = await Api.get(urlRelative); 
-		return data.data;
+		const urlRelative = `/Hotels?pageNumber=${pageNumber}&pageSize=${Environment.LIMIT_DEFAULT}&searchValue=${searchValue}`;
+		const { data } = await Api.get(urlRelative); // Não é mais necessário pegar os headers
+
+		if (data) {
+			return [{
+				data: data.hotels, // Ajuste para pegar os hotéis de data.Hotels
+				totalCount: data.totalHotels, // Ajuste para pegar o total de hotéis de data.TotalHotels
+			}];
+		}
+
+		return new Error("Erro ao listar os registros.");
 	} catch (error) {
 		console.error(error);
-		return new Error("Erro ao listar os registros.");
+		return new Error((error as { message: string }).message || "Erro ao listar os registros.");
 	}
 };
+
+
 
 
 export const HotelService = {

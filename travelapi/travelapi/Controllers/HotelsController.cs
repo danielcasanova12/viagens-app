@@ -7,6 +7,7 @@ using travelapi.Domain.Dto;
 using travelapi.Domain.Models;
 using travelapi.Infrastructure;
 using AutoMapper;
+using travelapi.Utils;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -21,15 +22,57 @@ public class HotelsController : ControllerBase
         _mapper = mapper;
     }
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
+    public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels(int? pageNumber, int? pageSize,string? searchValue)
     {
-        var hotels = await _context.Hotels
-            .Include(h => h.Location)
-            .Include(h => h.Images)
-            .ToListAsync();
 
-        var hotelDtos = _mapper.Map<List<HotelDto>>(hotels);
-        return Ok(hotelDtos);
+        try
+        {
+            if (pageNumber == null || pageSize == null)
+            {
+                var hotels = await _context.Hotels
+                .Include(h => h.Location)
+                .Include(h => h.Images)
+                .ToListAsync();
+
+                var hotelDtos = _mapper.Map<List<HotelDto>>(hotels);
+                int totalHotels = await _context.Hotels.CountAsync();
+                return Ok(new { Hotels = hotelDtos, TotalHotels = totalHotels });
+            }
+            else if(searchValue == null)
+            {
+                int startIndex = (pageNumber.Value - 1) * pageSize.Value;
+
+                int totalHotels = await _context.Hotels.CountAsync();
+                var hotels = await _context.Hotels
+                    .Skip(startIndex)
+                    .Take(pageSize.Value)
+                    .Include(h => h.Location)
+                    .Include(h => h.Images)
+                    .ToListAsync();
+
+                return Ok(new { Hotels = hotels, TotalHotels = totalHotels });
+            }
+            else 
+            {
+                int startIndex = (pageNumber.Value - 1) * pageSize.Value;
+
+                int totalHotels = await _context.Hotels.CountAsync();
+                var hotels = await _context.Hotels
+                    .Where(h => h.Name.Contains(searchValue) || h.Location.City.Contains(searchValue))
+                    .Skip(startIndex)
+                    .Take(pageSize.Value)
+                    .Include(h => h.Location)
+                    .Include(h => h.Images)
+                    .ToListAsync();
+
+                return Ok(new { Hotels = hotels, TotalHotels = totalHotels });
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw ex.Failin();
+        }
     }
 
 

@@ -21,17 +21,13 @@ namespace travelapi.Application.Services
             {
                 if (pageNumber == null || pageSize == null)
                 {
-                    // Se pageNumber ou pageSize forem nulos, traga todos os dados do banco.
                     return await _context.Users.ToListAsync();
                 }
                 else
                 {
                     int startIndex = (pageNumber.Value - 1) * pageSize.Value;
 
-                    // Consulta o número total de usuários no banco de dados.
                     int totalUsers = await _context.Users.CountAsync();
-
-                    // Consulta os usuários para a página atual.
                     var users = await _context.Users
                         .Skip(startIndex)
                         .Take(pageSize.Value)
