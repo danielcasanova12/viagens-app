@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/H0PiRBNdzDuiQiIsW/q1iVDoe5Iy5Empl56J13tHkN2dD0QEo+3S7UhjeMfZJKN3m8Oq6OTvL1oMZnVXOnrJQ==",
+  "dgSpecHash": "FMQjvxEJNWvayeO64S+9mP723jwOO7h/U/y7Y1tZ6PjvJk/o5Yt8rXe4Psw/hh2OO3E3zC0mJFos7HPc0qzD7g==",
   "success": true,
   "projectFilePath": "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\travelapi.csproj",
   "expectedPackageFiles": [
@@ -27,6 +27,7 @@
     "C:\\Users\\daneil\\.nuget\\packages\\microsoft.extensions.options\\7.0.0\\microsoft.extensions.options.7.0.0.nupkg.sha512",
     "C:\\Users\\daneil\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
     "C:\\Users\\daneil\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\daneil\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.18.1\\microsoft.visualstudio.azure.containers.tools.targets.1.18.1.nupkg.sha512",
     "C:\\Users\\daneil\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\daneil\\.nuget\\packages\\mysqlconnector\\2.2.5\\mysqlconnector.2.2.5.nupkg.sha512",
     "C:\\Users\\daneil\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\7.0.0\\pomelo.entityframeworkcore.mysql.7.0.0.nupkg.sha512",
