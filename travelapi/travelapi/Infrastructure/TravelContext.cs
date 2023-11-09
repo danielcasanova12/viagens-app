@@ -20,8 +20,20 @@ namespace travelapi.Infrastructure
         public DbSet<Cost> Costs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql("server=localhost;database=traveldb;user=root;password=root",
-                new MySqlServerVersion(new Version(10, 4, 28))); // versão do servidor MySQL
+            optionsBuilder.UseMySql(
+                "server=172.19.0.3;port=3306;database=traveldb;user=root;password=root",
+                new MySqlServerVersion(new Version(8, 2, 0)),
+                mySqlOptions =>
+                {
+                    mySqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 10,
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorNumbersToAdd: null
+                    );
+                })
+                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+
         }
+
     }
 }

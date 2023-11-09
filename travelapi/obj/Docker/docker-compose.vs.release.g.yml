@@ -1,8 +1,8 @@
-version: '3.8'
+version: '3.4'
 
 services:
   travelapi:
-    container_name: travelapi
+    container_name: travelapi_1
     build:
       labels:
         com.microsoft.created-by: "visual-studio"

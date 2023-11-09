@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.4'
 
 services:
   travelapi:
@@ -6,13 +6,9 @@ services:
     build:
       context: .
       dockerfile: travelapi/Dockerfile
-    ports:
-      - "8080:80" 
-  mysql_cesupa:
-    image: mysql:latest 
+  database:
+    image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: traveldb 
     ports:
-      - "3306:3306" 
-
+      - "3307:3306"
