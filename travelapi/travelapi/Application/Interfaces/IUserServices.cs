@@ -9,5 +9,7 @@ namespace travelapi.Application.Interfaces
         Task<User> CriarUser(User user);
         Task<User> EditarUser(int id, User user);
         Task<User> DeletarUser(int id);
+        User ValidaLogin(string email, string senha);
+        bool BuscaLogin(string email, string senha);
     }
 }

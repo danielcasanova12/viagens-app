@@ -108,5 +108,20 @@ namespace travelapi.Application.Services
         {
             return _context.Users.Any(e => e.IdUser == id);
         }
+        public bool BuscaLogin(string? email, string? senha)
+        {
+            var user = _context.Users.SingleOrDefault(u => u.Email == email && u.Password == senha);
+            if (user == null)
+            {
+                return false;
+            }
+            return true;
+        }
+        public User ValidaLogin(string email, string senha)
+        {
+            var user = _context.Users.SingleOrDefault(u => u.Email == email && u.Password == senha);
+
+            return user;
+        }
     }
 }

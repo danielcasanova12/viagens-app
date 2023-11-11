@@ -32,7 +32,22 @@ public class UserController : ControllerBase
         var userDtos = _mapper.Map<List<UserDto>>(results);
         return Ok(userDtos);
     }
-    
+    [HttpGet("login")]
+    public async Task<ActionResult<UserDto>> Login(string email, string password)
+    {
+        var verifica = _userServices.BuscaLogin(email, password);
+
+        if (verifica == true)
+        {
+            var user = _userServices.ValidaLogin(email, password);
+            return Ok(user);
+        }
+        else
+        {
+            return BadRequest("Email ou Senha Incorretos");
+        }
+
+    }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetUsersById(int id)
