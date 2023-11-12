@@ -1,4 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using travelapi.Application.Interfaces;
 using travelapi.Domain.Dto;
 using travelapi.Domain.Models;
@@ -122,6 +126,21 @@ namespace travelapi.Application.Services
             var user = _context.Users.SingleOrDefault(u => u.Email == email && u.Password == senha);
 
             return user;
+        }
+        public string GenerateJwtToken(string email)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("34h@&Y#R$*!@$@*742385*432898723049872349872349876543210986543210986543");
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim("email", email) }),
+                Expires = DateTime.UtcNow.AddHours(1), // Defina o tempo de expiração do token como desejado
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }

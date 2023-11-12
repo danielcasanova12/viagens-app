@@ -33,14 +33,19 @@ public class UserController : ControllerBase
         return Ok(userDtos);
     }
     [HttpGet("login")]
-    public async Task<ActionResult<UserDto>> Login(string email, string password)
+    public async Task<ActionResult<AuthToken>> Login(string email, string password)
     {
         var verifica = _userServices.BuscaLogin(email, password);
 
         if (verifica == true)
         {
             var user = _userServices.ValidaLogin(email, password);
-            return Ok(user);
+            var token = _userServices.GenerateJwtToken(user.Username);
+            var authToken = new AuthToken
+            {
+                accessToken = token,
+            };
+            return Ok(authToken);
         }
         else
         {

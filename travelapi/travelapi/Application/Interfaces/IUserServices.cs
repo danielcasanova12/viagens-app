@@ -11,5 +11,6 @@ namespace travelapi.Application.Interfaces
         Task<User> DeletarUser(int id);
         User ValidaLogin(string email, string senha);
         bool BuscaLogin(string email, string senha);
+        string GenerateJwtToken(string email);
     }
 }

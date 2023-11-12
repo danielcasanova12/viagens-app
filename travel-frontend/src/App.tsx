@@ -3,15 +3,21 @@ import { AppRoutes } from "./routes";
 import { BrowserRouter } from "react-router-dom";
 import { AppThemeProvider } from "./shared/contexts/ThemeContext"; 
 import React from "react";
+import { AuthProvider } from "./shared/contexts";
+import { Login } from "./shared/components/login/Login";
 
 function App() {
 	return (
-		<AppThemeProvider>
-			<BrowserRouter>
-				<ResponsiveAppBar/>
-				<AppRoutes/>
-			</BrowserRouter>
-		</AppThemeProvider>
+		<AuthProvider>
+			<AppThemeProvider>
+				<Login>
+					<BrowserRouter>
+						<ResponsiveAppBar/>
+						<AppRoutes/>
+					</BrowserRouter>
+				</Login>
+			</AppThemeProvider>
+		</AuthProvider>
 	);
 }
 

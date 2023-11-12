@@ -86,3 +86,8 @@ C:\Users\daneil\Documents\GitHub\Travel\travelapi\travelapi\obj\Debug\net7.0\tra
 C:\Users\daneil\Documents\GitHub\Travel\travelapi\travelapi\obj\Debug\net7.0\ref\travelapi.dll
 C:\Users\daneil\Documents\GitHub\Travel\travelapi\travelapi\bin\Debug\net7.0\AutoMapper.dll
 C:\Users\daneil\Documents\GitHub\Travel\travelapi\travelapi\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\daneil\Documents\GitHub\Travel\travelapi\travelapi\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\daneil\Documents\GitHub\Travel\travelapi\travelapi\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\daneil\Documents\GitHub\Travel\travelapi\travelapi\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\daneil\Documents\GitHub\Travel\travelapi\travelapi\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\daneil\Documents\GitHub\Travel\travelapi\travelapi\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
