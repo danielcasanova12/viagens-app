@@ -3,8 +3,7 @@ import { Box, Button, Card, CardActions, CardContent, CircularProgress, TextFiel
 import * as yup from "yup";
 
 import { useAuthContext } from "../../contexts";
-
-
+import { UserService, IUser } from "../../services/api";
 const loginSchema = yup.object().shape({
 	email: yup.string().email().required(),
 	password: yup.string().required().min(5),
@@ -17,6 +16,7 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 	const { isAuthenticated, login } = useAuthContext();
 
 	const [isLoading, setIsLoading] = useState(false);
+	const [isCreatingAccount, setIsCreatingAccount] = useState(false);
 
 	const [passwordError, setPasswordError] = useState("");
 	const [emailError, setEmailError] = useState("");
@@ -31,10 +31,22 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 	
 		try {
 			const dadosValidados = await loginSchema.validate({ email, password }, { abortEarly: false });
-			const result = await login(dadosValidados.email, dadosValidados.password);
-	
-			// Log the token received from the API
-			console.log("Token from API:", result);
+			
+			if (isCreatingAccount) {
+				const newUser: IUser = {
+					IdUser: 0,
+					username: "",
+					email: dadosValidados.email,
+					password: dadosValidados.password,
+					image: "",
+					typePermission: 0,
+				};
+				const result = await UserService.createUser(newUser);
+				console.log("User created:", result);
+			} else {
+				const result = await login(dadosValidados.email, dadosValidados.password);
+				console.log("Token from API:", result);
+			}
 	
 			setIsLoading(false);
 		} catch (errors) {
@@ -63,7 +75,7 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 			<Card>
 				<CardContent>
 					<Box display='flex' flexDirection='column' gap={2} width={250}>
-						<Typography variant='h6' align='center'>Identifique-se</Typography>
+						<Typography variant='h6' align='center'>{isCreatingAccount ? "Crie sua conta" : "Identifique-se"}</Typography>
 
 						<TextField
 							fullWidth
@@ -99,7 +111,15 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 							onClick={handleSubmit}
 							endIcon={isLoading ? <CircularProgress variant='indeterminate' color='inherit' size={20} /> : undefined}
 						>
-              Entrar
+							{isCreatingAccount ? "Criar Conta" : "Entrar"}
+						</Button>
+
+						<Button
+							variant='contained'
+							disabled={isLoading}
+							onClick={() => setIsCreatingAccount(!isCreatingAccount)}
+						>
+							{isCreatingAccount ? "Voltar para Login" : "Criar Login"}
 						</Button>
 
 					</Box>

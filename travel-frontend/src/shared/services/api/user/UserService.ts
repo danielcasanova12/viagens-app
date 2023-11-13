@@ -1,7 +1,6 @@
 import { Environment } from "../../../environment/Environments";
 import { Api } from "../axios-config";
 
-
 export interface IUser {
   IdUser: number;
   username: string;
@@ -10,6 +9,17 @@ export interface IUser {
   image: string;
   typePermission: number;
 }
+
+const createUser = async (user: IUser): Promise<IUser | Error> => {
+	try {
+		const urlRelative = "/users";
+		const data = await Api.post(urlRelative, user); 
+		return data.data;
+	} catch (error) {
+		console.error(error);
+		return new Error("Erro ao criar o usuário.");
+	}
+};
 
 const getAllUsers = async (): Promise<IUser[] | Error> => {
 	try {
@@ -23,7 +33,7 @@ const getAllUsers = async (): Promise<IUser[] | Error> => {
 	}
 };
 
-
 export const UserService = {
 	getAllUsers,
+	createUser,
 };
