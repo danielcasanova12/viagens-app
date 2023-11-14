@@ -41,10 +41,12 @@ public class UserController : ControllerBase
         {
             var user = _userServices.ValidaLogin(email, password);
             var token = _userServices.GenerateJwtToken(user.Username);
-            var authToken = new AuthToken
+            var authToken = new AuthUser
             {
                 accessToken = token,
+                user = user, // Adicione esta linha
             };
+
             return Ok(authToken);
         }
         else

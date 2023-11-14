@@ -1,32 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\casanova.sistemas\\Documents\\GitHub\\TesteReact\\travelapi\\travelapi\\travelapi.csproj": {}
+    "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\travelapi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\casanova.sistemas\\Documents\\GitHub\\TesteReact\\travelapi\\travelapi\\travelapi.csproj": {
+    "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\travelapi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\casanova.sistemas\\Documents\\GitHub\\TesteReact\\travelapi\\travelapi\\travelapi.csproj",
+        "projectUniqueName": "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\travelapi.csproj",
         "projectName": "travelapi",
-        "projectPath": "C:\\Users\\casanova.sistemas\\Documents\\GitHub\\TesteReact\\travelapi\\travelapi\\travelapi.csproj",
-        "packagesPath": "C:\\Users\\casanova.sistemas\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\casanova.sistemas\\Documents\\GitHub\\TesteReact\\travelapi\\travelapi\\obj\\",
+        "projectPath": "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\travelapi.csproj",
+        "packagesPath": "C:\\Users\\daneil\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\daneil\\Documents\\GitHub\\Travel\\travelapi\\travelapi\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\casanova.sistemas\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\daneil\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files (x86)\\Unisys\\ClearPath\\ePortal Developer 10.0\\Packages": {},
+          "F:\\Program Files\\dotnet\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -105,7 +99,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "F:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
         }
       }
     }

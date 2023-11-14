@@ -17,7 +17,6 @@ import { useAppThemeContext } from "../../contexts/ThemeContext";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 
-
 const pages = ["dashboard", "voos", "hotels", "carros"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 

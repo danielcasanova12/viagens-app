@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Environment } from "../../../environment/Environments";
 import { Api } from "../axios-config";
 
@@ -9,16 +10,32 @@ export interface IUser {
   image: string;
   typePermission: number;
 }
+export interface IUsers {
+  username: string;
+  email : string;
+  password: string;
+  image: string;
+  typePermission: string;
+  Reservations: []; // Add this line
+}
 
-const createUser = async (user: IUser): Promise<IUser | Error> => {
+
+const createUser = async (user: IUsers): Promise<IUser | Error> => {
 	try {
 		const urlRelative = "/users";
+		console.log(urlRelative);
+		console.log(user);
 		const data = await Api.post(urlRelative, user); 
+		console.log(data);
+		
 		return data.data;
-	} catch (error) {
-		console.error(error);
+	}catch (error) {
+		if (axios.isAxiosError(error) && error.response) {
+			console.error(error.response.data);
+		}
 		return new Error("Erro ao criar o usuário.");
 	}
+
 };
 
 const getAllUsers = async (): Promise<IUser[] | Error> => {

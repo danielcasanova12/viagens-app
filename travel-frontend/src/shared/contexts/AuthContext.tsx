@@ -2,8 +2,19 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 import { AuthService } from "../services/api/auth/AuthService";
 
+interface IUser {
+	IdUser: number;
+  username: string;
+  email : string;
+  password: string;
+  image: string;
+  typePermission: string;
+  Reservations: []; // Add this line
+}
+
 
 interface IAuthContextData {
+  user: IUser | null; // Adicione esta linha
   logout: () => void;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<string | void>;
@@ -18,6 +29,7 @@ interface IAuthProviderProps {
 }
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 	const [accessToken, setAccessToken] = useState<string>();
+	const [user, setUser] = useState<IUser | null>(null); // Adicione esta linha
 
 	useEffect(() => {
 		const accessToken = localStorage.getItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
@@ -43,19 +55,21 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 		} else {
 			localStorage.setItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN, JSON.stringify(result.accessToken));
 			setAccessToken(result.accessToken);
+			setUser(result.user); // Supondo que o resultado também inclua informações do usuário
 		}
 	}, []);
 
 	const handleLogout = useCallback(() => {
 		localStorage.removeItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
 		setAccessToken(undefined);
+		setUser(null); // Adicione esta linha
 	}, []);
 
 	const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);
 
 
 	return (
-		<AuthContext.Provider value={{ isAuthenticated, login: handleLogin, logout: handleLogout }}>
+		<AuthContext.Provider value={{ user, isAuthenticated, login: handleLogin, logout: handleLogout }}>
 			{children}
 		</AuthContext.Provider>
 	);
