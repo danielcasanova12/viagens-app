@@ -8,7 +8,7 @@ export interface IUser {
   email : string;
   password: string;
   image: string;
-  typePermission: number;
+  typePermission: string;
 }
 export interface IUsers {
   username: string;

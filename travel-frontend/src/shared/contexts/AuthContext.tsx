@@ -47,6 +47,20 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 		}
 	}, []);
 
+	useEffect(() => {
+		const user = localStorage.getItem("APP_USER");
+
+		try {
+			if (user) {
+				setUser(JSON.parse(user));
+			} else {
+				setUser(null);
+			}
+		} catch (error) {
+			console.error("Error parsing user:", error);
+			setUser(null);
+		}
+	}, []);
 
 	const handleLogin = useCallback(async (email: string, password: string) => {
 		const result = await AuthService.auth(email, password);
@@ -54,8 +68,9 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 			return result.message;
 		} else {
 			localStorage.setItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN, JSON.stringify(result.accessToken));
+			localStorage.setItem("APP_USER", JSON.stringify(result.user)); // Adicione esta linha
 			setAccessToken(result.accessToken);
-			setUser(result.user); // Supondo que o resultado também inclua informações do usuário
+			setUser(result.user);
 		}
 	}, []);
 

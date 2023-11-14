@@ -15,7 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
 import { useAppThemeContext } from "../../contexts/ThemeContext";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
-
+import { useAuthContext  } from "../../contexts/AuthContext";
 
 const pages = ["dashboard", "voos", "hotels", "carros"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -23,7 +23,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 function ResponsiveAppBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-
+	const { user } = useAuthContext (); 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
 	};
@@ -135,7 +135,7 @@ function ResponsiveAppBar() {
 						</IconButton>
 						<Tooltip title="Open settings">
 							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-								<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+								<Avatar src={user?.image} alt={user?.username}  />
 							</IconButton>
 						</Tooltip>
 						<Menu
