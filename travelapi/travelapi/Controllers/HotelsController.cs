@@ -79,7 +79,9 @@ public class HotelsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<HotelDto>> GetHotelById(int id)
     {
-        var hotel = await _context.Hotels.FindAsync(id);
+        var hotel = await _context.Hotels
+            .Include(h => h.Images) 
+            .FirstOrDefaultAsync(h => h.IdHotel == id); 
 
         if (hotel == null)
         {
@@ -89,6 +91,7 @@ public class HotelsController : ControllerBase
         var hotelDto = _mapper.Map<HotelDto>(hotel);
         return hotelDto;
     }
+
 
     [HttpPost]
     public async Task<ActionResult<HotelDto>> PostHotel(HotelDto hotelDto)

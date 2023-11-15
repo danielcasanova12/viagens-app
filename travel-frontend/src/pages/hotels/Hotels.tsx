@@ -19,8 +19,9 @@ import { useSearchParams } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { Environment } from "../../shared/environment/Environments";
+import { useNavigate  } from "react-router-dom";
 
-export const Voos = () => {
+export const Hotels = () => {
 	const [hotels, setHotels] = useState<IHotel[]>([]);
 	const [error, setError] = useState<Error | null>(null);
 	const theme = useTheme();
@@ -28,6 +29,7 @@ export const Voos = () => {
 	const mdDown = useMediaQuery(theme.breakpoints.down("md"));
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [totalCount, setTotalCount] = useState(0);
+	const navigate = useNavigate();
 
 	const search = useMemo(() => {
 		return searchParams.get("search") || "";
@@ -82,7 +84,7 @@ export const Voos = () => {
 	return (
 		<div>
 			<LayoutBasePage
-				title="Voos"
+				title="Hotels"
 				toolbar={
 					<ToolsList
 						showInputSearch={true}
@@ -115,6 +117,7 @@ export const Voos = () => {
 											<IconButton
 												sx={{ color: "rgba(255, 255, 255, 0.54)" }}
 												aria-label={`info about ${item.name}`}
+												onClick={() => navigate(`/hotels/detalhes/${item.idHotel}`)}
 											>
               Detathes
 											</IconButton>

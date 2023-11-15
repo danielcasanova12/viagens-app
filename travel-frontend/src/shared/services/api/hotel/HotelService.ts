@@ -8,7 +8,7 @@ interface Image {
 export interface IHotel {
   idHotel: number;
   name: string;
-  location: {
+  location?: {
     idLocal: number;
     name: string;
     adress: string;
@@ -19,11 +19,6 @@ export interface IHotel {
   };
   starRating: number;
   pricePerNight: number;
-  typesRoom: {
-    idTypeRoom: number;
-    name: string;
-    priceDaily: number;
-  }[];
 	images: Image[];
 }
 
@@ -51,9 +46,25 @@ const getAllHotels = async (searchValue: string, pageNumber = 1): Promise<THotel
 	}
 };
 
+const getHotelById = async (id: number): Promise<IHotel | Error> => {
+	try {
+		const urlRelative = `/Hotels/${id}`;
+		const { data } = await Api.get(urlRelative);
 
+		if (data) {
+			console.log(data);
+			return data;
+		}
+
+		return new Error("Erro ao buscar o hotel.");
+	} catch (error) {
+		console.error(error);
+		return new Error((error as { message: string }).message || "Erro ao buscar o hotel.");
+	}
+};
 
 
 export const HotelService = {
 	getAllHotels,
+	getHotelById,
 };

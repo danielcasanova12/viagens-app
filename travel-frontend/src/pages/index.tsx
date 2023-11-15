@@ -1,3 +1,5 @@
 export * from "./dashboard/Dashboard";
-export * from "./voos/Voos";
+export * from "./hotels/Hotels";
 export * from "./cars/Cars";
+export * from "./profile/Profile";
+export * from "./hotels/HotelDetails";
