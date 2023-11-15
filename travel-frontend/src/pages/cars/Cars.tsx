@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuthContext } from "./../../shared/contexts/AuthContext"; // Altere para useAuthContext
+import { useAuthContext } from "../../shared/contexts/AuthContext"; // Altere para useAuthContext
 
 export const Carros = () => {
 	const { user } = useAuthContext(); // Acesse o usuário do contexto de autenticação

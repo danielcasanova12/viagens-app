@@ -1,7 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { AuthService } from "../services/api/auth/AuthService";
-
+interface IResrvarion {
+	IdReservation: number;
+	date: string;
+	time: string;
+	IdUser: number;
+	IdFlight: number;
+}
 interface IUser {
 	IdUser: number;
   username: string;
@@ -9,7 +15,7 @@ interface IUser {
   password: string;
   image: string;
   typePermission: string;
-  Reservations: []; // Add this line
+  Reservations: IResrvarion[]; // Add this line
 }
 
 

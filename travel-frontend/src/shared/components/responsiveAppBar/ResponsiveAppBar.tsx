@@ -16,11 +16,13 @@ import { Link } from "react-router-dom";
 import { useAppThemeContext } from "../../contexts/ThemeContext";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { useAuthContext  } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const pages = ["dashboard", "voos", "hotels", "carros"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
+	const navigate = useNavigate();
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 	const { user } = useAuthContext (); 
@@ -92,11 +94,16 @@ function ResponsiveAppBar() {
 								display: { xs: "block", md: "none" },
 							}}
 						>
-							{pages.map((page) => (
-								<MenuItem key={page} onClick={handleCloseNavMenu}>
-									<Link to={`/${page}`}  style={{ textDecoration: "none",color: "black"}}> 
-										<Typography textAlign="center">{page}</Typography>
-									</Link>
+							{pages.map((setting) => (
+								<MenuItem 
+									key={setting} 
+									onClick={() => {
+										handleCloseNavMenu();
+										navigate(`/${setting.toLowerCase()}`);
+										
+									}}
+								>
+									<Typography textAlign="center">{setting}</Typography>
 								</MenuItem>
 							))}
 						</Menu>
@@ -155,7 +162,13 @@ function ResponsiveAppBar() {
 							onClose={handleCloseUserMenu}
 						>
 							{settings.map((setting) => (
-								<MenuItem key={setting} onClick={handleCloseUserMenu}>
+								<MenuItem 
+									key={setting} 
+									onClick={() => {
+										handleCloseUserMenu();
+										navigate(`/${setting.toLowerCase()}`);
+									}}
+								>
 									<Typography textAlign="center">{setting}</Typography>
 								</MenuItem>
 							))}
