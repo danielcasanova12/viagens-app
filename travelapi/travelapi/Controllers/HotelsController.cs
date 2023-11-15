@@ -80,7 +80,8 @@ public class HotelsController : ControllerBase
     public async Task<ActionResult<HotelDto>> GetHotelById(int id)
     {
         var hotel = await _context.Hotels
-            .Include(h => h.Images) 
+            .Include(h => h.Images)
+            .Include(h => h.Location)
             .FirstOrDefaultAsync(h => h.IdHotel == id); 
 
         if (hotel == null)

@@ -17,15 +17,23 @@ import { useAppThemeContext } from "../../contexts/ThemeContext";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { useAuthContext  } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+
 
 const pages = ["dashboard", "voos", "hotels", "carros"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile", "Logout"];
+
+
+
 
 function ResponsiveAppBar() {
 	const navigate = useNavigate();
+	const {  logout } = useAuthContext();
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-	const { user } = useAuthContext (); 
+	const { user } = useAuthContext ();
+	const [openLogoutDialog, setOpenLogoutDialog] = React.useState(false);
+
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
 	};
@@ -33,15 +41,41 @@ function ResponsiveAppBar() {
 		setAnchorElUser(event.currentTarget);
 	};
 
+
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null);
 	};
+
 
 	const handleCloseUserMenu = () => {
 		setAnchorElUser(null);
 	};
 
+
+	const handleLogout = () => {
+		localStorage.removeItem("APP_USER");
+		localStorage.removeItem("APP_ACCESS_TOKEN");
+		handleCloseUserMenu();
+		setOpenLogoutDialog(false);
+		logout();
+
+	};
+	const handleProfile = () => {
+		// Implemente a lógica de logout aqui
+		handleCloseUserMenu();
+		setOpenLogoutDialog(false);
+	};
+	const handleOpenLogoutDialog = () => {
+		handleCloseUserMenu();
+		setOpenLogoutDialog(true);
+	};
+
+	const handleCloseLogoutDialog = () => {
+		setOpenLogoutDialog(false);
+	};
+
 	const {toggleTheme} = useAppThemeContext();
+
 
 	return (
 		<AppBar position="static">
@@ -64,6 +98,7 @@ function ResponsiveAppBar() {
 					>
             LOGO1
 					</Typography>
+
 
 					<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
 						<IconButton
@@ -95,12 +130,12 @@ function ResponsiveAppBar() {
 							}}
 						>
 							{pages.map((setting) => (
-								<MenuItem 
-									key={setting} 
+								<MenuItem
+									key={setting}
 									onClick={() => {
 										handleCloseNavMenu();
 										navigate(`/${setting.toLowerCase()}`);
-										
+                   
 									}}
 								>
 									<Typography textAlign="center">{setting}</Typography>
@@ -136,6 +171,7 @@ function ResponsiveAppBar() {
 						))}
 					</Box>
 
+
 					<Box sx={{ flexGrow: 0 }}>
 						<IconButton aria-label="DarkMode" onClick={toggleTheme}>
 							<DarkModeIcon />
@@ -146,7 +182,6 @@ function ResponsiveAppBar() {
 							</IconButton>
 						</Tooltip>
 						<Menu
-							sx={{ mt: "45px" }}
 							id="menu-appbar"
 							anchorEl={anchorElUser}
 							anchorOrigin={{
@@ -162,21 +197,43 @@ function ResponsiveAppBar() {
 							onClose={handleCloseUserMenu}
 						>
 							{settings.map((setting) => (
-								<MenuItem 
-									key={setting} 
-									onClick={() => {
-										handleCloseUserMenu();
-										navigate(`/${setting.toLowerCase()}`);
-									}}
-								>
-									<Typography textAlign="center">{setting}</Typography>
+								<MenuItem key={setting} onClick={setting === "Logout" ? handleOpenLogoutDialog : handleProfile}>
+									{setting}
 								</MenuItem>
 							))}
 						</Menu>
+						<Dialog
+							open={openLogoutDialog}
+							onClose={handleCloseLogoutDialog}
+						>
+							<DialogTitle>
+          Confirmar Logout
+							</DialogTitle>
+							<DialogContent>
+								<DialogContentText>
+            Você tem certeza de que deseja sair?
+								</DialogContentText>
+							</DialogContent>
+							<DialogActions>
+								<Button onClick={handleCloseLogoutDialog}>
+            Cancelar
+								</Button>
+								<Button onClick={handleLogout} color="primary" autoFocus>
+            Sair
+								</Button>
+							</DialogActions>
+						</Dialog>
 					</Box>
 				</Toolbar>
 			</Container>
 		</AppBar>
 	);
 }
+
+
+
+
+
+
 export default ResponsiveAppBar;
+

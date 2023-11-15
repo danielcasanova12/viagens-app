@@ -21,7 +21,7 @@ namespace travelapi.Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(
-                "server=172.26.0.2;port=3306;database=traveldb;user=root;password=root",
+                "server=172.18.0.3;port=3306;database=traveldb;user=root;password=root",
                 new MySqlServerVersion(new Version(8, 2, 0)),
                 mySqlOptions =>
                 {

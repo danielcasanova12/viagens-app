@@ -2,26 +2,33 @@ import React, { useEffect, useState } from "react";
 import { LayoutBasePage } from "../../shared/layouts";
 import { useParams } from "react-router-dom";
 import { HotelService, IHotel } from "../../shared/services/api";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import IconButton from "@mui/material/IconButton";
-
-function srcset(image: string, size: number, rows = 1, cols = 1) {
-	return {
-		src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-		srcSet: `${image}?w=${size * cols}&h=${
-			size * rows
-		}&fit=crop&auto=format&dpr=2 2x`,
-	};
-}
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import { Button } from "@mui/material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 export const HotelDetails = () => {
 	const { id } = useParams();
 	const [hotel, setHotel] = useState<IHotel | null>(null);
+	const [currentImageIndex, setCurrentImageIndex] = useState(0);
+	const theme = useTheme();
+	const smDown = useMediaQuery(theme.breakpoints.down("sm"));
+	const mdDown = useMediaQuery(theme.breakpoints.down("md"));
+
+	const getImageSize = () => {
+		if (smDown) {
+			return 100;
+		} else if (mdDown) {
+			return 350;
+		} else {
+			return 600;
+		}
+	};
 
 	useEffect(() => {
 		const fetchHotel = async () => {
@@ -33,6 +40,14 @@ export const HotelDetails = () => {
 
 		fetchHotel();
 	}, [id]);
+
+	const handlePreviousImage = () => {
+		setCurrentImageIndex((prevIndex) => prevIndex - 1);
+	};
+
+	const handleNextImage = () => {
+		setCurrentImageIndex((prevIndex) => prevIndex + 1);
+	};
 
 	return (
 		<LayoutBasePage title="Detalhes do Hotel">
@@ -48,22 +63,15 @@ export const HotelDetails = () => {
 						padding: 2,
 					}}
 				>
-					<ImageList
-						sx={{ width: "100%" }}
-						variant="quilted"
-						cols={4}
-						rowHeight={121}
-					>
-						{hotel.images.map((image) => (
-							<ImageListItem key={image.id} cols={1} rows={1}>
-								<img
-									{...srcset(image.imageUrl, 121, 1, 1)}
-									alt={hotel.name}
-									loading="lazy"
-								/>
-							</ImageListItem>
-						))}
-					</ImageList>
+          	<Box sx={{ display: "flex", alignItems: "center" }}>
+						<IconButton onClick={handlePreviousImage} disabled={currentImageIndex === 0}>
+							<ArrowBackIosIcon />
+						</IconButton>
+						<img src={hotel.images[currentImageIndex].imageUrl} alt={hotel.name} style={{ maxHeight: getImageSize(), width: "auto" }} />
+						<IconButton onClick={handleNextImage} disabled={currentImageIndex === hotel.images.length - 1}>
+							<ArrowForwardIosIcon />
+						</IconButton>
+					</Box>
 					<Typography variant="h4" component="h2" gutterBottom>
 						{hotel.name}
 					</Typography>
@@ -76,12 +84,11 @@ export const HotelDetails = () => {
 					<Typography variant="body1" gutterBottom>
 						Avaliação: {hotel.starRating} estrelas
 					</Typography>
-					
-					<Button variant="contained" color="secondary" sx={{ mt: 2 }}>
-						<IconButton color="primary" aria-label="add to shopping cart">
-							<AddShoppingCartIcon />
+					<Button variant="contained" color="primary" sx={{ mt: 2 }}>
+						<IconButton>
+							<AddShoppingCartIcon/>
 						</IconButton>
-						Adicionar ao carrinho
+            Adicionar ao carrinho
 					</Button>
 				</Box>
 			) : (
