@@ -1,12 +1,33 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { AuthService } from "../services/api/auth/AuthService";
+interface Image {
+	id: number;
+  hotelId: number;
+  imageUrl: string;
+}
+export interface IHotel {
+  idHotel: number;
+  name: string;
+  location?: {
+    idLocal: number;
+    name: string;
+    adress: string;
+    city: string;
+    state: string;
+    country: string;
+    image?: string;
+  };
+  starRating: number;
+  pricePerNight: number;
+	images: Image[];
+}
 interface IResrvarion {
 	IdReservation: number;
-	date: string;
-	time: string;
+	date?: string;
+	time?: string;
 	IdUser: number;
-	IdFlight: number;
+	ReservedHotel: IHotel
 }
 interface IUser {
 	IdUser: number;
@@ -22,8 +43,11 @@ interface IUser {
 interface IAuthContextData {
   user: IUser | null; // Adicione esta linha
   logout: () => void;
+	cart: IResrvarion[];
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<string | void>;
+	AddToCart: (reservation: IResrvarion) => void;
+	RemoveFromCart : (Number: number) => void;
 }
 
 const AuthContext = createContext({} as IAuthContextData);
@@ -33,8 +57,9 @@ const LOCAL_STORAGE_KEY__ACCESS_TOKEN = "APP_ACCESS_TOKEN";
 interface IAuthProviderProps {
   children: React.ReactNode;
 }
+
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
-	
+	const [cart, setCart] = useState<IResrvarion[]>([]);
 	const [accessToken, setAccessToken] = useState<string>();
 	const [user, setUser] = useState<IUser | null>(null); // Adicione esta linha
 
@@ -68,6 +93,32 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 			setUser(null);
 		}
 	}, []);
+	useEffect(() => {
+		const cart = localStorage.getItem("APP_CART");
+	
+		try {
+			if (cart) {
+				setCart(JSON.parse(cart));
+			} else {
+				setCart([]);
+			}
+		} catch (error) {
+			console.error("Error parsing cart:", error);
+			setCart([]);
+		}
+	}, []);
+	
+	const handleAddToCart = useCallback((item: IResrvarion) => {
+		const newCart = [...cart, item];
+		localStorage.setItem("APP_CART", JSON.stringify(newCart));
+		setCart(newCart);
+	}, [cart]);
+	
+	const handleRemoveFromCart = useCallback((itemId: number) => {
+		const newCart = cart.filter(item => item.IdReservation !== itemId);
+		localStorage.setItem("APP_CART", JSON.stringify(newCart));
+		setCart(newCart);
+	}, [cart]);
 
 	const handleLogin = useCallback(async (email: string, password: string) => {
 		const result = await AuthService.auth(email, password);
@@ -91,7 +142,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 
 
 	return (
-		<AuthContext.Provider value={{ user, isAuthenticated, login: handleLogin, logout: handleLogout }}>
+		<AuthContext.Provider value={{ user, isAuthenticated, login: handleLogin, logout: handleLogout, cart, AddToCart: handleAddToCart, RemoveFromCart: handleRemoveFromCart }}>
 			{children}
 		</AuthContext.Provider>
 	);

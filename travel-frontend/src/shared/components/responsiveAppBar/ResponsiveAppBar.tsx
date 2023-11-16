@@ -18,7 +18,8 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { useAuthContext  } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Badge from "@material-ui/core/Badge";
 
 const pages = ["dashboard", "voos", "hotels", "carros"];
 const settings = ["Profile", "Logout"];
@@ -31,7 +32,7 @@ function ResponsiveAppBar() {
 	const {  logout } = useAuthContext();
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-	const { user } = useAuthContext ();
+	const { user, cart } = useAuthContext ();
 	const [openLogoutDialog, setOpenLogoutDialog] = React.useState(false);
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -175,6 +176,11 @@ function ResponsiveAppBar() {
 					<Box sx={{ flexGrow: 0 }}>
 						<IconButton aria-label="DarkMode" onClick={toggleTheme}>
 							<DarkModeIcon />
+						</IconButton>
+						<IconButton>
+							<Badge badgeContent={cart.length} color="secondary">
+								<ShoppingCartIcon/>
+							</Badge>
 						</IconButton>
 						<Tooltip title="Open settings">
 							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

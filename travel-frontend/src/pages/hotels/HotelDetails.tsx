@@ -11,9 +11,21 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { Button } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import {useAuthContext} from "../../shared/contexts/AuthContext";
+
+
+
+interface IResrvarion {
+	IdReservation: number;
+	date?: string;
+	time?: string;
+	IdUser: number;
+	ReservedHotel: IHotel
+}
 
 export const HotelDetails = () => {
 	const { id } = useParams();
+	const { AddToCart } = useAuthContext();
 	const [hotel, setHotel] = useState<IHotel | null>(null);
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const theme = useTheme();
@@ -35,6 +47,7 @@ export const HotelDetails = () => {
 			const result = await HotelService.getHotelById(Number(id));
 			if (!(result instanceof Error)) {
 				setHotel(result);
+
 			}
 		};
 
@@ -48,6 +61,21 @@ export const HotelDetails = () => {
 	const handleNextImage = () => {
 		setCurrentImageIndex((prevIndex) => prevIndex + 1);
 	};
+
+	const handleAdd = () => {
+		console.log("asd");
+		const newReservation: IResrvarion = {
+			IdReservation: 1, // Substitua por seus próprios dados
+			date: "2023-11-15", // Substitua por seus próprios dados
+			time: "20:00", // Substitua por seus próprios dados
+			IdUser: 123, // Substitua por seus próprios dados
+			ReservedHotel: hotel as IHotel, // Substitua por seus próprios dados
+		};
+		console.log(newReservation);
+		AddToCart(newReservation);
+	};
+	
+	
 
 	return (
 		<LayoutBasePage title="Detalhes do Hotel">
@@ -84,11 +112,17 @@ export const HotelDetails = () => {
 					<Typography variant="body1" gutterBottom>
 						Avaliação: {hotel.starRating} estrelas
 					</Typography>
-					<Button variant="contained" color="primary" sx={{ mt: 2 }}>
+					<Button 
+						variant="contained" 
+						color="primary" 
+						sx={{ mt: 2 }} 
+						
+						onClick={() => handleAdd()} // Substitua "item" pelos seus próprios dados
+					>
 						<IconButton>
 							<AddShoppingCartIcon/>
 						</IconButton>
-            Adicionar ao carrinho
+  Adicionar ao carrinho
 					</Button>
 				</Box>
 			) : (
