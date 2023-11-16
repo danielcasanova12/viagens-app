@@ -12,7 +12,7 @@ import { useTheme } from "@mui/material/styles";
 import { Button } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import {useAuthContext} from "../../shared/contexts/AuthContext";
-import { IHotel, IResrvarion } from "../../shared/Interfaces/Interfaces";
+import { IHotel, IReservation } from "../../shared/Interfaces/Interfaces";
 
 
 
@@ -33,7 +33,7 @@ export const HotelDetails = () => {
 		} else if (mdDown) {
 			return 350;
 		} else {
-			return 600;
+			return 450;
 		}
 	};
 
@@ -59,7 +59,7 @@ export const HotelDetails = () => {
 
 	const handleAdd = () => {
 		console.log("asd");
-		const newReservation: IResrvarion = {
+		const newReservation: IReservation = {
 			IdReservation: 1, // Substitua por seus próprios dados
 			date: "2023-11-15", // Substitua por seus próprios dados
 			time: "20:00", // Substitua por seus próprios dados

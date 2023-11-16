@@ -1,9 +1,9 @@
-export interface IResrvarion {
+export interface IReservation {
 	IdReservation: number;
 	date?: string;
 	time?: string;
 	IdUser: number;
-	ReservedHotel: IHotel
+	ReservedHotel?: IHotel
 }
 
 export interface Image {
@@ -35,7 +35,7 @@ export interface IUser {
   password: string;
   image: string;
   typePermission: string;
-  Reservations?: IResrvarion[]; // Add this line
+  Reservations?: IReservation[]; // Add this line
 }
 export interface IUsers {
     username: string;
@@ -43,7 +43,7 @@ export interface IUsers {
     password: string;
     image: string;
     typePermission: string;
-    Reservations?: IResrvarion[]; // Add this line
+    Reservations?: IReservation[]; // Add this line
 }
 export interface IAuth {
     accessToken: string;

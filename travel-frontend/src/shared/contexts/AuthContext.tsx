@@ -1,17 +1,17 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { AuthService } from "../services/api/auth/AuthService";
-import { IResrvarion, IUser } from "../Interfaces/Interfaces";
+import { IReservation, IUser } from "../Interfaces/Interfaces";
 
 
 
 interface IAuthContextData {
   user: IUser | null; // Adicione esta linha
   logout: () => void;
-	cart: IResrvarion[];
+	cart: IReservation[];
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<string | void>;
-	AddToCart: (reservation: IResrvarion) => void;
+	AddToCart: (reservation: IReservation) => void;
 	RemoveFromCart : (Number: number) => void;
 }
 
@@ -24,7 +24,7 @@ interface IAuthProviderProps {
 }
 
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
-	const [cart, setCart] = useState<IResrvarion[]>([]);
+	const [cart, setCart] = useState<IReservation[]>([]);
 	const [accessToken, setAccessToken] = useState<string>();
 	const [user, setUser] = useState<IUser | null>(null); // Adicione esta linha
 
@@ -73,7 +73,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 		}
 	}, []);
 	
-	const handleAddToCart = useCallback((item: IResrvarion) => {
+	const handleAddToCart = useCallback((item: IReservation) => {
 		const newCart = [...cart, item];
 		localStorage.setItem("APP_CART", JSON.stringify(newCart));
 		setCart(newCart);
