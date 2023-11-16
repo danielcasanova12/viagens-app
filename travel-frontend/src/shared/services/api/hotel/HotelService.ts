@@ -1,26 +1,8 @@
+
+import { IHotel } from "../../../Interfaces/Interfaces";
 import { Environment } from "../../../environment/Environments";
 import { Api } from "../axios-config";
-interface Image {
-	id: number;
-  hotelId: number;
-  imageUrl: string;
-}
-export interface IHotel {
-  idHotel: number;
-  name: string;
-  location?: {
-    idLocal: number;
-    name: string;
-    adress: string;
-    city: string;
-    state: string;
-    country: string;
-    image?: string;
-  };
-  starRating: number;
-  pricePerNight: number;
-	images: Image[];
-}
+
 
 type THotelsCount = {
   data: IHotel[];

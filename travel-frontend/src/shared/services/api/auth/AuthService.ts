@@ -1,17 +1,7 @@
+import { IAuth } from "../../../Interfaces/Interfaces";
 import { Api } from "../axios-config";
-interface IUser {
-	IdUser: number;
-  username: string;
-  email : string;
-  password: string;
-  image: string;
-  typePermission: string;
-  Reservations: []; // Add this line
-}
-interface IAuth {
-  accessToken: string;
-  user: IUser; // Adicione esta linha
-}
+
+
 const auth = async (email: string, password: string): Promise<IAuth | Error> => {
 	try {
 		// Atualize o endpoint da API e os parâmetros

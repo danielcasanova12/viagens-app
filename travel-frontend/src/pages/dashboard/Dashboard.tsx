@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { LayoutBasePage } from "../../shared/layouts";
 import { ToolsDetails } from "../../shared/components";
-import { UserService, IUser } from "../../shared/services/api/user/UserService";
+import { UserService} from "../../shared/services/api/user/UserService";
 import {  Button, Card, CardContent,  Grid,   Typography } from "@mui/material";
+import { IUser } from "../../shared/Interfaces/Interfaces";
 
 export const Dashboard = () => {
 	const [users, setUsers] = useState<IUser[]>([]);

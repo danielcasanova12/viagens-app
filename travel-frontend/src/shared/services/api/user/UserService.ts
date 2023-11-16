@@ -1,23 +1,9 @@
 import axios from "axios";
 import { Environment } from "../../../environment/Environments";
 import { Api } from "../axios-config";
+import { IUser, IUsers } from "../../../Interfaces/Interfaces";
 
-export interface IUser {
-  IdUser: number;
-  username: string;
-  email : string;
-  password: string;
-  image: string;
-  typePermission: string;
-}
-export interface IUsers {
-  username: string;
-  email : string;
-  password: string;
-  image: string;
-  typePermission: string;
-  Reservations: []; // Add this line
-}
+
 
 
 const createUser = async (user: IUsers): Promise<IUser | Error> => {

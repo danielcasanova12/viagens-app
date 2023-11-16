@@ -63,7 +63,9 @@ function ResponsiveAppBar() {
 	};
 	const handleProfile = () => {
 		// Implemente a lógica de logout aqui
+		
 		handleCloseUserMenu();
+		navigate("/profile");
 		setOpenLogoutDialog(false);
 	};
 	const handleOpenLogoutDialog = () => {

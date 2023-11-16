@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import debounce from "lodash/debounce";
 import {
-	HotelService,
-	IHotel,
+	HotelService
 } from "../../shared/services/api";
 import {
 	IconButton,
@@ -20,6 +19,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { Environment } from "../../shared/environment/Environments";
 import { useNavigate  } from "react-router-dom";
+import { IHotel } from "../../shared/Interfaces/Interfaces";
 
 export const Hotels = () => {
 	const [hotels, setHotels] = useState<IHotel[]>([]);

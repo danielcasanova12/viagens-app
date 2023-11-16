@@ -1,43 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { AuthService } from "../services/api/auth/AuthService";
-interface Image {
-	id: number;
-  hotelId: number;
-  imageUrl: string;
-}
-export interface IHotel {
-  idHotel: number;
-  name: string;
-  location?: {
-    idLocal: number;
-    name: string;
-    adress: string;
-    city: string;
-    state: string;
-    country: string;
-    image?: string;
-  };
-  starRating: number;
-  pricePerNight: number;
-	images: Image[];
-}
-interface IResrvarion {
-	IdReservation: number;
-	date?: string;
-	time?: string;
-	IdUser: number;
-	ReservedHotel: IHotel
-}
-interface IUser {
-	IdUser: number;
-  username: string;
-  email : string;
-  password: string;
-  image: string;
-  typePermission: string;
-  Reservations: IResrvarion[]; // Add this line
-}
+import { IResrvarion, IUser } from "../Interfaces/Interfaces";
+
 
 
 interface IAuthContextData {

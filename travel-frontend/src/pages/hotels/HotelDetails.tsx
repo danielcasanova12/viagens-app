@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { LayoutBasePage } from "../../shared/layouts";
 import { useParams } from "react-router-dom";
-import { HotelService, IHotel } from "../../shared/services/api";
+import { HotelService} from "../../shared/services/api";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -12,16 +12,11 @@ import { useTheme } from "@mui/material/styles";
 import { Button } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import {useAuthContext} from "../../shared/contexts/AuthContext";
+import { IHotel, IResrvarion } from "../../shared/Interfaces/Interfaces";
 
 
 
-interface IResrvarion {
-	IdReservation: number;
-	date?: string;
-	time?: string;
-	IdUser: number;
-	ReservedHotel: IHotel
-}
+
 
 export const HotelDetails = () => {
 	const { id } = useParams();

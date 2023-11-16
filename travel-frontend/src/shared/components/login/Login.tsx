@@ -4,7 +4,8 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as yup from "yup";
 
 import { useAuthContext } from "../../contexts";
-import { UserService,  IUsers } from "../../services/api";
+import { UserService} from "../../services/api";
+import { IUsers } from "../../Interfaces/Interfaces";
 
 const loginSchema = yup.object().shape({
 	email: yup.string().email("Por favor, insira um email válido.").required("O campo de email é obrigatório."),
