@@ -61,8 +61,8 @@ export const HotelDetails = () => {
 		console.log("asd");
 		const newReservation: ICreateReservation = {
 			UserId: 1,
-			checkInDate: "2023-11-17T00:13:15.719Z",
-			checkOutDate:"2023-11-17T00:13:15.719Z", 
+			checkInDate: "2023-12-17T00:13:15.719Z",
+			checkOutDate:"2023-12-17T00:13:15.719Z", 
 			ReservedHotel: hotel as IHotel,
 		};
 		postReservation(newReservation);
@@ -73,7 +73,7 @@ export const HotelDetails = () => {
 			UserId: 1,
 			ReservedHotel: hotel as IHotel,
 		};
-		AddToCart(newReservation2);
+		AddToCart(newReservation2,1);
 		
 	};
 	

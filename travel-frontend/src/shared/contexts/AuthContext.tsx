@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 import { AuthService } from "../services/api/auth/AuthService";
 import { IReservation, IUser } from "../Interfaces/Interfaces";
+import { ReservationService } from "../services/api/reservation/ReservationService";
 
 
 
@@ -11,7 +12,7 @@ interface IAuthContextData {
 	cart: IReservation[];
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<string | void>;
-	AddToCart: (reservation: IReservation) => void;
+	AddToCart: (reservation: IReservation, userId : number) => void;
 	RemoveFromCart : (Number: number) => void;
 }
 
@@ -27,7 +28,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 	const [cart, setCart] = useState<IReservation[]>([]);
 	const [accessToken, setAccessToken] = useState<string>();
 	const [user, setUser] = useState<IUser | null>(null); // Adicione esta linha
-
+	const [TotalContReservations ,setTotalReservations] = useState(0);
 	useEffect(() => {
 		const accessToken = localStorage.getItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
 
@@ -73,10 +74,19 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 		}
 	}, []);
 	
-	const handleAddToCart = useCallback((item: IReservation) => {
+	const handleAddToCart = useCallback(async (item: IReservation, userId: number) => {
 		const newCart = [...cart, item];
 		localStorage.setItem("APP_CART", JSON.stringify(newCart));
 		setCart(newCart);
+
+		// Buscar as reservas do usuário
+		const result = await ReservationService.getReservationsByUserId(userId);
+		if (result && "reservations" in result && Array.isArray(result.reservations)) {
+			setTotalReservations(result.totalReservations);
+			console.log(TotalContReservations);
+		} else {
+			console.error(result);
+		}
 	}, [cart]);
 	
 	const handleRemoveFromCart = useCallback((itemId: number) => {
