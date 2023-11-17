@@ -42,17 +42,17 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 			console.log("data", data);
 			console.log("Imagem do hotel", data.reservations[0].ReservedHotel?.images[0].imageUrl);
 			const reservations = data.reservations.map((reservation: IReservation) => ({
-				idReservation: reservation.IdReservation,
-				userId: reservation.UserId,
+				idReservation: reservation.idReservation,
+				userId: reservation.userId,
 				checkInDate: reservation.checkInDate,
 				checkOutDate: reservation.checkOutDate,
 				reservedHotel: {
-					idHotel: reservation.ReservedHotel?.idHotel,
-					name: reservation.ReservedHotel?.name,
-					location: reservation.ReservedHotel?.location,
-					starRating: reservation.ReservedHotel?.starRating,
-					pricePerNight: reservation.ReservedHotel?.pricePerNight,
-					images: reservation.ReservedHotel?.images.map((image: IImage) => ({
+					idHotel: reservation.reservedHotel?.idHotel,
+					name: reservation.reservedHotel?.name,
+					location: reservation.reservedHotel?.location,
+					starRating: reservation.reservedHotel?.starRating,
+					pricePerNight: reservation.reservedHotel?.pricePerNight,
+					images: reservation.reservedHotel?.images.map((image: IImage) => ({
 						id: image.id,
 						hotelId: image.hotelId,
 						imageUrl: image.imageUrl,

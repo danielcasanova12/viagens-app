@@ -1,9 +1,9 @@
 export interface IReservation {
-	IdReservation: number;
-  UserId: number;
+	idReservation: number;
+  userId: number;
 	checkInDate?: string;
   checkOutDate?: string;
-	ReservedHotel?: IHotel
+	reservedHotel?: IHotel
 }
 export interface IReservationsAll  {
   reservations: IReservation[];
@@ -36,7 +36,7 @@ export interface ICreateReservation {
   UserId: number;
 	checkInDate?: string;
   checkOutDate?: string;
-	ReservedHotel?: IHotel
+	reservedHotel?: IHotel
 }
 
 
@@ -47,7 +47,7 @@ export interface IUser {
   password: string;
   image: string;
   typePermission: string;
-  Reservations?: IReservation[]; // Add this line
+  reservations?: IReservation[]; // Add this line
 }
 export interface IUsers {
     username: string;
@@ -55,7 +55,7 @@ export interface IUsers {
     password: string;
     image: string;
     typePermission: string;
-    Reservations?: IReservation[]; // Add this line
+    reservations?: IReservation[]; // Add this line
 }
 export interface IAuth {
     accessToken: string;

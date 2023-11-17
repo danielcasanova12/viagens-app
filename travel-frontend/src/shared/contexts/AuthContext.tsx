@@ -90,7 +90,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 	}, [cart]);
 	
 	const handleRemoveFromCart = useCallback((itemId: number) => {
-		const newCart = cart.filter(item => item.IdReservation !== itemId);
+		const newCart = cart.filter(item => item.idReservation !== itemId);
 		localStorage.setItem("APP_CART", JSON.stringify(newCart));
 		setCart(newCart);
 	}, [cart]);

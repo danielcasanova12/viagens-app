@@ -63,15 +63,15 @@ export const HotelDetails = () => {
 			UserId: 1,
 			checkInDate: "2023-12-17T00:13:15.719Z",
 			checkOutDate:"2023-12-17T00:13:15.719Z", 
-			ReservedHotel: hotel as IHotel,
+			reservedHotel: hotel as IHotel,
 		};
 		postReservation(newReservation);
 		const newReservation2: IReservation = {
-			IdReservation: 1,
+			idReservation: 1,
 			checkInDate: "2023-11-16T23:01:34.320Z",
 			checkOutDate: "2023-11-16T23:01:34.320Z", 
-			UserId: 1,
-			ReservedHotel: hotel as IHotel,
+			userId: 1,
+			reservedHotel: hotel as IHotel,
 		};
 		AddToCart(newReservation2,1);
 		

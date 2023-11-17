@@ -59,7 +59,7 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 					password: dadosValidados.password,
 					image: dadosValidados.image,
 					typePermission: dadosValidados.typePermission,
-					Reservations: [], // Add the reservations here
+					reservations: [], // Add the reservations here
 				};
 				
 				const result = await UserService.createUser(user);

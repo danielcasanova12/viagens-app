@@ -12,7 +12,7 @@ const ShoppingCart = () => {
 			const result = await ReservationService.getReservationsByUserId(userId);
 			if (result && "reservations" in result && Array.isArray(result.reservations)) {
 				setReservations( result.reservations );
-				console.log(result.reservations[0].ReservedHotel?.images[0].imageUrl);
+				console.log(result.reservations[0].reservedHotel?.images[0].imageUrl);
 			} else {
 				console.error(result);
 			}
@@ -31,7 +31,7 @@ const ShoppingCart = () => {
 							component="img"
 							alt="Hotel Image"
 							height="140"
-							image={reservation.ReservedHotel?.images[0].imageUrl} // Substitua pela URL da imagem do hotel
+							image={reservation.reservedHotel?.images[0].imageUrl} // Substitua pela URL da imagem do hotel
 							title="Hotel Image"
 						/>
 						<CardContent>
