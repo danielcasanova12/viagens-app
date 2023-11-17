@@ -16,7 +16,6 @@ const accountSchema = yup.object().shape({
 	username: yup.string().required("O campo de nome de usuário é obrigatório."),
 	email: yup.string().email("Por favor, insira um email válido.").required("O campo de email é obrigatório."),
 	password: yup.string().required("O campo de senha é obrigatório.").min(5, "A senha deve ter pelo menos 5 caracteres."),
-	image: yup.string().required("O campo de imagem é obrigatório."),
 	typePermission: yup.string().required("O campo de tipo de permissão é obrigatório."),
 });
 
@@ -37,13 +36,31 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 	const [emailError, setEmailError] = useState("");
 	const [password, setPassword] = useState("");
 	const [passwordError, setPasswordError] = useState("");
-	const [image, setImage] = useState("");
-	const [imageError, setImageError] = useState("");
 	const [typePermission, setTypePermission] = useState("");
 	const [typePermissionError, setTypePermissionError] = useState("");
 
 	const handleShowPassword = () => setShowPassword(!showPassword);
 
+	const [imageFile, setImageFile] = useState("");
+
+
+	const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files ? event.target.files[0] : null;
+		if (file) {
+			const reader = new FileReader();
+	
+			reader.onloadend = () => {
+				if (typeof reader.result === "string") {
+					const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+					setImageFile(base64String);
+				}
+			};
+	
+			reader.readAsDataURL(file);
+		}
+	};
+	
+	
 	useEffect(() => {
 		console.log(isCreatingAccount);
 	}, [isCreatingAccount]);
@@ -51,16 +68,18 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 		setIsLoading(true);
 	
 		try {
+			console.log("Click");
 			while (isCreatingAccount) {
-				const dadosValidados = await accountSchema.validate({ username, email, password, image, typePermission }, { abortEarly: false });
+				console.log("Click2");
+				const dadosValidados = await accountSchema.validate({ username, email, password,  typePermission }, { abortEarly: false });
 				// Clear the email error if the email is valid
 				setEmailError("");
-				
+				console.log("Click3");
 				const user: IUsers = {
 					username: dadosValidados.username,
 					email: dadosValidados.email,
 					password: dadosValidados.password,
-					image: dadosValidados.image,
+					image: imageFile,
 					typePermission: dadosValidados.typePermission,
 					reservations: [], // Add the reservations here
 				};
@@ -100,9 +119,6 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 						break;
 					case "password":
 						setPasswordError(error.message);
-						break;
-					case "image":
-						setImageError(error.message);
 						break;
 					case "typePermission":
 						setTypePermissionError(error.message);
@@ -178,16 +194,6 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 							<>
 								<TextField
 									fullWidth
-									label='Imagem'
-									value={image}
-									disabled={isLoading}
-									onChange={e => setImage(e.target.value)}
-									helperText={imageError}
-									error={!!imageError}
-								/>
-
-								<TextField
-									fullWidth
 									label='Tipo de permissão'
 									value={typePermission}
 									disabled={isLoading}
@@ -195,9 +201,15 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 									helperText={typePermissionError}
 									error={!!typePermissionError}
 								/>
+								<TextField
+									fullWidth
+									type='file'
+									disabled={isLoading}
+									onChange={e => handleImageUpload(e as React.ChangeEvent<HTMLInputElement>)}
+								/>
 							</>
 						)}
-						
+
 					</Box>
 				</CardContent>
 				{(!isCreatingAccount && loginError &&
