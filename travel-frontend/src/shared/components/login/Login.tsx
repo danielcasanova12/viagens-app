@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Card, CardActions, CardContent, CircularProgress, TextField, Typography, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as yup from "yup";
@@ -44,13 +44,16 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 
 	const handleShowPassword = () => setShowPassword(!showPassword);
 
+	useEffect(() => {
+		console.log(isCreatingAccount);
+	}, [isCreatingAccount]);
 	const handleSubmit = async () => {
 		setIsLoading(true);
 	
 		try {
-			if (isCreatingAccount) {
+			while (isCreatingAccount) {
 				const dadosValidados = await accountSchema.validate({ username, email, password, image, typePermission }, { abortEarly: false });
-				// Limpa o erro de email se o email for válido
+				// Clear the email error if the email is valid
 				setEmailError("");
 				
 				const user: IUsers = {
@@ -61,24 +64,26 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 					typePermission: dadosValidados.typePermission,
 					reservations: [], // Add the reservations here
 				};
-				
+				console.log("entrou");
 				const result = await UserService.createUser(user);
-	
-				// If account creation is successful, set isCreatingAccount to false and call handleSubmit again
+				
+				// If account creation is successful, set isCreatingAccount to false and exit the loop
 				if (result) {
 					setIsCreatingAccount(false);
-					handleSubmit();
-				}
-			} else {
-				const dadosValidados = await loginSchema.validate({ email, password }, { abortEarly: false });
-				// Limpa o erro de email se o email for válido
-				
-				
-				const result = await login(dadosValidados.email, dadosValidados.password);
-				if (result == "Request failed with status code 400") {
-					setLoginError("O login falhou. Por favor, tente novamente.");
+					console.log(isCreatingAccount);
+					break;
 				}
 			}
+			
+			const dadosValidados = await loginSchema.validate({ email, password }, { abortEarly: false });
+			// Limpa o erro de email se o email for válido
+				
+				
+			const result = await login(dadosValidados.email, dadosValidados.password);
+			if (result == "Request failed with status code 400") {
+				setLoginError("O login falhou. Por favor, tente novamente.");
+			}
+			
 	
 			setIsLoading(false);
 		} catch (errors) {
