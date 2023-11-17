@@ -12,8 +12,8 @@ import { useTheme } from "@mui/material/styles";
 import { Button } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import {useAuthContext} from "../../shared/contexts/AuthContext";
-import { IHotel, IReservation } from "../../shared/Interfaces/Interfaces";
-
+import { ICreateReservation, IHotel, IReservation } from "../../shared/Interfaces/Interfaces";
+import {ReservationService}  from "../../shared/services/api/reservation/ReservationService";
 
 
 
@@ -26,7 +26,7 @@ export const HotelDetails = () => {
 	const theme = useTheme();
 	const smDown = useMediaQuery(theme.breakpoints.down("sm"));
 	const mdDown = useMediaQuery(theme.breakpoints.down("md"));
-
+	const { postReservation } = ReservationService;
 	const getImageSize = () => {
 		if (smDown) {
 			return 100;
@@ -59,15 +59,22 @@ export const HotelDetails = () => {
 
 	const handleAdd = () => {
 		console.log("asd");
-		const newReservation: IReservation = {
-			IdReservation: 1, // Substitua por seus próprios dados
-			date: "2023-11-15", // Substitua por seus próprios dados
-			time: "20:00", // Substitua por seus próprios dados
-			IdUser: 123, // Substitua por seus próprios dados
-			ReservedHotel: hotel as IHotel, // Substitua por seus próprios dados
+		const newReservation: ICreateReservation = {
+			UserId: 1,
+			checkInDate: "2023-11-17T00:13:15.719Z",
+			checkOutDate:"2023-11-17T00:13:15.719Z", 
+			ReservedHotel: hotel as IHotel,
 		};
-		console.log(newReservation);
-		AddToCart(newReservation);
+		postReservation(newReservation);
+		const newReservation2: IReservation = {
+			IdReservation: 1,
+			checkInDate: "2023-11-16T23:01:34.320Z",
+			checkOutDate: "2023-11-16T23:01:34.320Z", 
+			UserId: 1,
+			ReservedHotel: hotel as IHotel,
+		};
+		AddToCart(newReservation2);
+		
 	};
 	
 	

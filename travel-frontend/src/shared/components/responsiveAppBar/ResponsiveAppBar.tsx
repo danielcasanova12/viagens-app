@@ -61,6 +61,10 @@ function ResponsiveAppBar() {
 		logout();
 
 	};
+	const handleClick = () => {
+		navigate("/shoppingCart");
+	};
+
 	const handleProfile = () => {
 		// Implemente a lógica de logout aqui
 		
@@ -179,7 +183,7 @@ function ResponsiveAppBar() {
 						<IconButton aria-label="DarkMode" onClick={toggleTheme}>
 							<DarkModeIcon />
 						</IconButton>
-						<IconButton>
+						<IconButton onClick={handleClick}>
 							<Badge badgeContent={cart.length} color="secondary">
 								<ShoppingCartIcon/>
 							</Badge>

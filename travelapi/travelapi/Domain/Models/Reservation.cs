@@ -11,6 +11,6 @@ namespace travelapi.Domain.Models
         public DateTime? CheckInDate { get; set; }
         public DateTime? CheckOutDate { get; set; }
         public Hotel? ReservedHotel { get; set; }
-        public List<Activity>? ReservedActivities { get; set; } = new List<Activity>();
+        //public List<Activity>? ReservedActivities { get; set; } = new List<Activity>();
     }
 }

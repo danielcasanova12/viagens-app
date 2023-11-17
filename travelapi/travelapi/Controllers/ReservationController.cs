@@ -44,11 +44,49 @@ namespace travelapi.Controllers
             var reservationDto = _mapper.Map<ReservationDto>(reservation);
             return reservationDto;
         }
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<ReservationDto>>> GetReservationsByUserId(int userId)
+        {
+            var reservations = await _context.Reservations.Where(r => r.UserId == userId).ToListAsync();
 
+            if (reservations == null || !reservations.Any())
+            {
+                return NotFound();
+            }
+
+            var reservationDtos = _mapper.Map<IEnumerable<ReservationDto>>(reservations);
+            return Ok(reservationDtos);
+        }
         [HttpPost]
         public async Task<ActionResult<ReservationDto>> PostReservation(ReservationDto reservationDto)
         {
             var reservation = _mapper.Map<Reservation>(reservationDto);
+
+            if (reservationDto.ReservedHotel.IdHotel != null)
+            {
+                // Se o idHotel estiver presente, busque o hotel correspondente no banco de dados
+                var hotel = _context.Hotels.Find(reservationDto.ReservedHotel.IdHotel);
+                if (hotel != null)
+                {
+                    // Se o hotel for encontrado, use-o para a reserva
+                    reservation.ReservedHotel = hotel;
+                }
+                else
+                {
+                    // Se o hotel não for encontrado, retorne um erro
+                    return NotFound("Hotel não encontrado");
+                }
+            }
+            else
+            {
+                // Se o idHotel não estiver presente, use os dados fornecidos para criar um novo hotel
+                var hotel = _mapper.Map<Hotel>(reservationDto.ReservedHotel);
+                _context.Hotels.Add(hotel);
+                await _context.SaveChangesAsync();
+                reservation.ReservedHotel = hotel;
+            }
+
+            Console.WriteLine(reservation.ToString());
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
 

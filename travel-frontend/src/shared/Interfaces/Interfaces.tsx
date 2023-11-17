@@ -1,11 +1,18 @@
 export interface IReservation {
 	IdReservation: number;
-	date?: string;
-	time?: string;
-	IdUser: number;
+  UserId: number;
+	checkInDate?: string;
+  checkOutDate?: string;
 	ReservedHotel?: IHotel
 }
 
+
+export interface ICreateReservation {
+  UserId: number;
+	checkInDate?: string;
+  checkOutDate?: string;
+	ReservedHotel?: IHotel
+}
 export interface Image {
 	id: number;
   hotelId: number;
