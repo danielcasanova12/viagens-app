@@ -8,7 +8,6 @@ const auth = async (email: string, password: string): Promise<IAuth | Error> => 
 		const { data } = await Api.get(`/users/login?email=${email}&password=${password}`);
 
 		if (data) {
-			console.log(data);
 			return {
 				accessToken: data.accessToken,
 				user: data.user, // Adicione esta linha

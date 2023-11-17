@@ -78,8 +78,9 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 		const newCart = [...cart, item];
 		localStorage.setItem("APP_CART", JSON.stringify(newCart));
 		setCart(newCart);
-
-		// Buscar as reservas do usuário
+		console.log("item:", item);
+	
+		// Fetch the user's reservations
 		const result = await ReservationService.getReservationsByUserId(userId);
 		if (result && "reservations" in result && Array.isArray(result.reservations)) {
 			setTotalReservations(result.totalReservations);
@@ -89,8 +90,10 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 		}
 	}, [cart]);
 	
-	const handleRemoveFromCart = useCallback((itemId: number) => {
-		const newCart = cart.filter(item => item.idReservation !== itemId);
+	const handleRemoveFromCart = useCallback(() => {
+		console.log("Removing the first item from the cart");
+		const newCart = cart.slice(1); // This will create a new array without the first item
+		console.log("Updated cart:", newCart);
 		localStorage.setItem("APP_CART", JSON.stringify(newCart));
 		setCart(newCart);
 	}, [cart]);

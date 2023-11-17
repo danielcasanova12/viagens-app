@@ -2,29 +2,12 @@
 import { ICreateReservation,IImage,IReservation,IReservationsAll } from "../../../Interfaces/Interfaces";
 import { Api } from "../axios-config";
 
-const postReservation = async (reservationDto: ICreateReservation): Promise<ICreateReservation | Error> => {
-	try {
-		console.log("reservationDto", reservationDto);
-		const { data } = await Api.post("/Reservation", reservationDto);
 
-		if (data) {
-
-			console.log("data", data);
-			
-		}
-
-		return new Error("Erro ao criar a reserva.");
-	} catch (error) {
-		console.error(error);
-		return new Error((error as { message: string }).message || "Erro ao criar a reserva.");
-	}
-};
 const getReservationById = async (id: number): Promise<ICreateReservation | Error> => {
 	try {
 		const { data } = await Api.get(`/Reservation/${id}`);
 
 		if (data) {
-			console.log("data", data);
 			return data;
 		}
 
@@ -39,8 +22,6 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 		const { data } = await Api.get(`/Reservation/user/${userId}`);
 
 		if (data) {
-			console.log("data", data);
-			console.log("Imagem do hotel", data.reservations[0].ReservedHotel?.images[0].imageUrl);
 			const reservations = data.reservations.map((reservation: IReservation) => ({
 				idReservation: reservation.idReservation,
 				userId: reservation.userId,
@@ -72,9 +53,35 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 		return new Error((error as { message: string }).message || "Erro ao obter as reservas.");
 	}
 };
+const postReservation = async (reservationDto: ICreateReservation): Promise<ICreateReservation | Error> => {
+	try {
+		const { data } = await Api.post("/Reservation", reservationDto);
+
+		if (data) {
+
+			console.log("data", data);
+			
+		}
+
+		return new Error("Erro ao criar a reserva.");
+	} catch (error) {
+		console.error(error);
+		return new Error((error as { message: string }).message || "Erro ao criar a reserva.");
+	}
+};
+
+export const deleteReservation = async (id: number): Promise<void> => {
+	try {
+		await Api.delete(`/Reservation/${id}`);
+	} catch (error) {
+		console.error(error);
+		throw new Error((error as { message: string }).message || "Error deleting the reservation.");
+	}
+};
 
 export const ReservationService = {
-	postReservation,
 	getReservationById,
 	getReservationsByUserId,
+	postReservation,
+	deleteReservation,
 };

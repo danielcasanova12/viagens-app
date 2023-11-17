@@ -63,7 +63,6 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 				};
 				
 				const result = await UserService.createUser(user);
-				console.log("User created:", result);
 	
 				// If account creation is successful, set isCreatingAccount to false and call handleSubmit again
 				if (result) {
@@ -79,7 +78,6 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 				if (result == "Request failed with status code 400") {
 					setLoginError("O login falhou. Por favor, tente novamente.");
 				}
-				console.log("Token from API:", result);
 			}
 	
 			setIsLoading(false);

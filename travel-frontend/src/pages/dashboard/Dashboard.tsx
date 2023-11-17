@@ -18,8 +18,6 @@ export const Dashboard = () => {
 					setError(data);
 				} else {
 					setUsers(data);
-					console.log(data[0].IdUser);
-					console.log("Dados recebidos com sucesso!");
 				}
 			})
 			.catch((error) => {

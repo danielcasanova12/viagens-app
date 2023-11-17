@@ -58,7 +58,6 @@ export const HotelDetails = () => {
 	};
 
 	const handleAdd = () => {
-		console.log("asd");
 		const newReservation: ICreateReservation = {
 			UserId: 1,
 			checkInDate: "2023-12-17T00:13:15.719Z",

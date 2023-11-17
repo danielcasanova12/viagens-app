@@ -34,7 +34,6 @@ const getHotelById = async (id: number): Promise<IHotel | Error> => {
 		const { data } = await Api.get(urlRelative);
 
 		if (data) {
-			console.log(data);
 			return data;
 		}
 
