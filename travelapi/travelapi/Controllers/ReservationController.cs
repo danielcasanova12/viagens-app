@@ -55,7 +55,14 @@ namespace travelapi.Controllers
             }
 
             var reservationDtos = _mapper.Map<IEnumerable<ReservationDto>>(reservations);
-            return Ok(reservationDtos);
+            var reservationCount = await _context.Reservations.CountAsync(r => r.UserId == userId);
+
+            var reservationAll = new ReservationsAll
+            {
+                Reservations = reservations,
+                TotalReservations = reservationCount
+            };
+            return Ok(reservationAll);
         }
         [HttpPost]
         public async Task<ActionResult<ReservationDto>> PostReservation(ReservationDto reservationDto)

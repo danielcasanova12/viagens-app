@@ -5,7 +5,10 @@ export interface IReservation {
   checkOutDate?: string;
 	ReservedHotel?: IHotel
 }
-
+export interface IReservationsAll  {
+  reservations: IReservation[];
+	totalReservations: number;
+}
 
 export interface ICreateReservation {
   UserId: number;

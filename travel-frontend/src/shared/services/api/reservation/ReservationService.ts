@@ -1,5 +1,5 @@
 
-import { ICreateReservation, IReservation } from "../../../Interfaces/Interfaces";
+import { ICreateReservation,IReservationsAll } from "../../../Interfaces/Interfaces";
 import { Api } from "../axios-config";
 
 const postReservation = async (reservationDto: ICreateReservation): Promise<ICreateReservation | Error> => {
@@ -34,7 +34,7 @@ const getReservationById = async (id: number): Promise<ICreateReservation | Erro
 		return new Error((error as { message: string }).message || "Erro ao obter a reserva.");
 	}
 };
-const getReservationsByUserId = async (userId: number): Promise<Array<IReservation> | Error> => {
+const getReservationsByUserId = async (userId: number): Promise<IReservationsAll | Error> => {
 	try {
 		const { data } = await Api.get(`/Reservation/user/${userId}`);
 

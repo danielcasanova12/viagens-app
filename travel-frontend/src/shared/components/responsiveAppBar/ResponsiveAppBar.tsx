@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@material-ui/core/Badge";
+import { ReservationService } from "../../services/api/reservation/ReservationService";
 
 const pages = ["dashboard", "voos", "hotels", "carros"];
 const settings = ["Profile", "Logout"];
@@ -32,9 +33,9 @@ function ResponsiveAppBar() {
 	const {  logout } = useAuthContext();
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-	const { user, cart } = useAuthContext ();
+	const { user} = useAuthContext ();
 	const [openLogoutDialog, setOpenLogoutDialog] = React.useState(false);
-
+	const [totalReservations, setTotalReservations] = React.useState<number>(0);
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
 	};
@@ -83,6 +84,20 @@ function ResponsiveAppBar() {
 
 	const {toggleTheme} = useAppThemeContext();
 
+	React.useEffect(() => {
+		const fetchReservations = async () => {
+			const userId = 1; // Substitua pelo ID do usuário atual
+			const result = await ReservationService.getReservationsByUserId(userId);
+			console.log(result);
+			if (result && "reservations" in result && Array.isArray(result.reservations)) {
+				setTotalReservations( result.totalReservations );
+			} else {
+				console.error(result);
+			}
+		};
+
+		fetchReservations();
+	}, []);
 
 	return (
 		<AppBar position="static">
@@ -184,7 +199,7 @@ function ResponsiveAppBar() {
 							<DarkModeIcon />
 						</IconButton>
 						<IconButton onClick={handleClick}>
-							<Badge badgeContent={cart.length} color="secondary">
+							<Badge badgeContent={totalReservations} color="secondary">
 								<ShoppingCartIcon/>
 							</Badge>
 						</IconButton>

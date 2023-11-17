@@ -9,9 +9,10 @@ const ShoppingCart = () => {
 		const fetchReservations = async () => {
 			const userId = 1; // Substitua pelo ID do usuário atual
 			const result = await ReservationService.getReservationsByUserId(userId);
-
-			if (Array.isArray(result)) {
-				setReservations(result);
+			console.log(result);
+			if (result && "reservations" in result && Array.isArray(result.reservations)) {
+				setReservations( result.reservations );
+				console.log(result.totalReservations);
 			} else {
 				console.error(result);
 			}
