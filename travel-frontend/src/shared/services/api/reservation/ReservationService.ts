@@ -1,5 +1,5 @@
 
-import { ICreateReservation,IReservationsAll } from "../../../Interfaces/Interfaces";
+import { ICreateReservation,IImage,IReservation,IReservationsAll } from "../../../Interfaces/Interfaces";
 import { Api } from "../axios-config";
 
 const postReservation = async (reservationDto: ICreateReservation): Promise<ICreateReservation | Error> => {
@@ -40,7 +40,30 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 
 		if (data) {
 			console.log("data", data);
-			return data;
+			console.log("Imagem do hotel", data.reservations[0].ReservedHotel?.images[0].imageUrl);
+			const reservations = data.reservations.map((reservation: IReservation) => ({
+				idReservation: reservation.IdReservation,
+				userId: reservation.UserId,
+				checkInDate: reservation.checkInDate,
+				checkOutDate: reservation.checkOutDate,
+				reservedHotel: {
+					idHotel: reservation.ReservedHotel?.idHotel,
+					name: reservation.ReservedHotel?.name,
+					location: reservation.ReservedHotel?.location,
+					starRating: reservation.ReservedHotel?.starRating,
+					pricePerNight: reservation.ReservedHotel?.pricePerNight,
+					images: reservation.ReservedHotel?.images.map((image: IImage) => ({
+						id: image.id,
+						hotelId: image.hotelId,
+						imageUrl: image.imageUrl,
+					})),
+				},
+			}));
+
+			return {
+				reservations,
+				totalReservations: data.totalReservations,
+			};
 		}
 
 		return new Error("Erro ao obter as reservas.");

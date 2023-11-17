@@ -9,14 +9,7 @@ export interface IReservationsAll  {
   reservations: IReservation[];
 	totalReservations: number;
 }
-
-export interface ICreateReservation {
-  UserId: number;
-	checkInDate?: string;
-  checkOutDate?: string;
-	ReservedHotel?: IHotel
-}
-export interface Image {
+export interface IImage {
 	id: number;
   hotelId: number;
   imageUrl: string;
@@ -24,7 +17,12 @@ export interface Image {
 export interface IHotel {
   idHotel: number;
   name: string;
-  location?: {
+  location?: ILocation;
+  starRating: number;
+  pricePerNight: number;
+	images: IImage[];
+}
+export interface ILocation{
     idLocal: number;
     name: string;
     adress: string;
@@ -32,11 +30,15 @@ export interface IHotel {
     state: string;
     country: string;
     image?: string;
-  };
-  starRating: number;
-  pricePerNight: number;
-	images: Image[];
 }
+
+export interface ICreateReservation {
+  UserId: number;
+	checkInDate?: string;
+  checkOutDate?: string;
+	ReservedHotel?: IHotel
+}
+
 
 export interface IUser {
 	IdUser: number;
