@@ -47,7 +47,12 @@ namespace travelapi.Controllers
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<ReservationDto>>> GetReservationsByUserId(int userId)
         {
-            var reservations = await _context.Reservations.Where(r => r.UserId == userId).ToListAsync();
+            var reservations = await _context.Reservations
+                .Include(r => r.ReservedHotel) // Inclua os detalhes do hotel
+                    .ThenInclude(h => h.Location) // Inclua os detalhes da localização do hotel
+                .Include(r => r.ReservedHotel.Images) // Inclua as imagens do hotel
+                .Where(r => r.UserId == userId)
+                .ToListAsync();
 
             if (reservations == null || !reservations.Any())
             {
