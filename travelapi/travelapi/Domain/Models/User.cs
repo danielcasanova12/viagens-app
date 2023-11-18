@@ -13,7 +13,7 @@ namespace travelapi.Domain.Models
         public string Password { get; set; }
         [Required]
         public List<Reservation> Reservations { get; set; } = new List<Reservation>();
-        public string Image { get; set; }
+        public string? Image { get; set; }
         public string TypePermission { get; set; }
     }
 }
