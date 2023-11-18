@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using travelapi.Infrastructure;
 
@@ -10,9 +11,11 @@ using travelapi.Infrastructure;
 namespace travelapi.Migrations
 {
     [DbContext(typeof(TravelContext))]
-    partial class TravelContextModelSnapshot : ModelSnapshot
+    [Migration("20231118005426_v21")]
+    partial class v21
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,7 +72,7 @@ namespace travelapi.Migrations
 
                     b.HasIndex("PickupLocationIdLocal");
 
-                    b.ToTable("CarRentals");
+                    b.ToTable("CarRental");
                 });
 
             modelBuilder.Entity("travelapi.Domain.Models.Cost", b =>
@@ -153,7 +156,7 @@ namespace travelapi.Migrations
 
                     b.HasIndex("DepartureLocationIdLocal");
 
-                    b.ToTable("Flights");
+                    b.ToTable("Flight");
                 });
 
             modelBuilder.Entity("travelapi.Domain.Models.Hotel", b =>

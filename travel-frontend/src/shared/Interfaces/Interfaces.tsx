@@ -61,3 +61,11 @@ export interface IAuth {
     accessToken: string;
     user: IUser; // Adicione esta linha
 }
+export interface ICarRental
+{
+    IdCarRental : number;
+    Company : string;
+    Model : string;
+    PricePerDay: number;
+    PickupLocation : ILocation;
+}

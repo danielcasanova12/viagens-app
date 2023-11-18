@@ -12,7 +12,5 @@ namespace travelapi.Domain.Models
         public int? StarRating { get; set; }
         public decimal? PricePerNight { get; set; }
         public List<HotelImage> Images { get; set; }
-
-
     }
 }

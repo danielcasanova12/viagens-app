@@ -16,8 +16,9 @@ namespace travelapi.Infrastructure
         public DbSet<HotelImage> HotelImages { get; set; }
         public DbSet<Local> Locations { get; set; }
         public DbSet<TouristAttraction> TouristAttractions { get; set; }
-        
+         public DbSet<CarRental> CarRentals { get; set; }
         public DbSet<Cost> Costs { get; set; }
+        public DbSet<Flight> Flights { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(
