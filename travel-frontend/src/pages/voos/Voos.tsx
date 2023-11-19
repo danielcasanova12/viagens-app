@@ -144,3 +144,46 @@ export const Voos = () => {
 		</div>
 	);
 };
+
+
+
+{/* <h1>Flights</h1>
+{flights.map((flight, index) => (
+	<Card key={index} style={{ marginBottom: "20px" }}>
+		<Grid container spacing={2}>
+			<Grid item xs={12} sm={6}>
+				<CardMedia
+					component="img"
+					alt="Flight Image"
+					style={{objectFit: "cover", height: `${getImageSize()}px`, width: "100%"}}
+					image={flight.image || ""}
+					title="Flight Image"
+				/>
+			</Grid>
+			<Grid item xs={12} sm={6}>
+				<CardContent>
+					<Typography gutterBottom variant="h4" component="h2">
+						{flight.airline}
+					</Typography>
+					<Typography variant="body2" color="textSecondary" component="p">
+						Departure: {flight.departureTime}
+					</Typography>
+					<Typography variant="body2" color="textSecondary" component="p">
+						Arrival: {flight.arrivalTime}
+					</Typography>
+					<CardActions>
+						<Button
+							size="small"
+							color="primary"
+							variant="contained"
+							onClick={() => handleDetails(flight.idFlight)}
+						>
+							Detalhes
+						</Button>
+					</CardActions>
+				</CardContent>
+			</Grid>
+		</Grid>
+	</Card>
+))}
+</div> */}

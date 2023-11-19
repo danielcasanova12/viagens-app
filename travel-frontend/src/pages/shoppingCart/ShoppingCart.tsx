@@ -97,15 +97,7 @@ const ShoppingCart = () => {
 										Delete
 									</Button>
 								</CardActions>
-								<CardActions>
-									<Button
-										size="small"
-										variant="contained"
-										onClick={() => handleDelete(reservation.idReservation)}
-									>
-										Editar
-									</Button>
-								</CardActions>
+								
 							</CardContent>
 						</Grid>
 					</Grid>
