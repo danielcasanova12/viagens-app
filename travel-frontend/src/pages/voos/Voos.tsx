@@ -1,189 +1,202 @@
-import React, { useEffect, useMemo, useState } from "react";
-import debounce from "lodash/debounce";
-import {
-	HotelService
-} from "../../shared/services/api";
-import {
-	IconButton,
-	ImageList,
-	ImageListItem,
-	ImageListItemBar,
-	ListSubheader,
-	useMediaQuery,
-	useTheme,
-} from "@mui/material";
+// import React, { useEffect, useState } from "react";
+// import { FlightService } from "../../shared/services/api/flights/FlightsService";  // Importe o FlightService
+// import { Card, Grid, CardMedia, CardContent, Typography, CardActions, Button } from "@material-ui/core";
+// import { IFlight } from "../../shared/Interfaces/Interfaces";
+// import { useTheme } from "@mui/material/styles";
+// import { LayoutBasePage } from "../../shared/layouts/LayoutBasePage";
+// import { ToolsList } from "../../shared/components";
+// export const Voos = () => {
+// 	const [flights, setFlights] = useState<IFlight[]>([]);
+// 	const [searchValue, setSearchValue] = useState("");
+// 	const [pageNumber, setPageNumber] = useState(1);
+// 	const theme = useTheme();
+
+
+
+// 	const getBackgroundColor = () => {
+// 		// Use o tema aqui para ajustar a cor de fundo com base no tema atual
+// 		return theme.palette.background.default;
+// 	};
+// 	useEffect(() => {
+// 		const fetchFlights = async () => {
+// 			const result = await FlightService.getAllFlights(searchValue, pageNumber);
+// 			if (result instanceof Error) {
+// 				console.error(result);
+// 			} else {
+// 				setFlights(result[0].flighti);
+// 			}
+// 		};
+
+// 		fetchFlights();
+// 	}, [searchValue, pageNumber]); // Chame fetchFlights sempre que searchValue ou pageNumber mudar
+
+// 	const handleDetails = (id: number) => {
+// 		// Implemente esta função para lidar com a ação quando o botão "Detalhes" é clicado
+// 		console.log(`Detalhes do voo ${id}`);
+// 		setSearchValue("");
+// 		setPageNumber(1);
+// 		getBackgroundColor();
+// 	};
+
+// 	const getImageSize = () => {
+// 		// Implemente esta função para retornar o tamanho da imagem
+// 	};
+
+// 	return (
+// 		<div>
+// 			 			<LayoutBasePage
+// 				title="Car Rentals"
+// 				toolbar={
+// 					<ToolsList
+// 						showInputSearch={true}
+// 						showSaveButton={false}
+// 					/>
+// 				}
+// 			>
+// 				<h1>Flights</h1>
+// 				{flights.map((flight: IFlight, index: number) => (
+// 					<Card key={index} style={{ marginBottom: "20px" }}>
+// 						<Grid container spacing={2}>
+// 							<Grid item xs={12} sm={6}>
+// 								<CardMedia
+// 									component="img"
+// 									alt="Flight Image"
+// 									style={{objectFit: "cover", height: `${getImageSize()}px`, width: "100%"}}
+// 									image={flight.image || ""}
+// 									title="Flight Image"
+// 								/>
+// 							</Grid>
+// 							<Grid item xs={12} sm={6}>
+// 								<CardContent>
+// 									<Typography gutterBottom variant="h4" component="h2">
+// 										{flight.airline}
+// 									</Typography>
+// 									<Typography variant="body2" color="textSecondary" component="p">
+//     Departure: {flight.departureTime ? new Date(flight.departureTime).toDateString() : "N/A"}
+// 									</Typography>
+// 									<Typography variant="body2" color="textSecondary" component="p">
+//     Arrival: {flight.arrivalTime ? new Date(flight.arrivalTime).toDateString() : "N/A"}
+// 									</Typography>
+
+// 									<CardActions>
+// 										<Button
+// 											size="small"
+// 											color="primary"
+// 											variant="contained"
+// 											onClick={() => handleDetails(flight.idFlight || 1)}
+// 										>
+//                                         Detalhes
+// 										</Button>
+// 									</CardActions>
+// 								</CardContent>
+// 							</Grid>
+// 						</Grid>
+// 					</Card>
+// 				))}
+// 			</LayoutBasePage>
+// 		</div>
+// 	);
+// };
+
+// export default Voos;
+import { useState,useEffect } from "react";
+import { ToolsList } from "../../shared/components/";
 import { LayoutBasePage } from "../../shared/layouts";
-import { ToolsList } from "../../shared/components";
-import { useSearchParams } from "react-router-dom";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-import { Environment } from "../../shared/environment/Environments";
-import { useNavigate  } from "react-router-dom";
-import { IHotel } from "../../shared/Interfaces/Interfaces";
+import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography, useTheme } from "@mui/material";
+import { FlightService } from "../../shared/services/api/flights/FlightsService";
+import { IFlight } from "../../shared/Interfaces/Interfaces";
 
 export const Voos = () => {
-	const [hotels, setHotels] = useState<IHotel[]>([]);
-	const [error, setError] = useState<Error | null>(null);
+
+	const [flights, setFlights] = useState<IFlight[]>([]);
+	const [searchValue, setSearchValue] = useState("");
+	const [pageNumber, setPageNumber] = useState(1);
 	const theme = useTheme();
-	const smDown = useMediaQuery(theme.breakpoints.down("sm"));
-	const mdDown = useMediaQuery(theme.breakpoints.down("md"));
-	const [searchParams, setSearchParams] = useSearchParams();
-	const [totalCount, setTotalCount] = useState(0);
-	const navigate = useNavigate();
-
-	const search = useMemo(() => {
-		return searchParams.get("search") || "";
-	}, [searchParams]);
-
-	const page = useMemo(() => {
-		return Number(searchParams.get("page") || "1");
-	}, [searchParams]);
-
-	const fetchData = async (searchValue: string, pageNumber: number) => {
-		try {
-			const data = await HotelService.getAllHotels(searchValue, pageNumber);
-			if (data instanceof Error) {
-				setError(data);
-			} else {
-				if (Array.isArray(data) ) {
-					const extractedHotels = data[0].data;
-					setHotels(extractedHotels);
-					setTotalCount(data[0].totalCount);
-				} else {
-					// Trate o caso em que não há hotéis disponíveis, por exemplo:
-					setHotels([]);
-					setTotalCount(0);
-				}
-				
-				
-			}
-		} catch (e) {
-			setError(error);
-		}
 	
+	
+	
+	const getBackgroundColor = () => {
+		// Use o tema aqui para ajustar a cor de fundo com base no tema atual
+		return theme.palette.background.default;
 	};
-
-	// Use o debounce para controlar as chamadas à API
-	const debouncedFetchData = debounce(fetchData, 500);
-
 	useEffect(() => {
-		// Chame a função debouncedFetchData sempre que a busca ou a página mudar
-		debouncedFetchData(search, page);
-	}, [search, page]);
-
-	const getImageCols = () => {
-		if (smDown) {
-			return 1;
-		} else if (mdDown) {
-			return 3;
-		} else {
-			return 5;
-		}
+		const fetchFlights = async () => {
+			const result = await FlightService.getAllFlights(searchValue, pageNumber);
+			if (result instanceof Error) {
+				console.error(result);
+			} else {
+				setFlights(result[0].flighti);
+			}
+		};
+	
+		fetchFlights();
+	}, [searchValue, pageNumber]); // Chame fetchFlights sempre que searchValue ou pageNumber mudar
+	
+	const handleDetails = (id: number) => {
+		// Implemente esta função para lidar com a ação quando o botão "Detalhes" é clicado
+		console.log(`Detalhes do voo ${id}`);
+		setSearchValue("");
+		setPageNumber(1);
+		getBackgroundColor();
 	};
+	
+	const getImageSize = () => {
+		// Implemente esta função para retornar o tamanho da imagem
+	};
+
 
 	return (
 		<div>
-			<LayoutBasePage
-				title="Hotels"
+					 			<LayoutBasePage
+				title="Voos"
 				toolbar={
 					<ToolsList
 						showInputSearch={true}
 						showSaveButton={false}
-						changeTextSearch={(text) => setSearchParams({ search: text, page: "1" }, { replace: true })}
-						textSearch={search}
 					/>
 				}
 			>
-				{error && <p>{error.message}</p>}
-				<ImageList sx={{ width: "100%", height: "auto" }} cols={getImageCols()}>
-					<ImageListItem key="Subheader" cols={getImageCols()}>
-						<ListSubheader component="div">Hotels</ListSubheader>
-					</ImageListItem>
-					{hotels.length > 0 ? (
-						hotels
-							.filter((item) => item.images.length > 0)
-							.map((item) => (
-								<ImageListItem key={item.idHotel}>
-									<img
-										srcSet={`${item.images[0].imageUrl}?w=248&fit=crop&auto=format&dpr=2 2x`}
-										src={`${item.images[0].imageUrl}?w=248&fit=crop&auto=format`}
-										alt={item.name}
-										loading="lazy"
-									/>
-									<ImageListItemBar
-										title={item.name}
-										subtitle={item.location?.city}
-										actionIcon={
-											<IconButton
-												sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-												aria-label={`info about ${item.name}`}
-												onClick={() => navigate(`/hotels/detalhes/${item.idHotel}`)}
-											>
-              Detathes
-											</IconButton>
-										}
-									/>
-								</ImageListItem>
-							))
-					) : (
-						<p>Nenhum hotel disponível.</p>
-					)}
-
-				</ImageList>
-				<Stack spacing={4}>
-					<Pagination
-						count={Math.ceil(totalCount / Environment.LIMIT_DEFAULT)}
-						color="primary"
-						page={page}
-						onChange={(event, value) => {
-							setSearchParams({ page: String(value) }, { replace: true });
-						}}
-					/>
-				</Stack>
+				<h1>Flights</h1>
+				{flights.map((flight: IFlight, index: number) => (
+					<Card key={index} style={{ marginBottom: "20px" }}>
+						<Grid container spacing={2}>
+							<Grid item xs={12} sm={6}>
+								<CardMedia
+									component="img"
+									alt="Flight Image"
+									style={{objectFit: "cover", height: `${getImageSize()}px`, width: "100%"}}
+									image={flight.image || ""}
+									title="Flight Image"
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<CardContent>
+									<Typography gutterBottom variant="h4" component="h2">
+										{flight.airline}
+									</Typography>
+									<Typography variant="body2" color="textSecondary" component="p">
+		    Departure: {flight.departureTime ? new Date(flight.departureTime).toDateString() : "N/A"}
+									</Typography>
+									<Typography variant="body2" color="textSecondary" component="p">
+		    Arrival: {flight.arrivalTime ? new Date(flight.arrivalTime).toDateString() : "N/A"}
+									</Typography>
+		
+									<CardActions>
+										<Button
+											size="small"
+											color="primary"
+											variant="contained"
+											onClick={() => handleDetails(flight.idFlight || 1)}
+										>
+		                                        Detalhes
+										</Button>
+									</CardActions>
+								</CardContent>
+							</Grid>
+						</Grid>
+					</Card>
+				))}
 			</LayoutBasePage>
 		</div>
 	);
 };
-
-
-
-{/* <h1>Flights</h1>
-{flights.map((flight, index) => (
-	<Card key={index} style={{ marginBottom: "20px" }}>
-		<Grid container spacing={2}>
-			<Grid item xs={12} sm={6}>
-				<CardMedia
-					component="img"
-					alt="Flight Image"
-					style={{objectFit: "cover", height: `${getImageSize()}px`, width: "100%"}}
-					image={flight.image || ""}
-					title="Flight Image"
-				/>
-			</Grid>
-			<Grid item xs={12} sm={6}>
-				<CardContent>
-					<Typography gutterBottom variant="h4" component="h2">
-						{flight.airline}
-					</Typography>
-					<Typography variant="body2" color="textSecondary" component="p">
-						Departure: {flight.departureTime}
-					</Typography>
-					<Typography variant="body2" color="textSecondary" component="p">
-						Arrival: {flight.arrivalTime}
-					</Typography>
-					<CardActions>
-						<Button
-							size="small"
-							color="primary"
-							variant="contained"
-							onClick={() => handleDetails(flight.idFlight)}
-						>
-							Detalhes
-						</Button>
-					</CardActions>
-				</CardContent>
-			</Grid>
-		</Grid>
-	</Card>
-))}
-</div> */}

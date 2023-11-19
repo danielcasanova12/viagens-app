@@ -1,9 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import { Cars, Dashboard, Hotels, HotelDetails } from "../pages";
+import { Cars, Dashboard, Hotels, HotelDetails, Voos } from "../pages";
 import React from "react";
 import { Profile } from "../pages/profile/Profile";
 import ShoppingCart from "../pages/shoppingCart/ShoppingCart";
-import { Voos } from "../pages/voos/Voos";
 import { CarDetails } from "../pages/cars/CarsDetails";
 
 export const AppRoutes = () => {
