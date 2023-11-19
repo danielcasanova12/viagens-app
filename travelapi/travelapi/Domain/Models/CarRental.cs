@@ -9,6 +9,7 @@ namespace travelapi.Domain.Models
         public string? Company { get; set; }
         public string? Model { get; set; }
         public decimal? PricePerDay { get; set; }
+        public string? Image { get; set; }
         public Local? PickupLocation { get; set; }
     }
 }

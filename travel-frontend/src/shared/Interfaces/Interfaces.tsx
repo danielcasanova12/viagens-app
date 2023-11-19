@@ -3,7 +3,9 @@ export interface IReservation {
   userId: number;
 	checkInDate?: string;
   checkOutDate?: string;
-	reservedHotel?: IHotel
+	reservedHotel?: IHotel;
+  carRental?: ICarRental;
+  flight?: IFlight;
 }
 export interface IReservationsAll  {
   reservations: IReservation[];
@@ -36,7 +38,9 @@ export interface ICreateReservation {
   UserId: number;
 	checkInDate?: string;
   checkOutDate?: string;
-	reservedHotel?: IHotel
+	reservedHotel?: IHotel;
+  CarRentals?: ICarRental;
+  reservedFlight?: IFlight;
 }
 
 
@@ -61,11 +65,22 @@ export interface IAuth {
     accessToken: string;
     user: IUser; // Adicione esta linha
 }
-export interface ICarRental
-{
-    IdCarRental : number;
-    Company : string;
-    Model : string;
-    PricePerDay: number;
-    PickupLocation : ILocation;
+export interface ICarRental {
+  idCarRental: number | null;
+  company: string | null;
+  model: string | null;
+  pricePerDay: number | null;
+  image: string | null;
+  pickupLocation: ILocation | null;
+}
+
+export interface IFlight {
+  idFlight: number | null;
+  airline: string | null;
+  departureLocation: ILocation | null;
+  arrivalLocation: ILocation | null;
+  departureTime: Date | null;
+  arrivalTime: Date | null;
+  image: string | null;
+  price: number | null;
 }

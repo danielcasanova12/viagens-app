@@ -11,6 +11,7 @@ namespace travelapi.Domain.Models
         public Local? ArrivalLocation { get; set; }
         public DateTime? DepartureTime { get; set; }
         public DateTime? ArrivalTime { get; set; }
+        public string? Image { get; set; }
         public decimal? Price { get; set; }
     }
 }

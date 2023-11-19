@@ -4,6 +4,7 @@ import React from "react";
 import { Profile } from "../pages/profile/Profile";
 import ShoppingCart from "../pages/shoppingCart/ShoppingCart";
 import { Voos } from "../pages/voos/Voos";
+import { CarDetails } from "../pages/cars/CarsDetails";
 
 export const AppRoutes = () => {
 	return (
@@ -13,6 +14,7 @@ export const AppRoutes = () => {
 			<Route path="/carros" element={<Cars/>} /> 
 			<Route path="/profile" element={<Profile/>} /> 
 			<Route path="/Hotels/detalhes/:id" element={<HotelDetails />} />
+			<Route path="/car/detalhes/:id" element={<CarDetails />} />
 			<Route path="/shoppingCart" element={<ShoppingCart/>} /> 
 			<Route path="/voos" element={<Voos/>} /> 
 			{/* <Route path="*" element={<Navigate to="/Dashboard" />} /> */}

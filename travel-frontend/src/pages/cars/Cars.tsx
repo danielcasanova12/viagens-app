@@ -5,11 +5,12 @@ import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ImageList, ImageListItem, ImageListItemBar, IconButton, ListSubheader, Stack } from "@mui/material";
 import { Pagination } from "@mui/lab";
-import { ToolsList, LayoutBasePage } from "../../../components";
-import { Environment } from "../../../environment/Environments";
-import { CarService } from "../../../services";
-import { ICarRental } from "../../../Interfaces/Interfaces";
+import { ToolsList } from "../../shared/components/";
+import { Environment } from "../../shared/environment/Environments";
+import { CarService } from "../../shared/services/api/car/CarService";
+import { ICarRental } from "../../shared/Interfaces/Interfaces";
 import debounce from "lodash.debounce";
+import { LayoutBasePage } from "../../shared/layouts";
 
 export const Cars = () => {
 	const [carRentals, setCarRentals] = useState<ICarRental[]>([]);
@@ -28,17 +29,18 @@ export const Cars = () => {
 	const page = useMemo(() => {
 		return Number(searchParams.get("page") || "1");
 	}, [searchParams]);
-
-	const fetchData = async (pageNumber: number) => {
+	const fetchData = async (searchValue: string, pageNumber: number) => {
 		try {
-			const data = await CarService.getAllCarRentals(pageNumber);
+			const data = await CarService.getAllCarRentals(searchValue,pageNumber);
+			console.log("data",data);
 			if (data instanceof Error) {
 				setError(data);
+				console.log(searchValue);
 			} else {
 				if (Array.isArray(data) ) {
-					const extractedCarRentals = data[0].data;
+					const extractedCarRentals = data[0].carro;
 					setCarRentals(extractedCarRentals);
-					setTotalCount(data[0].totalCount);
+					setTotalCount(data[0].contAllCars);
 				} else {
 					setCarRentals([]);
 					setTotalCount(0);
@@ -48,12 +50,13 @@ export const Cars = () => {
 			setError(error);
 		}
 	};
-
+	
 	const debouncedFetchData = debounce(fetchData, 500);
-
+	
 	useEffect(() => {
 		debouncedFetchData(search, page);
 	}, [search, page]);
+	
 
 	const getImageCols = () => {
 		if (smDown) {
@@ -83,43 +86,42 @@ export const Cars = () => {
 					<ImageListItem key="Subheader" cols={getImageCols()}>
 						<ListSubheader component="div">Car Rentals</ListSubheader>
 					</ImageListItem>
-					{carRentals.length > 0 ? (
+					{carRentals && carRentals.length > 0 ? (
 						carRentals.map((item) => (
-							<ImageListItem key={item.IdCarRental}>
-								<img
-									srcSet={`${item.PickupLocation.imageUrl}?w=248&fit=crop&auto=format&dpr=2 2x`}
-									src={`${item.PickupLocation.imageUrl}?w=248&fit=crop&auto=format`}
-									alt={item.Model}
-									loading="lazy"
-								/>
-								<ImageListItemBar
-									title={item.Model}
-									subtitle={item.Company}
-									actionIcon={
-										<IconButton
-											sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-											aria-label={`info about ${item.Model}`}
-											onClick={() => navigate(`/carrentals/detalhes/${item.IdCarRental}`)}
-										>
-											Detalhes
-										</IconButton>
-									}
-								/>
-							</ImageListItem>
+							item.image && (
+								<ImageListItem key={item.idCarRental}>
+									<img src={item.image} alt={item.model ? item.model : undefined} />
+									<ImageListItemBar
+										title={item.model}
+										subtitle={item.company}
+										actionIcon={
+											<IconButton
+												sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+												aria-label={`info about ${item.model}`}
+												onClick={() => navigate(`/car/detalhes/${item.idCarRental}`)}
+											>
+                                Detalhes
+											</IconButton>
+										}
+									/>
+								</ImageListItem>
+							)
 						))
 					) : (
 						<p>Nenhum aluguel de carro disponível.</p>
 					)}
 				</ImageList>
+
 				<Stack spacing={4}>
 					<Pagination
-						count={Math.ceil(totalCount / Environment.LIMIT_DEFAULT)}
+						count={isNaN(totalCount / Environment.LIMIT_DEFAULT) ? 0 : Math.ceil(totalCount / Environment.LIMIT_DEFAULT)}
 						color="primary"
 						page={page}
 						onChange={(event, value) => {
 							setSearchParams({ page: String(value) }, { replace: true });
 						}}
 					/>
+
 				</Stack>
 			</LayoutBasePage>
 		</div>

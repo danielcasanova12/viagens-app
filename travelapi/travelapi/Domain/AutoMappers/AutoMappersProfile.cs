@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using travelapi.Domain.Models;
 using travelapi.Domain.Dto;
+using travelapi.Domain.DTOs;
 
 namespace travelapi.Domain.AutoMappers
 {
@@ -30,6 +31,10 @@ namespace travelapi.Domain.AutoMappers
             CreateMap<User, UserDto>()
                 .ReverseMap();
             CreateMap<HotelImage, HotelImageDto>()
+                .ReverseMap();
+            CreateMap<CarRental, CarRentalDto>()
+                .ReverseMap();
+            CreateMap<Flight, FlightDto>()
                 .ReverseMap();
 
         }

@@ -18,9 +18,45 @@ namespace travelapi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CarRental>>> GetCarRentals()
+        public async Task<ActionResult<CarCount>> GetCarRentals(int? pageNumber, int? pageSize, string? searchValue)
         {
-            return await _context.CarRentals.ToListAsync();
+            var query = _context.CarRentals.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                query = query.Where(c => c.Company.Contains(searchValue) || c.Model.Contains(searchValue));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            if (pageNumber.HasValue && pageSize.HasValue)
+            {
+                query = query.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
+            }
+
+            var cars = await query.ToListAsync();
+
+            var result = new CarCount
+            {
+                Carro = cars,
+                ContAllCars = totalCount
+            };
+
+            return result;
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CarRental>> GetCarRental(int id)
+        {
+            var carRental = await _context.CarRentals.FindAsync(id);
+
+            if (carRental == null)
+            {
+                return NotFound();
+            }
+
+            return carRental;
         }
 
         [HttpPost]

@@ -7,6 +7,7 @@ using travelapi.Domain.Dto;
 using travelapi.Domain.Models;
 using travelapi.Infrastructure;
 using AutoMapper;
+using System.Runtime.ConstrainedExecution;
 
 namespace travelapi.Controllers
 {
@@ -51,6 +52,8 @@ namespace travelapi.Controllers
                 .Include(r => r.ReservedHotel) // Inclua os detalhes do hotel
                     .ThenInclude(h => h.Location) // Inclua os detalhes da localização do hotel
                 .Include(r => r.ReservedHotel.Images) // Inclua as imagens do hotel
+                .Include(r => r.CarRentals) // Inclua os detalhes do carro alugado
+                .Include(r => r.Flights) // Inclua os detalhes do voo
                 .Where(r => r.UserId == userId)
                 .ToListAsync();
 
@@ -72,30 +75,85 @@ namespace travelapi.Controllers
         [HttpPost]
         public async Task<ActionResult<ReservationDto>> PostReservation(ReservationDto reservationDto)
         {
-            var reservation = _mapper.Map<Reservation>(reservationDto);
-
-            if (reservationDto.ReservedHotel.IdHotel != null)
+            if(reservationDto.CarRentals != null)
             {
-                // Se o idHotel estiver presente, busque o hotel correspondente no banco de dados
-                var hotel = _context.Hotels.Find(reservationDto.ReservedHotel.IdHotel);
-                if (hotel != null)
+                await Console.Out.WriteLineAsync("12");
+            }
+            var reservation = _mapper.Map<Reservation>(reservationDto);
+            if(reservation.CarRentals != null)
+            {
+                await Console.Out.WriteLineAsync("2");
+            }
+            // Lida com o hotel
+            if (reservationDto.ReservedHotel != null)
+            {
+                if (reservationDto.ReservedHotel.IdHotel != null)
                 {
-                    // Se o hotel for encontrado, use-o para a reserva
-                    reservation.ReservedHotel = hotel;
+                    var hotel = _context.Hotels.Find(reservationDto.ReservedHotel.IdHotel);
+                    if (hotel != null)
+                    {
+                        reservation.ReservedHotel = hotel;
+                    }
+                    else
+                    {
+                        return NotFound("Hotel não encontrado");
+                    }
                 }
                 else
                 {
-                    // Se o hotel não for encontrado, retorne um erro
-                    return NotFound("Hotel não encontrado");
+                    var hotel = _mapper.Map<Hotel>(reservationDto.ReservedHotel);
+                    _context.Hotels.Add(hotel);
+                    await _context.SaveChangesAsync();
+                    reservation.ReservedHotel = hotel;
                 }
             }
-            else
+
+            // Lida com o carro
+            if (reservationDto.CarRentals != null)
             {
-                // Se o idHotel não estiver presente, use os dados fornecidos para criar um novo hotel
-                var hotel = _mapper.Map<Hotel>(reservationDto.ReservedHotel);
-                _context.Hotels.Add(hotel);
-                await _context.SaveChangesAsync();
-                reservation.ReservedHotel = hotel;
+                if (reservationDto.CarRentals.IdCarRental != null)
+                {
+                    var car = _context.CarRentals.Find(reservationDto.CarRentals.IdCarRental);
+                    if (car != null)
+                    {
+                        reservation.CarRentals = car;
+                    }
+                    else
+                    {
+                        return NotFound("Carro não encontrado");
+                    }
+                }
+                else
+                {
+                    var car = _mapper.Map<CarRental>(reservationDto.CarRentals);
+                    _context.CarRentals.Add(car);
+                    await _context.SaveChangesAsync();
+                    reservation.CarRentals = car;
+                }
+            }
+
+            // Lida com o voo
+            if (reservationDto.Flights != null)
+            {
+                if (reservationDto.Flights.IdFlight != null)
+                {
+                    var flight = _context.Flights.Find(reservationDto.Flights.IdFlight);
+                    if (flight != null)
+                    {
+                        reservation.Flights = flight;
+                    }
+                    else
+                    {
+                        return NotFound("Voo não encontrado");
+                    }
+                }
+                else
+                {
+                    var flight = _mapper.Map<Flight>(reservationDto.Flights);
+                    _context.Flights.Add(flight);
+                    await _context.SaveChangesAsync();
+                    reservation.Flights = flight;
+                }
             }
 
             Console.WriteLine(reservation.ToString());
@@ -106,6 +164,7 @@ namespace travelapi.Controllers
 
             return CreatedAtAction("GetReservation", new { id = createdDto.IdReservation }, createdDto);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReservation(int id, ReservationDto reservationDto)

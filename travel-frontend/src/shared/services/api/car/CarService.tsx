@@ -3,20 +3,22 @@ import { Environment } from "../../../environment/Environments";
 import { Api } from "../axios-config";
 
 type TCarRentalsCount = {
-  data: ICarRental[];
-  totalCount: number;
+  carro: ICarRental[];
+  contAllCars: number;
 }
 
-const getAllCarRentals = async (pageNumber = 1): Promise<TCarRentalsCount[] | Error> => {
+const getAllCarRentals = async (searchValue: string,pageNumber = 1): Promise<TCarRentalsCount[] | Error> => {
 	try {
-		const urlRelative = `/CarRental?pageNumber=${pageNumber}&pageSize=${Environment.LIMIT_DEFAULT}`;
+		const urlRelative = `/CarRental?pageNumber=${pageNumber}&pageSize=${Environment.LIMIT_DEFAULT}&searchValue=${searchValue}`;
 		const { data } = await Api.get(urlRelative);
-
+		console.log("data",data);
 		if (data) {
-			return [{
-				data: data.carRentals,
-				totalCount: data.totalCarRentals,
+			const result = [{
+				carro: data.carro,
+				contAllCars: data.contAllCars,
 			}];
+			console.log("result",result);
+			return result;
 		}
 
 		return new Error("Erro ao listar os registros.");
