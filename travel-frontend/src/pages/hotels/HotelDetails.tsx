@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { LayoutBasePage } from "../../shared/layouts";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { HotelService} from "../../shared/services/api";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -14,11 +14,13 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import {useAuthContext} from "../../shared/contexts/AuthContext";
 import { ICreateReservation, IHotel, IReservation } from "../../shared/Interfaces/Interfaces";
 import {ReservationService}  from "../../shared/services/api/reservation/ReservationService";
-
-
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions} from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { green } from "@mui/material/colors";
 
 
 export const HotelDetails = () => {
+	const navigate = useNavigate();
 	const { id } = useParams();
 	const { AddToCart } = useAuthContext();
 	const [hotel, setHotel] = useState<IHotel | null>(null);
@@ -27,6 +29,8 @@ export const HotelDetails = () => {
 	const smDown = useMediaQuery(theme.breakpoints.down("sm"));
 	const mdDown = useMediaQuery(theme.breakpoints.down("md"));
 	const { postReservation } = ReservationService;
+	const [open, setOpen] = useState(false);
+
 	const getImageSize = () => {
 		if (smDown) {
 			return 100;
@@ -73,10 +77,14 @@ export const HotelDetails = () => {
 			reservedHotel: hotel as IHotel,
 		};
 		AddToCart(newReservation2,1);
-		
+		setOpen(true);
 	};
-	
-	
+	const handleClose = () => {
+		setOpen(false);
+	};
+	const goToCart = () => {
+		navigate("/shoppingCart");
+	};
 
 	return (
 		<LayoutBasePage title="Detalhes do Hotel">
@@ -129,6 +137,24 @@ export const HotelDetails = () => {
 			) : (
 				<p>Carregando detalhes do hotel...</p>
 			)}
+			<Dialog open={open} onClose={handleClose}>
+				<DialogTitle>{"Sucesso!"}</DialogTitle>
+				<DialogContent>
+					<DialogContentText style={{ color: green[900] }}>
+						<CheckCircleIcon /> Hotel adicionado ao carrinho com sucesso!
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={goToCart}  color="secondary" autoFocus >
+            Ver Carrinho
+					</Button>
+					<Button onClick={handleClose}  variant="contained" color="success" autoFocus>
+            OK
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</LayoutBasePage>
 	);
 };
+
+

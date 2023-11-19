@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../../shared/contexts";
 import { useEffect, useState } from "react";
 import { ICarRental, ICreateReservation, IReservation } from "../../shared/Interfaces/Interfaces";
@@ -8,7 +8,13 @@ import { ReservationService } from "../../shared/services/api/reservation/Reserv
 import { CarService } from "../../shared/services/api/car/CarService";
 import { LayoutBasePage } from "../../shared/layouts";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions} from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { green } from "@mui/material/colors";
+
+
 export const CarDetails = () => {
+	const navigate = useNavigate();
 	const { id } = useParams();
 	const { AddToCart } = useAuthContext();
 	const [car, setCar] = useState<ICarRental | null>(null);
@@ -16,6 +22,8 @@ export const CarDetails = () => {
 	const theme = useTheme();
 	const smDown = useMediaQuery(theme.breakpoints.down("sm"));
 	const mdDown = useMediaQuery(theme.breakpoints.down("md"));
+	const [open, setOpen] = useState(false);
+
 	const { postReservation } = ReservationService;
 	const getImageSize = () => {
 		if (smDown) {
@@ -55,14 +63,18 @@ export const CarDetails = () => {
 			checkInDate: "2023-11-16T23:01:34.320Z",
 			checkOutDate: "2023-11-16T23:01:34.320Z", 
 			userId: 1,
-			carRental: car as ICarRental,
+			carRentals: car as ICarRental,
 		};
 		AddToCart(newReservation2,1);
-		
+		setOpen(true);
 	};
 	
-	
-
+	const handleClose = () => {
+		setOpen(false);
+	};
+	const goToCart = () => {
+		navigate("/shoppingCart");
+	};
 	return (
 		<LayoutBasePage title="Detalhes do Carro">
 			{car ? (
@@ -110,6 +122,22 @@ export const CarDetails = () => {
 			) : (
 				<p>Carregando detalhes do carro...</p>
 			)}
+			<Dialog open={open} onClose={handleClose}>
+				<DialogTitle>{"Sucesso!"}</DialogTitle>
+				<DialogContent>
+					<DialogContentText style={{ color: green[900] }}>
+						<CheckCircleIcon /> Carro adicionado ao carrinho com sucesso!
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={goToCart}  color="secondary" autoFocus >
+            Ver Carrinho
+					</Button>
+					<Button onClick={handleClose}  variant="contained" color="success" autoFocus>
+            OK
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</LayoutBasePage>
 	);
 };

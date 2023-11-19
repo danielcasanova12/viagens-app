@@ -4,7 +4,7 @@ export interface IReservation {
 	checkInDate?: string;
   checkOutDate?: string;
 	reservedHotel?: IHotel;
-  carRental?: ICarRental;
+  carRentals?: ICarRental;
   flight?: IFlight;
 }
 export interface IReservationsAll  {

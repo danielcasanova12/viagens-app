@@ -23,12 +23,15 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 
 		if (data) {
 			const reservations = data.reservations.map((reservation: IReservation) => {
-				let reservedItem = null;
+				let teste = null;
 
 				if (reservation.reservedHotel) {
-					reservedItem = {
-						type: "hotel",
-						details: {
+					teste =  {
+						idReservation: reservation.idReservation,
+						userId: reservation.userId,
+						checkInDate: reservation.checkInDate,
+						checkOutDate: reservation.checkOutDate,
+						reservedHotel: {
 							idHotel: reservation.reservedHotel.idHotel,
 							name: reservation.reservedHotel.name,
 							location: reservation.reservedHotel.location,
@@ -41,22 +44,30 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 							})) : [],
 						}
 					};
-				} else if (reservation.carRental) {
-					reservedItem = {
-						type: "car",
-						details: {
-							idCarRental: reservation.carRental?.idCarRental,
-							company: reservation.carRental?.company,
-							model: reservation.carRental?.model,
-							pricePerDay: reservation.carRental?.pricePerDay,
-							image: reservation.carRental?.image,
-							pickupLocation: reservation.carRental?.pickupLocation
+
+				} else if (reservation.carRentals) {
+					teste =  {
+						idReservation: reservation.idReservation,
+						userId: reservation.userId,
+						checkInDate: reservation.checkInDate,
+						checkOutDate: reservation.checkOutDate,
+						carRentals: {
+							idCarRental: reservation.carRentals?.idCarRental,
+							company: reservation.carRentals?.company,
+							model: reservation.carRentals?.model,
+							pricePerDay: reservation.carRentals?.pricePerDay,
+							image: reservation.carRentals?.image,
+							pickupLocation: reservation.carRentals?.pickupLocation
 						}
-					};
+					};	
 				} else if (reservation.flight) {
-					reservedItem = {
-						type: "flight",
-						details: {
+
+					teste =  {
+						idReservation: reservation.idReservation,
+						userId: reservation.userId,
+						checkInDate: reservation.checkInDate,
+						checkOutDate: reservation.checkOutDate,
+						carRentals: {
 							idFlight: reservation.flight.idFlight,
 							airline: reservation.flight.airline,
 							departureLocation: reservation.flight.departureLocation,
@@ -66,26 +77,19 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 							image: reservation.flight.image,
 							price: reservation.flight.price
 						}
-					};
+					};	
+			
 					
 				}
-				console.log("reservedItem return ", reservedItem);
-				console.log("Mo ", reservation.carRental?.image);
-				const teste =  {
-					idReservation: reservation.idReservation,
-					userId: reservation.userId,
-					checkInDate: reservation.checkInDate,
-					checkOutDate: reservation.checkOutDate,
-					reservedItem,
-				};
-				console.log("teste return ", teste);
 				return teste;
 			});
 
-			return {
+			const teste2 = {
 				reservations,
 				totalReservations: data.totalReservations,
 			};
+			console.log("teste2", teste2.reservations[1].reservedHotel?.images[0].imageUrl);
+			return teste2;
 		}
 
 		return new Error("Erro ao obter as reservas.");
