@@ -4,6 +4,7 @@ import React from "react";
 import { Profile } from "../pages/profile/Profile";
 import ShoppingCart from "../pages/shoppingCart/ShoppingCart";
 import { CarDetails } from "../pages/cars/CarsDetails";
+import { FlightDetails } from "../pages/voos/VooDetails";
 
 export const AppRoutes = () => {
 	return (
@@ -16,6 +17,7 @@ export const AppRoutes = () => {
 			<Route path="/car/detalhes/:id" element={<CarDetails />} />
 			<Route path="/shoppingCart" element={<ShoppingCart/>} /> 
 			<Route path="/voos" element={<Voos/>} /> 
+			<Route path="/voos/detalhes/:id" element={<FlightDetails/>} /> 
 			{/* <Route path="*" element={<Navigate to="/Dashboard" />} /> */}
 		</Routes>
 	);

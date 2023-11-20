@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ReservationService } from "../../shared/services/api/reservation/ReservationService";
 import { IReservation } from "../../shared/Interfaces/Interfaces";
-import { Button, Card,  CardActions, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { Button, Card,  CardActions, CardContent, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { red } from "@mui/material/colors";
 
 const ShoppingCart = () => {
 	const [reservations, setReservations] = useState<IReservation[]>([]);
@@ -12,6 +13,7 @@ const ShoppingCart = () => {
 	const theme = useTheme();
 	const smDown = useMediaQuery(theme.breakpoints.down("sm"));
 	const mdDown = useMediaQuery(theme.breakpoints.down("md"));
+	const [open, setOpen] = useState(false);
 
 	const getImageSize = () => {
 		if (smDown) {
@@ -34,14 +36,20 @@ const ShoppingCart = () => {
 			alert("Error deleting the reservation.");
 		}
 	};
+	const handleDelet = () => {
+		setOpen(true);
+	};
+	const handleClose = () => {
+		setOpen(false);
+	};
 	useEffect(() => {
 		const fetchReservations = async () => {
+			console.log("entrou");
 			const userId = user?.IdUser ?? 1; // Substitua pelo ID do usuário atual
 			const result = await ReservationService.getReservationsByUserId(userId);
+			console.log("result: ", result);
 			if (result && "reservations" in result && Array.isArray(result.reservations)) {
 				setReservations( result.reservations );
-				console.log("IMAGEM DO CARRO",result.reservations[1].carRentals?.image);
-				console.log("Imagem do carro",result.reservations[0].reservedHotel?.images[0].imageUrl);
 			} else {
 				console.error(result);
 			}
@@ -62,13 +70,13 @@ const ShoppingCart = () => {
 								alt="Reserved Item Image"
 								style={{objectFit: "cover", height: `${getImageSize()}px`, width: "100%"}}
 								image={
-									(reservation.reservedHotel
+									(reservation && (reservation.reservedHotel
 										? reservation.reservedHotel.images[0].imageUrl
 										: reservation.carRentals
 											? reservation.carRentals.image
-											: reservation.flight
-												? reservation.flight.image
-												: "") || ""
+											: reservation.flights
+												? reservation.flights.image
+												: "")) || ""
 								}
 								title="Reserved Item Image"
 							/>
@@ -76,29 +84,43 @@ const ShoppingCart = () => {
 						<Grid item xs={12} sm={6}>
 							<CardContent>
 								<Typography gutterBottom variant="h4" component="h2">
-									{reservation.reservedHotel
+									{reservation && (reservation.reservedHotel
 										? reservation.reservedHotel.name
 										: reservation.carRentals
 											? reservation.carRentals.company
-											: reservation.flight
-												? reservation.flight.airline
-												: ""}
-								</Typography>
-								<Typography variant="body2" color="textSecondary" component="p">
-									Check-in: {reservation.checkInDate}
+											: reservation.flights
+												? reservation.flights.airline
+												: "")}
 								</Typography>
 								<CardActions>
 									<Button
 										size="small"
 										color="error"
 										variant="contained"
-										onClick={() => handleDelete(reservation.idReservation)}
+										onClick={() => handleDelet()}
 									>
 										Delete
 									</Button>
 								</CardActions>
 								
 							</CardContent>
+							<Dialog open={open} onClose={handleClose}>
+								<DialogTitle>{"Excluir"}</DialogTitle>
+								<DialogContent>
+									<DialogContentText style={{ color: red[900] }}>
+										Dezeja deletar esta reserva?
+									</DialogContentText>
+								</DialogContent>
+								<DialogActions>
+									<Button onClick={handleClose}  variant="contained" color="primary" autoFocus>
+            Cancelar
+									</Button>
+									<Button onClick={() => handleDelete(reservation.idReservation)}variant="contained"  color="error" autoFocus >
+            Deletar
+									</Button>
+									
+								</DialogActions>
+							</Dialog>
 						</Grid>
 					</Grid>
 				</Card>

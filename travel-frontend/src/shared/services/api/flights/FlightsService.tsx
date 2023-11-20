@@ -11,13 +11,11 @@ const getAllFlights = async (searchValue: string, pageNumber = 1): Promise<TFlig
 	try {
 		const urlRelative = `/Flights?pageNumber=${pageNumber}&pageSize=${Environment.LIMIT_DEFAULT}&searchValue=${searchValue}`;
 		const { data } = await Api.get(urlRelative);
-		console.log("data",data);
 		if (data) {
 			const result = [{
 				flighti: data.flighti,
 				contAllFlight: data.contAllFlight,
 			}];
-			console.log("result",result);
 			return result;
 		}
 
@@ -34,6 +32,7 @@ const getFlightById = async (id: number): Promise<IFlight | Error> => {
 		const { data } = await Api.get(urlRelative);
 
 		if (data) {
+			console.log("data",data);
 			return data;
 		}
 

@@ -12,7 +12,6 @@ const createUser = async (user: IUsers): Promise<IUser | Error> => {
 		console.log(urlRelative);
 		console.log(user);
 		const data = await Api.post(urlRelative, user); 
-		console.log(data);
 		
 		return data.data;
 	}catch (error) {

@@ -20,7 +20,7 @@ const getReservationById = async (id: number): Promise<ICreateReservation | Erro
 const getReservationsByUserId = async (userId: number): Promise<IReservationsAll | Error> => {
 	try {
 		const { data } = await Api.get(`/Reservation/user/${userId}`);
-
+		console.log("data",data);
 		if (data) {
 			const reservations = data.reservations.map((reservation: IReservation) => {
 				let teste = null;
@@ -43,8 +43,9 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 								imageUrl: image.imageUrl,
 							})) : [],
 						}
+						
 					};
-
+					console.log("teste", teste);	
 				} else if (reservation.carRentals) {
 					teste =  {
 						idReservation: reservation.idReservation,
@@ -60,26 +61,23 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 							pickupLocation: reservation.carRentals?.pickupLocation
 						}
 					};	
-				} else if (reservation.flight) {
-
+				} else if (reservation.flights) {
 					teste =  {
 						idReservation: reservation.idReservation,
 						userId: reservation.userId,
 						checkInDate: reservation.checkInDate,
 						checkOutDate: reservation.checkOutDate,
-						carRentals: {
-							idFlight: reservation.flight.idFlight,
-							airline: reservation.flight.airline,
-							departureLocation: reservation.flight.departureLocation,
-							arrivalLocation: reservation.flight.arrivalLocation,
-							departureTime: reservation.flight.departureTime,
-							arrivalTime: reservation.flight.arrivalTime,
-							image: reservation.flight.image,
-							price: reservation.flight.price
+						flights: {
+							idFlight: reservation.flights.idFlight,
+							airline: reservation.flights.airline,
+							departureLocation: reservation.flights.departureLocation || {},
+							arrivalLocation: reservation.flights.arrivalLocation || {},
+							departureTime: reservation.flights.departureTime,
+							arrivalTime: reservation.flights.arrivalTime,
+							image: reservation.flights.image,
+							price: reservation.flights.price
 						}
 					};	
-			
-					
 				}
 				return teste;
 			});
@@ -88,7 +86,7 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 				reservations,
 				totalReservations: data.totalReservations,
 			};
-			console.log("teste2", teste2.reservations[1].reservedHotel?.images[0].imageUrl);
+			console.log("teste2", teste2);
 			return teste2;
 		}
 

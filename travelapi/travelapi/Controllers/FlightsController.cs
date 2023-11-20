@@ -11,55 +11,59 @@ namespace travelapi.Controllers
     public class FlightsController : Controller
     {
         
-            private readonly TravelContext _context; // Substitua YourDbContext pelo nome do seu DbContext
+            private readonly TravelContext _context; 
 
             public FlightsController(TravelContext context)
             {
                 _context = context;
             }
 
-            [HttpGet]
-            public async Task<ActionResult<FlightCount>> GetFlights(int? pageNumber, int? pageSize, string? searchValue)
+        [HttpGet]
+        public async Task<ActionResult<FlightCount>> GetFlights(int? pageNumber, int? pageSize, string? searchValue)
+        {
+            var query = _context.Flights
+                .Include(f => f.DepartureLocation)
+                .Include(f => f.ArrivalLocation)
+                .AsQueryable();
+            if (!string.IsNullOrEmpty(searchValue))
             {
-                var query = _context.Flights.AsQueryable();
-
-                if (!string.IsNullOrEmpty(searchValue))
-                {
-                    query = query.Where(f => f.Airline.Contains(searchValue));
-                }
-
-                var totalCount = await query.CountAsync();
-
-                if (pageNumber.HasValue && pageSize.HasValue)
-                {
-                    query = query.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
-                }
-
-                var flights = await query.ToListAsync();
-
-                var result = new FlightCount
-                {
-                    Flighti = flights,
-                    ContAllFlight = totalCount
-                };
-
-                return result;
+                query = query.Where(f => f.Airline.Contains(searchValue));
             }
 
-            [HttpGet("{id}")]
-            public async Task<ActionResult<Flight>> GetFlight(int id)
+            var totalCount = await query.CountAsync();
+
+            if (pageNumber.HasValue && pageSize.HasValue)
             {
-                var flight = await _context.Flights.FindAsync(id);
-
-                if (flight == null)
-                {
-                    return NotFound();
-                }
-
-                return flight;
+                query = query.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
             }
 
-            [HttpPost]
+            var flights = await query.ToListAsync();
+
+            var result = new FlightCount
+            {
+                Flighti = flights,
+                ContAllFlight = totalCount
+            };
+
+            return result;
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Flight>> GetFlight(int id)
+        {
+            var flight = await _context.Flights
+                .Include(f => f.DepartureLocation)
+                .Include(f => f.ArrivalLocation)
+                .FirstOrDefaultAsync(f => f.IdFlight == id);
+
+            if (flight == null)
+            {
+                return NotFound();
+            }
+
+            return flight;
+        }
+
+        [HttpPost]
             public async Task<ActionResult<Flight>> PostFlight(Flight flight)
             {
                 _context.Flights.Add(flight);
@@ -67,6 +71,6 @@ namespace travelapi.Controllers
 
                 return Ok();
             
-        }
+            }
     }
 }

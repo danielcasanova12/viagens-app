@@ -53,7 +53,9 @@ namespace travelapi.Controllers
                     .ThenInclude(h => h.Location) // Inclua os detalhes da localização do hotel
                 .Include(r => r.ReservedHotel.Images) // Inclua as imagens do hotel
                 .Include(r => r.CarRentals) // Inclua os detalhes do carro alugado
-                .Include(r => r.Flights) // Inclua os detalhes do voo
+                .Include(r => r.Flights)
+                    .ThenInclude(h => h.DepartureLocation)
+                    // Inclua os detalhes do voo
                 .Where(r => r.UserId == userId)
                 .ToListAsync();
 
