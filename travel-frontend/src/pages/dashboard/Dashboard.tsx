@@ -35,7 +35,7 @@ export const Dashboard = () => {
 			{error && <p>{error.message}</p>}
 			<Grid container spacing={2}>
 				{users.map((user) => (
-					<Grid item xs={12} sm={6} md={4} key={user.IdUser}>
+					<Grid item xs={12} sm={6} md={4} key={user.idUser}>
 						<Card variant="outlined" style={{ height: "100%" }}>
 							<CardContent>
 								<Typography variant="h6" component="div">

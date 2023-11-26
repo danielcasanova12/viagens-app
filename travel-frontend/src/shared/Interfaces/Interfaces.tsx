@@ -45,7 +45,7 @@ export interface ICreateReservation {
 
 
 export interface IUser {
-	IdUser: number;
+	idUser: number;
   username: string;
   email : string;
   password: string;

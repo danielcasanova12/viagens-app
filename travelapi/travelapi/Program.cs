@@ -40,6 +40,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+var context = new TravelContext();
+if (context.HasData())
+{
+    Console.WriteLine("O banco de dados já possui dados.");
+}
+else
+{
+    Console.WriteLine("O banco de dados está vazio. Adicionando dados...");
+    context.AddDataIfNotExists();
+}
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseCors("AllowSpecificOrigin");

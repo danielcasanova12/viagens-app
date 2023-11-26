@@ -14,7 +14,18 @@ const ShoppingCart = () => {
 	const smDown = useMediaQuery(theme.breakpoints.down("sm"));
 	const mdDown = useMediaQuery(theme.breakpoints.down("md"));
 	const [open, setOpen] = useState(false);
+	const [total, setTotal] = useState(0);
+	const calculateTotal = (valor : number) => {
+		console.log("valor: ", valor);
+		const totalPedido = total + valor;
+		// Substitua esta linha pelo cálculo real do total do seu pedido
+		setTotal(totalPedido);
+	};
 
+	const handleConfirmOrder = () => {
+		// Substitua esta linha pela lógica real de confirmação do pedido
+		console.log("Pedido confirmado!");
+	};
 	const getImageSize = () => {
 		if (smDown) {
 			return 100;
@@ -45,7 +56,7 @@ const ShoppingCart = () => {
 	useEffect(() => {
 		const fetchReservations = async () => {
 			console.log("entrou");
-			const userId = user?.IdUser ?? 1; // Substitua pelo ID do usuário atual
+			const userId = user?.idUser ?? 1; // Substitua pelo ID do usuário atual
 			const result = await ReservationService.getReservationsByUserId(userId);
 			console.log("result: ", result);
 			if (result && "reservations" in result && Array.isArray(result.reservations)) {
@@ -53,15 +64,22 @@ const ShoppingCart = () => {
 			} else {
 				console.error(result);
 			}
+			
 		};
 
 		fetchReservations();
+	}, []);
+	useEffect(() => {
+		reservations.map((reservation) => {
+			calculateTotal(reservation.flights?.price || reservation.reservedHotel?.pricePerNight || reservation.carRentals?.pricePerDay || 0);
+		});
 	}, []);
 
 	return (
 		<div>
 			<h1>Shopping Cart</h1>
 			{reservations.map((reservation, index) => (
+				
 				<Card key={index} style={{ marginBottom: "20px" }}>
 					<Grid container spacing={2}>
 						<Grid item xs={12} sm={6}>
@@ -92,6 +110,7 @@ const ShoppingCart = () => {
 												? reservation.flights.airline
 												: "")}
 								</Typography>
+								
 								<CardActions>
 									<Button
 										size="small"
@@ -124,7 +143,12 @@ const ShoppingCart = () => {
 						</Grid>
 					</Grid>
 				</Card>
+				
 			))}
+			<div>
+				<h2>Total do Pedido: {total}</h2>
+				<button onClick={handleConfirmOrder}>Confirmar Pedido</button>
+			</div>
 		</div>
 	);
 };

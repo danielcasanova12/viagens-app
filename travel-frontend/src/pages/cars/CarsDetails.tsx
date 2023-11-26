@@ -14,6 +14,7 @@ import { green } from "@mui/material/colors";
 
 
 export const CarDetails = () => {
+	const { user} = useAuthContext ();
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { AddToCart } = useAuthContext();
@@ -52,7 +53,7 @@ export const CarDetails = () => {
 
 	const handleAdd = () => {
 		const newReservation: ICreateReservation = {
-			UserId: 1,
+			UserId: user?.idUser ?? 2,
 			checkInDate: "2023-12-17T00:13:15.719Z",
 			checkOutDate:"2023-12-17T00:13:15.719Z", 
 			CarRentals : car as ICarRental,
@@ -62,7 +63,7 @@ export const CarDetails = () => {
 			idReservation: 1,
 			checkInDate: "2023-11-16T23:01:34.320Z",
 			checkOutDate: "2023-11-16T23:01:34.320Z", 
-			userId: 1,
+			userId: user?.idUser ?? 2,
 			carRentals: car as ICarRental,
 		};
 		AddToCart(newReservation2,1);

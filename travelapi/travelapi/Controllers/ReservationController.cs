@@ -140,6 +140,7 @@ namespace travelapi.Controllers
                 if (reservationDto.Flights.IdFlight != null)
                 {
                     var flight = _context.Flights.Find(reservationDto.Flights.IdFlight);
+                    await Console.Out.WriteLineAsync(flight.Airline);
                     if (flight != null)
                     {
                         reservation.Flights = flight;
@@ -157,14 +158,23 @@ namespace travelapi.Controllers
                     reservation.Flights = flight;
                 }
             }
+            try
+            {
+                Console.WriteLine(reservation.ToString());
+                _context.Reservations.Add(reservation);
+                await _context.SaveChangesAsync();
 
-            Console.WriteLine(reservation.ToString());
-            _context.Reservations.Add(reservation);
-            await _context.SaveChangesAsync();
+                var createdDto = _mapper.Map<ReservationDto>(reservation);
+                return CreatedAtAction("GetReservation", new { id = createdDto.IdReservation }, createdDto);
 
-            var createdDto = _mapper.Map<ReservationDto>(reservation);
 
-            return CreatedAtAction("GetReservation", new { id = createdDto.IdReservation }, createdDto);
+            }
+            catch
+            {
+                Console.WriteLine("ou");
+                return Ok();
+            }
+
         }
 
 

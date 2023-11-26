@@ -14,6 +14,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { green } from "@mui/material/colors";
 import { FlightService } from "../../shared/services/api/flights/FlightsService";
 export const FlightDetails = () => {
+	const { user} = useAuthContext ();
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { AddToCart } = useAuthContext();
@@ -37,7 +38,7 @@ export const FlightDetails = () => {
 
 	const handleAdd = () => {
 		const newReservation: ICreateReservation = {
-			UserId: 1,
+			UserId: user?.idUser ?? 2,
 			checkInDate: "2023-12-17T00:13:15.719Z",
 			checkOutDate:"2023-12-17T00:13:15.719Z", 
 			Flights: flight as IFlight,
@@ -47,7 +48,7 @@ export const FlightDetails = () => {
 			idReservation: 1,
 			checkInDate: "2023-11-16T23:01:34.320Z",
 			checkOutDate: "2023-11-16T23:01:34.320Z", 
-			userId: 1,
+			userId: user?.idUser ?? 2,
 			flights: flight as IFlight,
 		};
 		AddToCart(newReservation2,1);

@@ -99,7 +99,6 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 
 const postReservation = async (reservationDto: ICreateReservation): Promise<ICreateReservation | Error> => {
 	try {
-		console.log("reservationDto", reservationDto);
 		const { data } = await Api.post("/Reservation", reservationDto);
 
 		if (data) {
