@@ -18,6 +18,20 @@ import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions} f
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { green } from "@mui/material/colors";
 
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/de";
+import "dayjs/locale/en-gb";
+import "dayjs/locale/zh-cn";
+import Stack from "@mui/material/Stack";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateField } from "@mui/x-date-pickers/DateField";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
+const locales = ["en", "en-gb", "zh-cn", "de"];
+
+type LocaleKey = (typeof locales)[number];
 
 export const HotelDetails = () => {
 	const { user} = useAuthContext ();
@@ -31,6 +45,10 @@ export const HotelDetails = () => {
 	const mdDown = useMediaQuery(theme.breakpoints.down("md"));
 	const { postReservation } = ReservationService;
 	const [open, setOpen] = useState(false);
+	const [datecheckIn, setDatecheckIn] = React.useState<Dayjs | null>(dayjs("2022-04-17"));
+	const [datecheckOut, setDatecheckOut] = React.useState<Dayjs | null>(dayjs("2022-04-17"));
+	const [locale, setLocale] = React.useState<LocaleKey>("en");
+	
 
 	const getImageSize = () => {
 		if (smDown) {
@@ -41,6 +59,8 @@ export const HotelDetails = () => {
 			return 450;
 		}
 	};
+
+
 
 	useEffect(() => {
 		const fetchHotel = async () => {
@@ -63,21 +83,23 @@ export const HotelDetails = () => {
 	};
 
 	const handleAdd = () => {
+		const a = datecheckIn?.toISOString();
+		console.log("a: ", a);
 		const newReservation: ICreateReservation = {
 			UserId: user?.idUser ?? 2,
-			checkInDate: "2023-12-17T00:13:15.719Z",
-			checkOutDate:"2023-12-17T00:13:15.719Z", 
+			checkInDate:datecheckIn?.toISOString()|| "2023-12-17T00:13:15.719Z",
+			checkOutDate:datecheckOut?.toISOString()|| "2023-12-17T00:13:15.719Z", 
 			reservedHotel: hotel as IHotel,
 		};
 		postReservation(newReservation);
 		const newReservation2: IReservation = {
 			idReservation: 1,
-			checkInDate: "2023-11-16T23:01:34.320Z",
-			checkOutDate: "2023-11-16T23:01:34.320Z", 
+			checkInDate:datecheckIn?.toISOString()|| "2023-12-17T00:13:15.719Z",
+			checkOutDate:datecheckOut?.toISOString()|| "2023-12-17T00:13:15.719Z",
 			userId: user?.idUser ?? 2,
 			reservedHotel: hotel as IHotel,
 		};
-		AddToCart(newReservation2,1);
+		AddToCart(newReservation2,user?.idUser ?? 2);
 		setOpen(true);
 	};
 	const handleClose = () => {
@@ -87,74 +109,133 @@ export const HotelDetails = () => {
 		navigate("/shoppingCart");
 	};
 
+	const handleDateChangeCheckIn = (newValue: Dayjs | null) => {
+		if (newValue) {
+			const today =  dayjs();
+	
+			if (newValue >= today) {
+				setDatecheckIn(newValue);
+			} else {
+				console.error("A data de check-in não pode ser anterior à data atual.");
+			}
+		}
+	};
+	
+	const handleDateChangeCheckOut = (newValue: Dayjs | null) => {
+		if (newValue && datecheckIn && newValue > datecheckIn) {
+			setDatecheckOut(newValue);
+		} else {
+			console.error("A data de check-out deve ser posterior à data de check-in.");
+		}
+	};
 	return (
-		<LayoutBasePage title="Detalhes do Hotel">
-			{hotel ? (
-				<Box
-					sx={{
-						display: "flex",
-						flexDirection: "column",
-						alignItems: "center",
-						width: "100%",
-						maxWidth: 500,
-						margin: "0 auto",
-						padding: 2,
-					}}
-				>
-          	<Box sx={{ display: "flex", alignItems: "center" }}>
-						<IconButton onClick={handlePreviousImage} disabled={currentImageIndex === 0}>
-							<ArrowBackIosIcon />
-						</IconButton>
-						<img src={hotel.images[currentImageIndex].imageUrl} alt={hotel.name} style={{ maxHeight: getImageSize(), width: "auto" }} />
-						<IconButton onClick={handleNextImage} disabled={currentImageIndex === hotel.images.length - 1}>
-							<ArrowForwardIosIcon />
-						</IconButton>
-					</Box>
-					<Typography variant="h4" component="h2" gutterBottom>
-						{hotel.name}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						Localização: {hotel.location?.city}, {hotel.location?.state}, {hotel.location?.country}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						Preço por noite: R${hotel.pricePerNight}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						Avaliação: {hotel.starRating} estrelas
-					</Typography>
-					<Button 
-						variant="contained" 
-						color="primary" 
-						sx={{ mt: 2 }} 
-						
-						onClick={() => handleAdd()} // Substitua "item" pelos seus próprios dados
+		<Box >
+			<LayoutBasePage title="Detalhes do Hotel">
+				{hotel ? (
+					<Box
+						sx={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+							width: "100%",
+							maxWidth: 500,
+							margin: "0 auto",
+							padding: 2,
+						}}
 					>
-						<IconButton>
-							<AddShoppingCartIcon/>
-						</IconButton>
+          	<Box >
+							<IconButton onClick={handlePreviousImage} disabled={currentImageIndex === 0}>
+								<ArrowBackIosIcon />
+							</IconButton>
+							<img src={hotel.images[currentImageIndex].imageUrl} alt={hotel.name} style={{ maxHeight: getImageSize(), width: "auto" }} />
+							<IconButton onClick={handleNextImage} disabled={currentImageIndex === hotel.images.length - 1}>
+								<ArrowForwardIosIcon />
+							</IconButton>
+						</Box>
+						<Typography variant="h4" component="h2" gutterBottom>
+							{hotel.name}
+						</Typography>
+						<Typography variant="body1" gutterBottom>
+						Localização: {hotel.location?.city}, {hotel.location?.state}, {hotel.location?.country}
+						</Typography>
+						<Typography variant="body1" gutterBottom>
+						Preço por noite: R${hotel.pricePerNight}
+						</Typography>
+						<Typography variant="body1" gutterBottom>
+						Avaliação: {hotel.starRating} estrelas
+						</Typography>
+						<Box   sx={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+							justifyContent: "center",
+						}}>
+							<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+								<Stack spacing={3} sx={{ width: 300 }}>
+									<ToggleButtonGroup
+										value={locale}
+										exclusive
+										fullWidth
+										onChange={(event, newLocale) => {
+											if (newLocale != null) {
+												setLocale(newLocale);
+											}
+										}}
+									>
+										{locales.map((localeItem) => (
+											<ToggleButton key={localeItem} value={localeItem}>
+												{localeItem}
+											</ToggleButton>
+										))}
+									</ToggleButtonGroup>
+									<DateField
+										label="CheckIn Date"
+										value={datecheckIn}
+										onChange={handleDateChangeCheckIn}
+									/>
+									<DateField
+										label="CheckOut Date"
+										value={datecheckOut}
+										onChange={handleDateChangeCheckOut}
+									/>
+								</Stack>
+							</LocalizationProvider>
+						</Box>
+						<Button 
+							variant="contained" 
+							color="primary" 
+							sx={{ mt: 2 }} 
+						
+							onClick={() => handleAdd()} // Substitua "item" pelos seus próprios dados
+						>
+							<IconButton>
+								<AddShoppingCartIcon/>
+							</IconButton>
   Adicionar ao carrinho
-					</Button>
-				</Box>
-			) : (
-				<p>Carregando detalhes do hotel...</p>
-			)}
-			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>{"Sucesso!"}</DialogTitle>
-				<DialogContent>
-					<DialogContentText style={{ color: green[900] }}>
-						<CheckCircleIcon /> Hotel adicionado ao carrinho com sucesso!
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={goToCart}  color="secondary" autoFocus >
+						</Button>
+					</Box>
+				) : (
+					<p>Carregando detalhes do hotel...</p>
+				)}
+				<Dialog open={open} onClose={handleClose}>
+					<DialogTitle>{"Sucesso!"}</DialogTitle>
+					<DialogContent>
+						<DialogContentText style={{ color: green[900] }}>
+							<CheckCircleIcon /> Hotel adicionado ao carrinho com sucesso!
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={goToCart}  color="secondary" autoFocus >
             Ver Carrinho
-					</Button>
-					<Button onClick={handleClose}  variant="contained" color="success" autoFocus>
+						</Button>
+						<Button onClick={handleClose}  variant="contained" color="success" autoFocus>
             OK
-					</Button>
-				</DialogActions>
-			</Dialog>
-		</LayoutBasePage>
+						</Button>
+					</DialogActions>
+				</Dialog>
+
+			</LayoutBasePage>
+		</Box>
 	);
 };
 

@@ -2,7 +2,7 @@
 import { useState,useEffect, useMemo } from "react";
 import { ToolsList } from "../../shared/components/";
 import { LayoutBasePage } from "../../shared/layouts";
-import { Button, Card, CardActions, CardContent, CardMedia, Grid,Stack, Typography, debounce, useTheme } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid,Stack, Typography, debounce, useTheme } from "@mui/material";
 import { FlightService } from "../../shared/services/api/flights/FlightsService";
 import { IFlight } from "../../shared/Interfaces/Interfaces";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -65,7 +65,7 @@ export const Voos = () => {
 
 
 	return (
-		<div>
+		<Container  maxWidth="xl">
 					 			<LayoutBasePage
 				title="Voos"
 				toolbar={
@@ -120,6 +120,6 @@ export const Voos = () => {
 				<Stack spacing={4}>
 				</Stack>
 			</LayoutBasePage>
-		</div>
+		</Container>
 	);
 };

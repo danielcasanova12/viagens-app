@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ReservationService } from "../../shared/services/api/reservation/ReservationService";
 import { IReservation } from "../../shared/Interfaces/Interfaces";
-import { Box, Button, Card,  CardActions, CardContent, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
+import { Box, Button, Card,  CardActions, CardContent, CardMedia, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -76,7 +76,7 @@ const ShoppingCart = () => {
 	}, []);
 
 	return (
-		<div>
+		<Container  maxWidth="xl">
 			<h1>Shopping Cart</h1>
 			{reservations.map((reservation, index) => (
 				
@@ -161,7 +161,7 @@ const ShoppingCart = () => {
         Confirmar Pedido
 				</Button>
 			</Box>
-		</div>
+		</Container>
 	);
 };
 export default ShoppingCart;
