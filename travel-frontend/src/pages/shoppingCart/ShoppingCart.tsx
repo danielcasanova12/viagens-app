@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ReservationService } from "../../shared/services/api/reservation/ReservationService";
 import { IReservation } from "../../shared/Interfaces/Interfaces";
-import { Button, Card,  CardActions, CardContent, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
+import { Box, Button, Card,  CardActions, CardContent, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -145,10 +145,22 @@ const ShoppingCart = () => {
 				</Card>
 				
 			))}
-			<div>
-				<h2>Total do Pedido: {total}</h2>
-				<button onClick={handleConfirmOrder}>Confirmar Pedido</button>
-			</div>
+			<Box
+				sx={{
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+					justifyContent: "center",
+					padding: 2,
+				}}
+			>
+				<Typography variant="h4" component="div" gutterBottom>
+        Total do Pedido: {total}
+				</Typography>
+				<Button variant="contained" onClick={handleConfirmOrder}>
+        Confirmar Pedido
+				</Button>
+			</Box>
 		</div>
 	);
 };

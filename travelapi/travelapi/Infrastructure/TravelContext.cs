@@ -22,7 +22,7 @@ namespace travelapi.Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(
-                "server=172.18.0.3;port=3306;database=traveldb;user=root;password=root",
+                "server=172.19.0.2;port=3306;database=traveldb;user=root;password=root",
                 new MySqlServerVersion(new Version(8, 2, 0)),
                 mySqlOptions =>
                 {
@@ -38,7 +38,7 @@ namespace travelapi.Infrastructure
 
         public bool HasData()
         {
-            return Users.Any() || Reservations.Any()  || Hotels.Any() ||  CarRentals.Any() || Flights.Any();
+            return Users.Any() || Reservations.Any() || Hotels.Any() || CarRentals.Any() || Flights.Any();
         }
 
         public void AddDataIfNotExists()
@@ -83,7 +83,7 @@ namespace travelapi.Infrastructure
                 //    ImageUrl = "https://imgs.search.brave.com/dE6dKPeR2-4c6JEZSoKa4s7TCBE79YDWaCZ348oOtfA/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTA0/NzMxNzE3L3Bob3Rv/L2x1eHVyeS1yZXNv/cnQuanBnP3M9NjEy/eDYxMiZ3PTAmaz0y/MCZjPWNPRE1TUGJZ/eXJuMUZIYWtlMXhZ/ejlNOHIxNWlPZkd6/OUFvc3k5RGI3bUk9"
                 //};
 
-                // Adicione a imagem do hotel ao banco de dados
+                //// Adicione a imagem do hotel ao banco de dados
                 //HotelImages.Add(hotelImage);
 
                 // Crie um novo voo
