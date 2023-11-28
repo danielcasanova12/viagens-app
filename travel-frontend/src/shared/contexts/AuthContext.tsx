@@ -13,6 +13,7 @@ interface IAuthContextData {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<string | void>;
 	AddToCart: (reservation: IReservation, userId : number) => void;
+	RemoveAllFromCart : (Number: number) => void;
 	RemoveFromCart : (Number: number) => void;
 }
 
@@ -90,6 +91,14 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 		}
 	}, [cart]);
 	
+	const handleAllRemoveFromCart = useCallback(() => {
+		console.log("Removing the first item from the cart");
+		const newCart = cart.slice(100); // This will create a new array without the first item
+		console.log("Updated cart:", newCart);
+		localStorage.setItem("APP_CART", JSON.stringify(newCart));
+		setCart(newCart);
+	}, [cart]);
+
 	const handleRemoveFromCart = useCallback(() => {
 		console.log("Removing the first item from the cart");
 		const newCart = cart.slice(1); // This will create a new array without the first item
@@ -120,7 +129,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 
 
 	return (
-		<AuthContext.Provider value={{ user, isAuthenticated, login: handleLogin, logout: handleLogout, cart, AddToCart: handleAddToCart, RemoveFromCart: handleRemoveFromCart }}>
+		<AuthContext.Provider value={{ user, isAuthenticated, login: handleLogin, logout: handleLogout, cart, AddToCart: handleAddToCart, RemoveFromCart: handleRemoveFromCart,RemoveAllFromCart:handleAllRemoveFromCart}}>
 			{children}
 		</AuthContext.Provider>
 	);

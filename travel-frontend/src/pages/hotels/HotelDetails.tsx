@@ -45,9 +45,11 @@ export const HotelDetails = () => {
 	const mdDown = useMediaQuery(theme.breakpoints.down("md"));
 	const { postReservation } = ReservationService;
 	const [open, setOpen] = useState(false);
-	const [datecheckIn, setDatecheckIn] = React.useState<Dayjs | null>(dayjs("2022-04-17"));
-	const [datecheckOut, setDatecheckOut] = React.useState<Dayjs | null>(dayjs("2022-04-17"));
+	const [datecheckIn, setDatecheckIn] = React.useState<Dayjs | null>(dayjs());
+	const [datecheckOut, setDatecheckOut] = React.useState<Dayjs | null>(dayjs());
 	const [locale, setLocale] = React.useState<LocaleKey>("en");
+	const [checkInError, setCheckInError] = useState(false);
+	const [checkOutError, setCheckOutError] = useState(false);
 	
 
 	const getImageSize = () => {
@@ -90,6 +92,7 @@ export const HotelDetails = () => {
 			checkInDate:datecheckIn?.toISOString()|| "2023-12-17T00:13:15.719Z",
 			checkOutDate:datecheckOut?.toISOString()|| "2023-12-17T00:13:15.719Z", 
 			reservedHotel: hotel as IHotel,
+			Confirmed: false
 		};
 		postReservation(newReservation);
 		const newReservation2: IReservation = {
@@ -98,6 +101,7 @@ export const HotelDetails = () => {
 			checkOutDate:datecheckOut?.toISOString()|| "2023-12-17T00:13:15.719Z",
 			userId: user?.idUser ?? 2,
 			reservedHotel: hotel as IHotel,
+			confirmed: false
 		};
 		AddToCart(newReservation2,user?.idUser ?? 2);
 		setOpen(true);
@@ -115,7 +119,9 @@ export const HotelDetails = () => {
 	
 			if (newValue >= today) {
 				setDatecheckIn(newValue);
+				setCheckInError(false); 
 			} else {
+				setCheckInError(true);
 				console.error("A data de check-in não pode ser anterior à data atual.");
 			}
 		}
@@ -124,7 +130,9 @@ export const HotelDetails = () => {
 	const handleDateChangeCheckOut = (newValue: Dayjs | null) => {
 		if (newValue && datecheckIn && newValue > datecheckIn) {
 			setDatecheckOut(newValue);
+			setCheckOutError(false); 
 		} else {
+			setCheckOutError(false); 
 			console.error("A data de check-out deve ser posterior à data de check-in.");
 		}
 	};
@@ -193,11 +201,21 @@ export const HotelDetails = () => {
 										value={datecheckIn}
 										onChange={handleDateChangeCheckIn}
 									/>
+									{checkInError && (
+										<Typography variant="body2" color="error">
+											A data de check-in não pode ser anterior à data atual.
+										</Typography>
+									)}
 									<DateField
 										label="CheckOut Date"
 										value={datecheckOut}
 										onChange={handleDateChangeCheckOut}
 									/>
+									{checkOutError && (
+										<Typography variant="body2" color="error">
+											A data de check-out deve ser posterior à data de check-in.
+										</Typography>
+									)}
 								</Stack>
 							</LocalizationProvider>
 						</Box>

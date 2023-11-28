@@ -22,7 +22,7 @@ namespace travelapi.Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(
-                "server=172.19.0.2;port=3306;database=traveldb;user=root;password=root",
+                "server=172.19.0.1;port=3306;database=traveldb;user=root;password=root",
                 new MySqlServerVersion(new Version(8, 2, 0)),
                 mySqlOptions =>
                 {
@@ -69,7 +69,7 @@ namespace travelapi.Infrastructure
                         Image = "string"
                     },
                     StarRating = 0,
-                    PricePerNight = 0,
+                    PricePerNight = 250,
                     Images = new List<HotelImage>()
                 };
 
@@ -113,7 +113,7 @@ namespace travelapi.Infrastructure
                     DepartureTime = DateTime.Parse("2023-11-26T13:05:27.239Z"),
                     ArrivalTime = DateTime.Parse("2023-11-26T13:05:27.239Z"),
                     Image = "https://imgs.search.brave.com/Kuwz2ZtMxJUfCbLDmB1BhSjYSzL9zTapvew_k9pFi9U/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMucG9kZXIzNjAu/Y29tLmJyLzIwMjEv/MTEvZ29sLWF2aWFv/LTg2OHg2NDQtMS04/NDh4NDc3LnBuZw",
-                    Price = 0
+                    Price = 1500
                 };
 
                 // Adicione o voo ao banco de dados
@@ -124,7 +124,7 @@ namespace travelapi.Infrastructure
                 {
                     Company = "string",
                     Model = "string",
-                    PricePerDay = 0,
+                    PricePerDay = 159,
                     Image = "https://imgs.search.brave.com/wqXxsTI8gGUbxXwz3Xcsdmw6lIW9GsMLJhjlbtv_T14/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9zMi1h/dXRvZXNwb3J0ZS5n/bGJpbWcuY29tL2Uw/aEw1N2ZSSmlUTE52/Ykx4U3d5eUtLZWpR/bz0vNTQweDMwNC90/b3Avc21hcnQvaHR0/cHM6Ly9pLnMzLmds/YmltZy5jb20vdjEv/QVVUSF9jZjlkMDM1/YmYyNmI0NjQ2YjEw/NWJkOTU4ZjMyMDg5/ZC9pbnRlcm5hbF9w/aG90b3MvYnMvMjAy/Mi9SL00vSzdrb3M1/UUdhZnh6U0dFa0ZQ/N1EvZHNjMDYxODEu/anBn",
                     PickupLocation = new Local
                     {

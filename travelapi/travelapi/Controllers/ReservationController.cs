@@ -45,7 +45,7 @@ namespace travelapi.Controllers
             var reservationDto = _mapper.Map<ReservationDto>(reservation);
             return reservationDto;
         }
-        [HttpGet("user/{userId}")]
+        [HttpGet("user/{userId}/confirmed")]
         public async Task<ActionResult<IEnumerable<ReservationDto>>> GetReservationsByUserId(int userId)
         {
             var reservations = await _context.Reservations
@@ -55,13 +55,41 @@ namespace travelapi.Controllers
                 .Include(r => r.CarRentals) // Inclua os detalhes do carro alugado
                 .Include(r => r.Flights)
                     .ThenInclude(h => h.DepartureLocation)
-                    // Inclua os detalhes do voo
-                .Where(r => r.UserId == userId)
+                // Inclua os detalhes do voo
+                .Where(r => r.UserId == userId && r.Confirmed == true)
                 .ToListAsync();
 
             if (reservations == null || !reservations.Any())
             {
                 return NotFound();
+            }
+
+            var reservationDtos = _mapper.Map<IEnumerable<ReservationDto>>(reservations);
+            var reservationCount = await _context.Reservations.CountAsync(r => r.UserId == userId);
+
+            var reservationAll = new ReservationsAll
+            {
+                Reservations = reservations,
+                TotalReservations = reservationCount
+            };
+            return Ok(reservationAll);
+        }
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<ReservationDto>>> GetReservationsByUserIdReservated(int userId)
+        {
+            var reservations = await _context.Reservations
+                .Include(r => r.ReservedHotel) // Inclua os detalhes do hotel
+                    .ThenInclude(h => h.Location) // Inclua os detalhes da localização do hotel
+                .Include(r => r.ReservedHotel.Images) // Inclua as imagens do hotel
+                .Include(r => r.CarRentals) // Inclua os detalhes do carro alugado
+                .Include(r => r.Flights)
+                    .ThenInclude(h => h.DepartureLocation)
+                 .Where(r => r.UserId == userId && r.Confirmed == false)
+                .ToListAsync();
+
+            if (reservations == null || !reservations.Any())
+            {
+                return Ok(reservations);
             }
 
             var reservationDtos = _mapper.Map<IEnumerable<ReservationDto>>(reservations);
@@ -176,7 +204,20 @@ namespace travelapi.Controllers
             }
 
         }
+        [HttpPut("user/{userId}")]
+        public async Task<IActionResult> PutReservationStatus(int userId)
+        {
+            var reservations = await _context.Reservations
+                .Include(r => r.ReservedHotel)
+                .Where(r => r.UserId == userId && r.Confirmed == false)
+                .ToListAsync();
 
+            reservations.ForEach(r => r.Confirmed = true);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(reservations);
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReservation(int id, ReservationDto reservationDto)

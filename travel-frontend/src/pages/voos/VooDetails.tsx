@@ -42,6 +42,7 @@ export const FlightDetails = () => {
 			checkInDate: "2023-12-17T00:13:15.719Z",
 			checkOutDate:"2023-12-17T00:13:15.719Z", 
 			Flights: flight as IFlight,
+			Confirmed: false
 		};
 		postReservation(newReservation);
 		const newReservation2: IReservation = {
@@ -50,6 +51,7 @@ export const FlightDetails = () => {
 			checkOutDate: "2023-11-16T23:01:34.320Z", 
 			userId: user?.idUser ?? 2,
 			flights: flight as IFlight,
+			confirmed: false
 		};
 		AddToCart(newReservation2,1);
 		setOpen(true);

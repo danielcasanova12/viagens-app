@@ -6,6 +6,7 @@ export interface IReservation {
 	reservedHotel?: IHotel;
   carRentals?: ICarRental;
   flights?: IFlight;
+  confirmed?: boolean;
 }
 export interface IReservationsAll  {
   reservations: IReservation[];
@@ -41,6 +42,7 @@ export interface ICreateReservation {
 	reservedHotel?: IHotel;
   CarRentals?: ICarRental;
   Flights?: IFlight;
+  Confirmed?: boolean;
 }
 
 

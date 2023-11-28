@@ -21,7 +21,7 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@material-ui/core/Badge";
 
-const pages = ["dashboard", "voos", "hotels", "carros"];
+const pages = ["dashboard", "voos", "hotels", "carros","Reservas"];
 const settings = ["Profile", "Logout"];
 
 

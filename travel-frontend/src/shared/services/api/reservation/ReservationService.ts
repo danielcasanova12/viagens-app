@@ -17,11 +17,11 @@ const getReservationById = async (id: number): Promise<ICreateReservation | Erro
 		return new Error((error as { message: string }).message || "Erro ao obter a reserva.");
 	}
 };
-const getReservationsByUserId = async (userId: number): Promise<IReservationsAll | Error> => {
+const getReservationsAllByUserId = async (userId: number): Promise<IReservationsAll | Error> => {
 	try {
-		const { data } = await Api.get(`/Reservation/user/${userId}`);
-		console.log("data",data);
-		if (data) {
+		const { data } = await Api.get(`/Reservation/user/${userId}/confirmed`);
+
+		if (data.reservations) {
 			const reservations = data.reservations.map((reservation: IReservation) => {
 				let teste = null;
 
@@ -89,8 +89,85 @@ const getReservationsByUserId = async (userId: number): Promise<IReservationsAll
 			console.log("teste2", teste2);
 			return teste2;
 		}
+		return data;
+	} catch (error) {
+		console.error(error);
+		return new Error((error as { message: string }).message || "Erro ao obter as reservas.");
+	}
+};
+const getReservationsByUserId = async (userId: number): Promise<IReservationsAll | Error> => {
+	try {
+		const { data } = await Api.get(`/Reservation/user/${userId}`);
 
-		return new Error("Erro ao obter as reservas.");
+		if (data.reservations) {
+			const reservations = data.reservations.map((reservation: IReservation) => {
+				let teste = null;
+
+				if (reservation.reservedHotel) {
+					teste =  {
+						idReservation: reservation.idReservation,
+						userId: reservation.userId,
+						checkInDate: reservation.checkInDate,
+						checkOutDate: reservation.checkOutDate,
+						reservedHotel: {
+							idHotel: reservation.reservedHotel.idHotel,
+							name: reservation.reservedHotel.name,
+							location: reservation.reservedHotel.location,
+							starRating: reservation.reservedHotel.starRating,
+							pricePerNight: reservation.reservedHotel.pricePerNight,
+							images: reservation.reservedHotel.images ? reservation.reservedHotel.images.map((image: IImage) => ({
+								id: image.id,
+								hotelId: image.hotelId,
+								imageUrl: image.imageUrl,
+							})) : [],
+						}
+						
+					};
+					console.log("teste", teste);	
+				} else if (reservation.carRentals) {
+					teste =  {
+						idReservation: reservation.idReservation,
+						userId: reservation.userId,
+						checkInDate: reservation.checkInDate,
+						checkOutDate: reservation.checkOutDate,
+						carRentals: {
+							idCarRental: reservation.carRentals?.idCarRental,
+							company: reservation.carRentals?.company,
+							model: reservation.carRentals?.model,
+							pricePerDay: reservation.carRentals?.pricePerDay,
+							image: reservation.carRentals?.image,
+							pickupLocation: reservation.carRentals?.pickupLocation
+						}
+					};	
+				} else if (reservation.flights) {
+					teste =  {
+						idReservation: reservation.idReservation,
+						userId: reservation.userId,
+						checkInDate: reservation.checkInDate,
+						checkOutDate: reservation.checkOutDate,
+						flights: {
+							idFlight: reservation.flights.idFlight,
+							airline: reservation.flights.airline,
+							departureLocation: reservation.flights.departureLocation || {},
+							arrivalLocation: reservation.flights.arrivalLocation || {},
+							departureTime: reservation.flights.departureTime,
+							arrivalTime: reservation.flights.arrivalTime,
+							image: reservation.flights.image,
+							price: reservation.flights.price
+						}
+					};	
+				}
+				return teste;
+			});
+
+			const teste2 = {
+				reservations,
+				totalReservations: data.totalReservations,
+			};
+			console.log("teste2", teste2);
+			return teste2;
+		}
+		return data;
 	} catch (error) {
 		console.error(error);
 		return new Error((error as { message: string }).message || "Erro ao obter as reservas.");
@@ -114,6 +191,14 @@ const postReservation = async (reservationDto: ICreateReservation): Promise<ICre
 	}
 };
 
+export const  putReservationStatus = async (id: number): Promise<void> => {
+	try {
+		await Api.put(`/Reservation/user/${id}`);
+	} catch (error) {
+		console.error(error);
+		throw new Error((error as { message: string }).message || "Error updating the reservation status.");
+	}
+};
 export const deleteReservation = async (id: number): Promise<void> => {
 	try {
 		await Api.delete(`/Reservation/${id}`);
@@ -126,6 +211,9 @@ export const deleteReservation = async (id: number): Promise<void> => {
 export const ReservationService = {
 	getReservationById,
 	getReservationsByUserId,
+	getReservationsAllByUserId,
 	postReservation,
+	putReservationStatus,
 	deleteReservation,
+	
 };

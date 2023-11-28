@@ -57,6 +57,7 @@ export const CarDetails = () => {
 			checkInDate: "2023-12-17T00:13:15.719Z",
 			checkOutDate:"2023-12-17T00:13:15.719Z", 
 			CarRentals : car as ICarRental,
+			Confirmed: false
 		};
 		postReservation(newReservation);
 		const newReservation2: IReservation = {
@@ -65,6 +66,7 @@ export const CarDetails = () => {
 			checkOutDate: "2023-11-16T23:01:34.320Z", 
 			userId: user?.idUser ?? 2,
 			carRentals: car as ICarRental,
+			confirmed: false
 		};
 		AddToCart(newReservation2,1);
 		setOpen(true);

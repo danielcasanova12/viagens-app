@@ -15,5 +15,6 @@ namespace travelapi.Domain.Dto
         public CarRentalDto? CarRentals { get; set; }
          public FlightDto? Flights { get; set; }
         public HotelDto? ReservedHotel { get; set; }
+        public bool? Confirmed { get; set; }
     }
 }

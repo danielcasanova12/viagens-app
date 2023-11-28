@@ -13,5 +13,6 @@ namespace travelapi.Domain.Models
         public Hotel? ReservedHotel { get; set; }
         public CarRental? CarRentals { get; set; }
         public Flight? Flights { get; set; }
+        public bool? Confirmed { get; set; }
     }
 }
