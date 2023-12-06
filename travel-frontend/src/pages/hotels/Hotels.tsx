@@ -4,6 +4,7 @@ import {
 	HotelService
 } from "../../shared/services/api";
 import {
+	CircularProgress,
 	IconButton,
 	ImageList,
 	ImageListItem,
@@ -30,6 +31,7 @@ export const Hotels = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [totalCount, setTotalCount] = useState(0);
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(true);
 
 	const search = useMemo(() => {
 		return searchParams.get("search") || "";
@@ -40,8 +42,10 @@ export const Hotels = () => {
 	}, [searchParams]);
 
 	const fetchData = async (searchValue: string, pageNumber: number) => {
+		setLoading(true);
 		try {
 			const data = await HotelService.getAllHotels(searchValue, pageNumber);
+			
 			if (data instanceof Error) {
 				setError(data);
 			} else {
@@ -60,7 +64,7 @@ export const Hotels = () => {
 		} catch (e) {
 			setError(error);
 		}
-	
+		setLoading(false);
 	};
 
 	// Use o debounce para controlar as chamadas à API
@@ -94,52 +98,57 @@ export const Hotels = () => {
 					/>
 				}
 			>
-				{error && <p>{error.message}</p>}
-				<ImageList sx={{ width: "100%", height: "auto" }} cols={getImageCols()}>
-					<ImageListItem key="Subheader" cols={getImageCols()}>
-						<ListSubheader component="div">Hotels</ListSubheader>
-					</ImageListItem>
-					{hotels.length > 0 ? (
-						hotels
-							.filter((item) => item.images.length > 0)
-							.map((item) => (
-								<ImageListItem key={item.idHotel}>
-									<img
-										srcSet={`${item.images[0].imageUrl}?w=248&fit=crop&auto=format&dpr=2 2x`}
-										src={`${item.images[0].imageUrl}?w=248&fit=crop&auto=format`}
-										alt={item.name}
-										loading="lazy"
-									/>
-									<ImageListItemBar
-										title={item.name}
-										subtitle={item.location?.city}
-										actionIcon={
-											<IconButton
-												sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-												aria-label={`info about ${item.name}`}
-												onClick={() => navigate(`/hotels/detalhes/${item.idHotel}`)}
-											>
-              Detathes
-											</IconButton>
-										}
-									/>
-								</ImageListItem>
-							))
-					) : (
-						<p>Nenhum hotel disponível.</p>
-					)}
-
-				</ImageList>
-				<Stack spacing={4}>
-					<Pagination
-						count={Math.ceil(totalCount / Environment.LIMIT_DEFAULT)}
-						color="primary"
-						page={page}
-						onChange={(event, value) => {
-							setSearchParams({ page: String(value) }, { replace: true });
-						}}
-					/>
-				</Stack>
+				{loading ? (
+					<CircularProgress />
+				) : (
+					<>
+						{error && <p>{error.message}</p>}
+						<ImageList sx={{ width: "100%", height: "auto" }} cols={getImageCols()}>
+							<ImageListItem key="Subheader" cols={getImageCols()}>
+								<ListSubheader component="div">Hotels</ListSubheader>
+							</ImageListItem>
+							{hotels.length > 0 ? (
+								hotels
+									.filter((item) => item.images.length > 0)
+									.map((item) => (
+										<ImageListItem key={item.idHotel}>
+											<img
+												srcSet={`${item.images[0].imageUrl}?w=248&fit=crop&auto=format&dpr=2 2x`}
+												src={`${item.images[0].imageUrl}?w=248&fit=crop&auto=format`}
+												alt={item.name}
+												loading="lazy"
+											/>
+											<ImageListItemBar
+												title={item.name}
+												subtitle={item.location?.city}
+												actionIcon={
+													<IconButton
+														sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+														aria-label={`info about ${item.name}`}
+														onClick={() => navigate(`/hotels/detalhes/${item.idHotel}`)}
+													>
+														Detathes
+													</IconButton>
+												}
+											/>
+										</ImageListItem>
+									))
+							) : (
+								<p>Nenhum hotel disponível.</p>
+							)}
+						</ImageList>
+						<Stack spacing={4}>
+							<Pagination
+								count={Math.ceil(totalCount / Environment.LIMIT_DEFAULT)}
+								color="primary"
+								page={page}
+								onChange={(event, value) => {
+									setSearchParams({ page: String(value) }, { replace: true });
+								}}
+							/>
+						</Stack>
+					</>
+				)}
 			</LayoutBasePage>
 		</div>
 	);

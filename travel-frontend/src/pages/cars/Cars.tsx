@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { ImageList, ImageListItem, ImageListItemBar, IconButton, ListSubheader, Stack } from "@mui/material";
+import { ImageList, ImageListItem, ImageListItemBar, IconButton, ListSubheader, Stack, CircularProgress } from "@mui/material";
 import { Pagination } from "@mui/lab";
 import { ToolsList } from "../../shared/components/";
 import { Environment } from "../../shared/environment/Environments";
@@ -21,6 +21,7 @@ export const Cars = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [totalCount, setTotalCount] = useState(0);
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(true);
 
 	const search = useMemo(() => {
 		return searchParams.get("search") || "";
@@ -30,6 +31,7 @@ export const Cars = () => {
 		return Number(searchParams.get("page") || "1");
 	}, [searchParams]);
 	const fetchData = async (searchValue: string, pageNumber: number) => {
+		setLoading(true);
 		try {
 			const data = await CarService.getAllCarRentals(searchValue,pageNumber);
 			console.log("data",data);
@@ -49,6 +51,7 @@ export const Cars = () => {
 		} catch (e) {
 			setError(error);
 		}
+		setLoading(false);
 	};
 	
 	const debouncedFetchData = debounce(fetchData, 500);
@@ -81,48 +84,53 @@ export const Cars = () => {
 					/>
 				}
 			>
-				{error && <p>{error.message}</p>}
-				<ImageList sx={{ width: "100%", height: "auto" }} cols={getImageCols()}>
-					<ImageListItem key="Subheader" cols={getImageCols()}>
-						<ListSubheader component="div">Car Rentals</ListSubheader>
-					</ImageListItem>
-					{carRentals && carRentals.length > 0 ? (
-						carRentals.map((item) => (
-							item.image && (
-								<ImageListItem key={item.idCarRental}>
-									<img src={item.image} alt={item.model ? item.model : undefined} />
-									<ImageListItemBar
-										title={item.model}
-										subtitle={item.company}
-										actionIcon={
-											<IconButton
-												sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-												aria-label={`info about ${item.model}`}
-												onClick={() => navigate(`/car/detalhes/${item.idCarRental}`)}
-											>
-                                Detalhes
-											</IconButton>
-										}
-									/>
-								</ImageListItem>
-							)
-						))
-					) : (
-						<p>Nenhum aluguel de carro disponível.</p>
-					)}
-				</ImageList>
+				{loading ? (
+					<CircularProgress />
+				) : (
+					<>
+						{error && <p>{error.message}</p>}
+						<ImageList sx={{ width: "100%", height: "auto" }} cols={getImageCols()}>
+							<ImageListItem key="Subheader" cols={getImageCols()}>
+								<ListSubheader component="div">Car Rentals</ListSubheader>
+							</ImageListItem>
+							{carRentals && carRentals.length > 0 ? (
+								carRentals.map((item) => (
+									item.image && (
+										<ImageListItem key={item.idCarRental}>
+											<img src={item.image} alt={item.model ? item.model : undefined} />
+											<ImageListItemBar
+												title={item.model}
+												subtitle={item.company}
+												actionIcon={
+													<IconButton
+														sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+														aria-label={`info about ${item.model}`}
+														onClick={() => navigate(`/car/detalhes/${item.idCarRental}`)}
+													>
+														Detalhes
+													</IconButton>
+												}
+											/>
+										</ImageListItem>
+									)
+								))
+							) : (
+								<p>Nenhum aluguel de carro disponível.</p>
+							)}
+						</ImageList>
 
-				<Stack spacing={4}>
-					<Pagination
-						count={isNaN(totalCount / Environment.LIMIT_DEFAULT) ? 0 : Math.ceil(totalCount / Environment.LIMIT_DEFAULT)}
-						color="primary"
-						page={page}
-						onChange={(event, value) => {
-							setSearchParams({ page: String(value) }, { replace: true });
-						}}
-					/>
-
-				</Stack>
+						<Stack spacing={4}>
+							<Pagination
+								count={isNaN(totalCount / Environment.LIMIT_DEFAULT) ? 0 : Math.ceil(totalCount / Environment.LIMIT_DEFAULT)}
+								color="primary"
+								page={page}
+								onChange={(event, value) => {
+									setSearchParams({ page: String(value) }, { replace: true });
+								}}
+							/>
+						</Stack>
+					</>
+				)}
 			</LayoutBasePage>
 		</div>
 	);

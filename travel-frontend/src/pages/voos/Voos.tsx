@@ -2,7 +2,7 @@
 import { useState,useEffect, useMemo } from "react";
 import { ToolsList } from "../../shared/components/";
 import { LayoutBasePage } from "../../shared/layouts";
-import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid,Stack, Typography, debounce, useTheme } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Container, Grid,Stack, Typography, debounce, useTheme } from "@mui/material";
 import { FlightService } from "../../shared/services/api/flights/FlightsService";
 import { IFlight } from "../../shared/Interfaces/Interfaces";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -12,6 +12,7 @@ export const Voos = () => {
 	const [flights, setFlights] = useState<IFlight[]>([]);
 	const theme = useTheme();
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(true);
 	const search = useMemo(() => {
 		return searchParams.get("search") || "";
 	}, [searchParams]);
@@ -25,25 +26,29 @@ export const Voos = () => {
 		return theme.palette.background.default;
 	};
 	const fetchData = async (searchValue: string, pageNumber: number) => {
+		// Iniciar o carregamento
+		setLoading(true);
+
 		try {
 			const result = await FlightService.getAllFlights(searchValue, pageNumber);
 			if (result instanceof Error) {
 				console.error(result);
 			} else {
-				if (Array.isArray(result) ) {
+				if (Array.isArray(result)) {
 					setFlights(result[0].flighti);
 				} else {
 					// Trate o caso em que não há hotéis disponíveis, por exemplo:
 					setFlights([]);
 				}
-				
-				
 			}
 		} catch (e) {
 			console.error(e);
+		} finally {
+			// Parar o carregamento
+			setLoading(false);
 		}
-	
 	};
+
 
 	
 	const handleDetails = (id: number) => {
@@ -66,7 +71,7 @@ export const Voos = () => {
 
 	return (
 		<Container  maxWidth="xl">
-					 			<LayoutBasePage
+			<LayoutBasePage
 				title="Voos"
 				toolbar={
 					<ToolsList
@@ -78,45 +83,49 @@ export const Voos = () => {
 				}
 			>
 				<h1>Flights</h1>
-				{flights.map((flight: IFlight, index: number) => (
-					<Card key={index} style={{ marginBottom: "20px" }}>
-						<Grid container spacing={2}>
-							<Grid item xs={12} sm={6}>
-								<CardMedia
-									component="img"
-									alt="Flight Image"
-									style={{objectFit: "cover", height: `${getImageSize()}px`, width: "100%"}}
-									image={flight.image || ""}
-									title="Flight Image"
-								/>
+				{loading ? (
+					<CircularProgress />
+				) : (
+					flights.map((flight: IFlight, index: number) => (
+						<Card key={index} style={{ marginBottom: "20px" }}>
+							<Grid container spacing={2}>
+								<Grid item xs={12} sm={6}>
+									<CardMedia
+										component="img"
+										alt="Flight Image"
+										style={{objectFit: "cover", height: `${getImageSize()}px`, width: "100%"}}
+										image={flight.image || ""}
+										title="Flight Image"
+									/>
+								</Grid>
+								<Grid item xs={12} sm={6}>
+									<CardContent>
+										<Typography gutterBottom variant="h4" component="h2">
+											{flight.airline}
+										</Typography>
+										<Typography variant="body2" color="textSecondary" component="p">
+					Departure: {flight.departureTime ? new Date(flight.departureTime).toDateString() : "N/A"}
+										</Typography>
+										<Typography variant="body2" color="textSecondary" component="p">
+					Arrival: {flight.arrivalTime ? new Date(flight.arrivalTime).toDateString() : "N/A"}
+										</Typography>
+			
+										<CardActions>
+											<Button
+												size="small"
+												color="primary"
+												variant="contained"
+												onClick={() => handleDetails(flight.idFlight || 1)}
+											>
+																							Detalhes
+											</Button>
+										</CardActions>
+									</CardContent>
+								</Grid>
 							</Grid>
-							<Grid item xs={12} sm={6}>
-								<CardContent>
-									<Typography gutterBottom variant="h4" component="h2">
-										{flight.airline}
-									</Typography>
-									<Typography variant="body2" color="textSecondary" component="p">
-		    Departure: {flight.departureTime ? new Date(flight.departureTime).toDateString() : "N/A"}
-									</Typography>
-									<Typography variant="body2" color="textSecondary" component="p">
-		    Arrival: {flight.arrivalTime ? new Date(flight.arrivalTime).toDateString() : "N/A"}
-									</Typography>
-		
-									<CardActions>
-										<Button
-											size="small"
-											color="primary"
-											variant="contained"
-											onClick={() => handleDetails(flight.idFlight || 1)}
-										>
-		                                        Detalhes
-										</Button>
-									</CardActions>
-								</CardContent>
-							</Grid>
-						</Grid>
-					</Card>
-				))}
+						</Card>
+					))
+				)}
 				<Stack spacing={4}>
 				</Stack>
 			</LayoutBasePage>
