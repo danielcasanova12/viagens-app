@@ -17,3 +17,8 @@ e dps muda para o ip
 "para achar o ip do conteiner"
 docker ps
 docker inspect idconteiner
+
+
+##
+tasklist | findstr mysqld
+taskkill /F /PID 6564
