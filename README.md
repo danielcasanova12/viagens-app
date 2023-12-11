@@ -22,3 +22,8 @@ docker inspect idconteiner
 ##
 tasklist | findstr mysqld
 taskkill /F /PID 6564
+
+##
+docker build -t meu-projeto-react-imagem .
+##
+docker run -p 3000:3000 meu-projeto-react-imagem
