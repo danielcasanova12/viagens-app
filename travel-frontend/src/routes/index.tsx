@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Cars, Dashboard, Hotels, HotelDetails, Voos } from "../pages";
+import { Cars,  Hotels, HotelDetails, Voos } from "../pages";
 import React from "react";
 import { Profile } from "../pages/profile/Profile";
 import ShoppingCart from "../pages/shoppingCart/ShoppingCart";
@@ -10,7 +10,6 @@ import Reservation from "../pages/shoppingCart/Reservations";
 export const AppRoutes = () => {
 	return (
 		<Routes>
-			<Route path="/Dashboard" element={<Dashboard />} />
 			<Route path="/Hotels" element={<Hotels />} />
 			<Route path="/carros" element={<Cars/>} /> 
 			<Route path="/profile" element={<Profile/>} /> 
