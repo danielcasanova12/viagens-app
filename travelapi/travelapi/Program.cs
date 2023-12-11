@@ -41,16 +41,17 @@ if (app.Environment.IsDevelopment())
 }
 
 var context = new TravelContext();
-if (context.HasData())
-{
-    Console.WriteLine("O banco de dados já possui dados.");
-}
-else
-{
-    Console.WriteLine("O banco de dados está vazio. Adicionando dados...");
-    context.AddDataIfNotExists();
-}
-
+//if (context.HasData())
+//{
+//    Console.WriteLine("O banco de dados já possui dados.");
+//}
+//else
+//{
+//    Console.WriteLine("O banco de dados está vazio. Adicionando dados...");
+//    context.AddDataIfNotExists();
+//}
+var initializer = new DatabaseInitializer(context);
+initializer.AddDataIfNotExists();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseCors("AllowSpecificOrigin");

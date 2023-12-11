@@ -1,8 +1,7 @@
 name: dockercompose10135541671707083648
 services:
-  mysql_cesupa:
+  database:
     environment:
-      MYSQL_DATABASE: mysql_cesupa
       MYSQL_ROOT_PASSWORD: root
     image: mysql:latest
     networks:
@@ -20,7 +19,7 @@ services:
         com.microsoft.created-by: visual-studio
         com.microsoft.visual-studio.project-name: travelapi
       target: base
-    container_name: travelapi
+    container_name: travelapi_1
     entrypoint:
       - tail
       - -f
@@ -42,10 +41,6 @@ services:
     ports:
       - mode: ingress
         target: 80
-        protocol: tcp
-      - mode: ingress
-        target: 80
-        published: "8080"
         protocol: tcp
       - mode: ingress
         target: 443

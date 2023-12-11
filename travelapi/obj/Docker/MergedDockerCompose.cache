@@ -1,5 +1,16 @@
 name: dockercompose10135541671707083648
 services:
+  database:
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    image: mysql:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 3306
+        published: "3306"
+        protocol: tcp
   travelapi:
     build:
       context: C:\Users\daneil\Documents\GitHub\Travel\travelapi

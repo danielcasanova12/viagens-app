@@ -148,13 +148,9 @@ const ShoppingCart = () => {
 													: "")}
 									</Typography>
 									<Typography gutterBottom variant="h4" component="h2">
-										{reservation && (reservation.reservedHotel
-											? reservation.reservedHotel.starRating
-											: reservation.carRentals
-												? reservation.carRentals.model
-												: reservation.flights
-													? reservation.flights.price
-													: "")}
+										{reservation && (reservation.flights
+											? reservation.flights.price
+											: "")}
 									</Typography>
 									<Typography gutterBottom variant="h4" component="h2">
 										{reservation && (reservation.reservedHotel
